@@ -1,6 +1,6 @@
 # ConfigPilot development progress
 
-Last updated: 2026-10-25 (Africa/Tunis).
+Last updated: 2026-10-26 (Africa/Tunis).
 
 ## Session scope and inspection
 
@@ -11,18 +11,18 @@ Discovery remains unfinished and must inform later product decisions.
 
 ## Milestones
 
-| Milestone             | Status      | Completed                                                                                                                                                                                                                      | Outstanding work and remaining risks                                                                                                                                                             |
-| --------------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| 0 — Discovery         | In Progress | Product specification identifies personas, problems, and positioning.                                                                                                                                                          | Review five competitors; document a v0.1 boundary, three usage scenarios, real-project evaluation candidates, and assumptions. No real-world validation yet.                                     |
-| 1 — Repository setup  | Complete    | Initialized Git on `main`; added ESM package metadata, CLI entry point, npm scripts, ESLint, Prettier, EditorConfig, ignore rules, MIT license, README, built-in test runner, naming conventions, and Node.js 20+ requirement. | Foundation checks passed; runtime/platform verification passed under Milestone 5.                                                                                                                |
-| 2 — Parser            | Complete    | Pure public `parseDotenv` API; portable keys/locations, comments, exports, whitespace, quotes/escapes, line endings/BOM, duplicates, safe syntax diagnostics, bounded input, and value-free results.                           | Physical multiline values remain unsupported and are quarantined. Exact syntax and recovery are documented in docs/PARSER.md; full dotenv compatibility is not claimed.                          |
-| 3 — Diagnostics       | Complete    | Pure analyzeConfig API; key-set comparison, shared diagnostic catalog, six stable codes, actionable recommendations, deterministic ordering, versioned report, and summary counts.                                             | Parser errors deliberately skip differences; external runtime provisioning is not inspected. CLI reporting was delivered in Milestone 4.                                                         |
-| 4 — CLI               | Complete    | Working check command, path options, help/version, terminal/JSON reports, strict arguments, exit codes, safe bounded reads, CI-compatible output, and integration tests.                                                       | CLI contract is unchanged. Native Windows/Linux verification passed under Milestone 5.                                                                                                           |
-| 5 — Testing           | Complete    | 139 tests; 100% local runtime line coverage; seeded invariants, isolated I/O faults, actual-checkout archive/offline installation checks; all 13 hosted runtime/platform jobs passed.                                          | Matrix samples supported runtime lines; Windows skips two POSIX-only tests. Coverage and tests do not replace real-project validation or release readiness.                                      |
-| 6 — Documentation     | Complete    | Reworked README; contribution/security/conduct/changelog and troubleshooting guides; executable examples and scenario guide; verified local install paths, examples, packaged documentation and links.                         | Local and 13 hosted checks passed; no-install fresh-clone quick start verified. Registry ownership, declarations, release metadata and private reporting configuration remain readiness/CI work. |
-| 7 — CI/CD             | In Progress | Quality matrix and stable gate; weekly dependency updates; restricted SHA-pinned Actions; private reports/security fixes; owner-only candidate environment; private archive/manifest workflow and guard tests.                 | Await pushed matrix, candidate rehearsals, main protection read-back and final PR verification. Publication remains disabled; see session below.                                                 |
-| 8 — Release readiness | Not Started | Private package guard, explicit runtime file allowlist, ESM exports/bin, license, and offline consumer installation/import/CLI verification passed.                                                                            | Verify ownership/name availability, TypeScript declarations, compatibility, final release archive and publishing authentication. This project is not release-ready.                              |
-| 9 — Publication       | Not Started | None.                                                                                                                                                                                                                          | Owner approval, release checklist, npm publication, public-install verification, and GitHub release. No publication, tag, or external release authorized.                                        |
+| Milestone             | Status      | Completed                                                                                                                                                                                                                      | Outstanding work and remaining risks                                                                                                                                                                              |
+| --------------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 0 — Discovery         | In Progress | Product specification identifies personas, problems, and positioning.                                                                                                                                                          | Review five competitors; document a v0.1 boundary, three usage scenarios, real-project evaluation candidates, and assumptions. No real-world validation yet.                                                      |
+| 1 — Repository setup  | Complete    | Initialized Git on `main`; added ESM package metadata, CLI entry point, npm scripts, ESLint, Prettier, EditorConfig, ignore rules, MIT license, README, built-in test runner, naming conventions, and Node.js 20+ requirement. | Foundation checks passed; runtime/platform verification passed under Milestone 5.                                                                                                                                 |
+| 2 — Parser            | Complete    | Pure public `parseDotenv` API; portable keys/locations, comments, exports, whitespace, quotes/escapes, line endings/BOM, duplicates, safe syntax diagnostics, bounded input, and value-free results.                           | Physical multiline values remain unsupported and are quarantined. Exact syntax and recovery are documented in docs/PARSER.md; full dotenv compatibility is not claimed.                                           |
+| 3 — Diagnostics       | Complete    | Pure analyzeConfig API; key-set comparison, shared diagnostic catalog, six stable codes, actionable recommendations, deterministic ordering, versioned report, and summary counts.                                             | Parser errors deliberately skip differences; external runtime provisioning is not inspected. CLI reporting was delivered in Milestone 4.                                                                          |
+| 4 — CLI               | Complete    | Working check command, path options, help/version, terminal/JSON reports, strict arguments, exit codes, safe bounded reads, CI-compatible output, and integration tests.                                                       | CLI contract is unchanged. Native Windows/Linux verification passed under Milestone 5.                                                                                                                            |
+| 5 — Testing           | Complete    | 139 tests; 100% local runtime line coverage; seeded invariants, isolated I/O faults, actual-checkout archive/offline installation checks; all 13 hosted runtime/platform jobs passed.                                          | Matrix samples supported runtime lines; Windows skips two POSIX-only tests. Coverage and tests do not replace real-project validation or release readiness.                                                       |
+| 6 — Documentation     | Complete    | Reworked README; contribution/security/conduct/changelog and troubleshooting guides; executable examples and scenario guide; verified local install paths, examples, packaged documentation and links.                         | Local and 13 hosted checks passed; no-install fresh-clone quick start verified. Registry ownership, declarations, release metadata and private reporting configuration remain readiness/CI work.                  |
+| 7 — CI/CD             | Complete    | Quality matrix and stable gate; weekly dependency updates; restricted SHA-pinned Actions; private reports/security fixes; owner-only candidate environment; private archive/manifest workflow and guard tests.                 | Hosted gate/matrix, candidate artifact/offline consumer, owner approval barrier and main protections verified. Publishing remains disabled; owner notification preferences and release readiness remain separate. |
+| 8 — Release readiness | Not Started | Private package guard, explicit runtime file allowlist, ESM exports/bin, license, and offline consumer installation/import/CLI verification passed.                                                                            | Verify ownership/name availability, TypeScript declarations, compatibility, final release archive and publishing authentication. This project is not release-ready.                                               |
+| 9 — Publication       | Not Started | None.                                                                                                                                                                                                                          | Owner approval, release checklist, npm publication, public-install verification, and GitHub release. No publication, tag, or external release authorized.                                                         |
 
 ## Architectural decisions
 
@@ -455,9 +455,9 @@ Verification (macOS Node 20.20.0/npm 10.8.2 and GitHub-hosted runners):
   are included; contribution docs, examples, tests, environment files and progress
   remain excluded. The private publication guard remains set.
 
-## Milestone 7 session — 2026-10-25
+## Milestone 7 session — 2026-10-25 to 2026-10-26
 
-Status: **In Progress**. Read the full specification and inspected clean Milestone 6
+Status: **Complete**. Read the full specification and inspected clean Milestone 6
 commit `2676379`, source/contracts, existing workflows, tests and actual GitHub settings.
 
 Completed:
@@ -492,9 +492,9 @@ Completed:
 
 Decisions and remaining work:
 
-- Main protection will require a PR, strict up-to-date **Quality gate** from the
-  GitHub Actions app, resolved conversations and linear history; admins included,
-  force-push/deletion disabled. Apply after the new required gate has actually passed.
+- Main protection requires a PR, strict up-to-date **Quality gate** from the GitHub
+  Actions app (ID 15368), resolved conversations and linear history; admins included,
+  force-push/deletion disabled. Applied only after the new gate passed on main.
 - For the sole maintainer, code PRs require CI with zero independent approving
   reviews. Candidate review still requires the owner. Add independent reviewers as
   maintainership expands; do not silently bypass checks to keep working.
@@ -503,10 +503,11 @@ Decisions and remaining work:
   create a tag or create an external release. Milestone 8/9 readiness/approval remains.
 - GitHub settings were read back after application; no test vulnerability report or
   security notification was sent. Owner notification preferences remain personal settings.
-- Still pending: hosted matrix, real candidate artifact/consumer verification,
-  unapproved environment-gate rehearsal, main protection and final protected-PR path.
+- Hosted matrix, candidate artifact/consumer, approval barrier and main protections
+  passed as recorded below. Final documentation delivery follows the protected PR
+  path rather than bypassing newly enforced main protection.
 
-Verification so far (macOS Node 20.20.0/npm 10.8.2):
+Verification (macOS Node 20.20.0/npm 10.8.2 and actual GitHub workflows):
 
 - `npm run check`: **148 passed**, zero failures/skips, clean lint and formatting.
 - `npm run test:coverage`: all tests executed; core parser/analyzer/runtime behavior
@@ -518,12 +519,40 @@ Verification so far (macOS Node 20.20.0/npm 10.8.2):
   byte integrity, packaged links and exclusion of synthetic environment files.
 - Repository setting read-back confirms SHA pinning, three allowed actions, read-only
   defaults, no workflow PR approvals, private reporting/security fixes and main-only
-  owner environment with no admin bypass. Main is not claimed protected yet.
+  owner environment with no admin bypass. Main protection was subsequently applied
+  and read back, including required-check provider and administrator enforcement.
 - `git diff --check`: passed. No npm package, release tag or external release created.
+
+- Implementation commit `39f7053`: [all 14 Quality jobs passed](https://github.com/ghazy001/configpilot/actions/runs/40225786639),
+  including all 12 Linux/Windows/macOS Node 20/22/24/26 combinations, the Node 20.0.0
+  minimum-runtime suite, and the stable required gate. Platform skips are documented.
+- Dependabot's first [npm update check](https://github.com/ghazy001/configpilot/actions/runs/40225792130)
+  and [Actions update check](https://github.com/ghazy001/configpilot/actions/runs/40225792042)
+  completed successfully with the restrictive Actions policy enabled.
+- [Preparation-only rehearsal](https://github.com/ghazy001/configpilot/actions/runs/40226186022)
+  passed: exact-commit API preflight, installation, lint/tests/format/coverage, clean
+  private archive generation and explicitly scoped artifact upload. No approval requested.
+- Independently downloaded artifact `12610783848`, verified manifest source commit
+  `39f7053c01a8e764e8d03ea588ca5af7cd7d3fe9` and archive SHA-256
+  `cd176a7c5759f0b7f2bce10f7c6756d3509d6236e6d9226e3b034462c7d5403b`.
+  ZIP contained only the tarball/manifest; tarball contained exactly 18 regular
+  intended files with the private guard, no environment files, tests or release scripts.
+  Offline installation in a separate consumer passed public imports, secret-free
+  reports, installed help/version, clean exit 0 and mismatch exit 1.
+- [Approval-barrier rehearsal](https://github.com/ghazy001/configpilot/actions/runs/40226442644)
+  reached a pending deployment for **release-review** with required user **ghazy001**.
+  Verified the API's pending reviewer, then cancelled the test without granting
+  approval. A cancelled rehearsal is intentional evidence of the approval boundary;
+  the preceding preparation-only run is the successful end-to-end reference.
+- Candidate artifact visibility follows GitHub repository access. `private: true`
+  blocks npm publication but does not make a public repository's artifacts confidential;
+  clarified this in release docs. Only reviewed distributable source/docs are uploaded.
+- The final verification record is delivered via a feature branch/PR. Main protection
+  remains enabled throughout; merge requires the same complete Quality gate.
 
 ## Next task
 
-Finish hosted Milestone 7 verification and protections, then Milestone 8: name
-ownership, TypeScript declarations, final consumer/archive review and approved
-publishing-security design. Discovery and real-project evaluation remain open;
-actual publication still requires explicit owner approval.
+Milestone 8: verify npm name availability/ownership, TypeScript declarations and
+consumer compatibility, final metadata/archive/release notes and publishing-security
+design. Discovery and real-project evaluation remain open. No npm publication,
+release tag or external release is authorized without explicit owner approval.
