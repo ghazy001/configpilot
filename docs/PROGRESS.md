@@ -1,6 +1,6 @@
 # ConfigPilot development progress
 
-Last updated: 2026-10-25 (Africa/Tunis).
+Last updated: 2026-10-26 (Africa/Tunis).
 
 ## Session scope and inspection
 
@@ -455,7 +455,7 @@ Verification (macOS Node 20.20.0/npm 10.8.2 and GitHub-hosted runners):
   are included; contribution docs, examples, tests, environment files and progress
   remain excluded. The private publication guard remains set.
 
-## Milestone 7 session — 2026-10-25
+## Milestone 7 session — 2026-10-25 to 2026-10-26
 
 Status: **Complete**. Read the full specification and inspected clean Milestone 6
 commit `2676379`, source/contracts, existing workflows, tests and actual GitHub settings.
