@@ -350,6 +350,11 @@ Verification so far (macOS):
   package test: Windows archives do not preserve Unix executable bits. Restricted
   that assertion to POSIX and retained mandatory installed-shim execution on every
   platform. A follow-up hosted run must pass before milestone completion.
+- Follow-up run `40220713276`: Linux/macOS and minimum runtime still passed;
+  Windows progressed to a byte-integrity assertion. Git's automatic CRLF checkout
+  converted the shebang, which npm normalizes to LF when installing. Added
+  `.gitattributes` to keep repository text on LF across platforms; retained strict
+  installed-byte equality rather than normalizing away differences in the test.
 
 ## Next task
 

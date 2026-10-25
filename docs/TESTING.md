@@ -78,6 +78,9 @@ can skip on Windows when creating a symlink requires privileges. These skips are
 reported by the runner. Other unexpected skips or failures need investigation.
 Archive executable bits are asserted on POSIX, where they are meaningful; both
 platforms must successfully execute their installed npm shim.
+The repository's `.gitattributes` keeps text checkouts on LF across platforms,
+including the executable shebang. This avoids Windows checkout conversion and npm
+shebang normalization changing the installed bytes; byte equality stays mandatory.
 
 The matrix samples the minimum runtime, development-tool boundaries, and current
 even-numbered release lines. It does not test every Node patch or OS version.
