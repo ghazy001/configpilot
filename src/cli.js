@@ -8,8 +8,8 @@ Options:
   --help       Show this help message.
   --version    Show the package version.
 
-Development status: parser available through the JavaScript API.
-The check command and configuration comparison API are not implemented yet.
+Development status: parsing and comparison available through the JavaScript API.
+The check command and CLI reports are not implemented yet.
 `;
 
 /** Resolve CLI arguments without accessing files, streams, or the environment. */
@@ -24,7 +24,7 @@ export function runCli(args, { version }) {
 
   const message =
     args[0] === "check"
-      ? "Configuration analysis is not implemented yet."
+      ? "The check command is not implemented yet. Use the JavaScript analysis API."
       : "Unsupported command or arguments.";
 
   // Never echo arguments: an accidental argument may contain a credential.

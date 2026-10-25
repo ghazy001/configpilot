@@ -2,14 +2,14 @@
 
 Explainable environment-configuration diagnostics for developers and CI.
 
-ConfigPilot is being built to compare environment-variable declarations, explain
-configuration inconsistencies, and recommend safe actions without reporting values.
+ConfigPilot compares environment-variable declarations, explains configuration
+inconsistencies, and recommends safe actions without reporting values.
 
-**Development status:** Milestone 2 (dotenv parser). The JavaScript API parses a
-documented dotenv subset into variable names, source locations, and safe diagnostics.
-Help and version commands work. Configuration comparison, CLI `check`, and JSON
-reports are **not implemented**. This package is not yet ready for production use
-or published to npm by this project.
+**Development status:** Milestone 3 (comparison and diagnostics). The JavaScript
+API parses and compares a documented dotenv subset, with value-free structured
+reports. Help and version commands work. CLI `check` and terminal/JSON CLI reports
+are **not implemented**. This package is not yet ready for production use or
+published to npm by this project.
 
 ## Try the current CLI
 
@@ -27,7 +27,7 @@ availability and ownership have not yet been verified; do not install a registry
 package based on this README.
 
 With no arguments, the CLI displays help. `configpilot check` currently returns a
-clear message that analysis is not implemented. Unknown commands, extra arguments,
+clear message directing you to the JavaScript analysis API. Unknown commands, extra arguments,
 and unsupported flags also fail. Arguments are never repeated in errors.
 
 | Exit code | Current meaning                                             |
@@ -39,6 +39,38 @@ This is the foundation contract. The analysis exit-code contract will be documen
 when `check` is implemented. Output uses plain text with no ANSI colors, including
 when `NO_COLOR` is set or output is redirected. Help/version use stdout; errors use
 stderr.
+
+## Compare configurations
+
+From this checkout or a locally installed package:
+
+```js
+import { analyzeConfig } from "configpilot";
+
+const report = analyzeConfig({
+  template: "DATABASE_URL=example\nPORT=3000",
+  environment: "PORT=4000\nREDIS_URL=example",
+});
+
+console.log(report.comparison); // complete
+console.log(report.issues.map(({ code, key }) => ({ code, key })));
+// [
+//   { code: "MISSING_KEY", key: "DATABASE_URL" },
+//   { code: "UNDOCUMENTED_KEY", key: "REDIS_URL" }
+// ]
+console.log(report.summary.warnings); // 2
+```
+
+Missing and undocumented keys are warnings: a missing local declaration may be
+provided externally. Duplicate and syntax findings from both inputs are included.
+If either input has parser errors, comparison is explicitly skipped to avoid
+misleading differences from partial key sets. Review `report.comparison` and
+`report.summary.errors`, then resolve input issues before relying on differences.
+
+Reports have a versioned schema and deterministic issue ordering. Use
+`JSON.stringify(report)` for machine-readable output, or the frozen `ISSUE_CODES`
+export to identify findings. See [the report contract](docs/REPORT.md) for inputs,
+source roles, all six codes, severity rules, summary counts, and skipped comparisons.
 
 ## Parse configuration text
 
@@ -94,20 +126,23 @@ There are no runtime dependencies or build steps. Tests execute the CLI in separ
 processes and verify an actual tarball in a temporary consumer project without
 network access. ESLint and Prettier are development dependencies only. Source uses
 ES modules, named exports, kebab-case filenames, and `*.test.js` test filenames.
-The ESM package entry point exports `parseDotenv`; CommonJS is not a target.
+The ESM package entry point exports `parseDotenv`, `analyzeConfig`, and
+`ISSUE_CODES`; CommonJS is not a target.
 
 The CLI entry point handles process I/O; `src/cli.js` resolves arguments independently.
-Parsing is pure and independent of filesystem and presentation code. Comparison
-will follow the same separation. Only explicitly listed runtime files and parser
-documentation, plus npm's mandatory metadata, README, and license, are packaged.
+Parsing and comparison are pure and independent of filesystem and presentation
+code. A shared diagnostic catalog keeps codes, messages, and recommendations
+consistent. Only explicitly listed runtime files and API documentation, plus
+npm's mandatory metadata, README, and license, are packaged.
 Adding runtime modules requires updating the allowlist and packaging tests.
 
 ## Privacy and release safety
 
 The current CLI never reads configuration files, executes their contents, writes
-configuration, or makes network requests. The parser only examines text passed to
-it and returns names, caller-provided file labels, locations, and fixed diagnostic
-text. Names and labels are public metadata; do not encode credentials in them.
+configuration, or makes network requests. The parser and analyzer only examine
+explicit text inputs and return names, caller-provided file labels, locations,
+fixed diagnostic text, status, and counts. They never inspect `process.env` or
+execute project code. Names and labels are public metadata; do not encode credentials in them.
 ConfigPilot is not a secret scanner. Avoid passing credentials on the command line;
 your shell and operating system may retain arguments independently of ConfigPilot.
 
@@ -122,8 +157,8 @@ milestone. The source repository is
 not yet verified.
 
 See [the progress log](docs/PROGRESS.md) for outstanding milestones and verification,
-and [AGENTS.md](AGENTS.md) for the full product specification. Next: Milestone 3,
-key-set comparison and explainable configuration diagnostics.
+and [AGENTS.md](AGENTS.md) for the full product specification. Next: Milestone 4,
+the working `configpilot check` command and CLI reports.
 
 ## License
 

@@ -28,7 +28,7 @@ test("check does not pretend to have analyzed configuration", () => {
   const result = runCli(["check"], options);
   assert.equal(result.exitCode, 2);
   assert.equal(result.stdout, "");
-  assert.match(result.stderr, /analysis is not implemented/);
+  assert.match(result.stderr, /check command is not implemented/);
 });
 
 test("unknown, mixed, and extra arguments fail without being echoed", () => {

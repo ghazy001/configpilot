@@ -16,19 +16,19 @@ Discovery remains unfinished and must inform later product decisions.
 | 0 — Discovery         | In Progress | Product specification identifies personas, problems, and positioning.                                                                                                                                                          | Review five competitors; document a v0.1 boundary, three usage scenarios, real-project evaluation candidates, and assumptions. No real-world validation yet.                                          |
 | 1 — Repository setup  | Complete    | Initialized Git on `main`; added ESM package metadata, CLI entry point, npm scripts, ESLint, Prettier, EditorConfig, ignore rules, MIT license, README, built-in test runner, naming conventions, and Node.js 20+ requirement. | All foundation checks passed locally. Other Node versions and operating systems remain to be verified in Milestone 7.                                                                                 |
 | 2 — Parser            | Complete    | Pure public `parseDotenv` API; portable keys/locations, comments, exports, whitespace, quotes/escapes, line endings/BOM, duplicates, safe syntax diagnostics, bounded input, and value-free results.                           | Physical multiline values remain unsupported and are quarantined. Exact syntax and recovery are documented in docs/PARSER.md; full dotenv compatibility is not claimed.                               |
-| 3 — Diagnostics       | Not Started | None.                                                                                                                                                                                                                          | Compare key sets; define issue codes, severities, recommendations, deterministic ordering, summary, and report schema. Missing local keys may be supplied externally.                                 |
+| 3 — Diagnostics       | Complete    | Pure analyzeConfig API; key-set comparison, shared diagnostic catalog, six stable codes, actionable recommendations, deterministic ordering, versioned report, and summary counts.                                             | Parser errors deliberately skip differences; external runtime provisioning is not inspected. CLI reporting remains Milestone 4.                                                                       |
 | 4 — CLI               | Not Started | Foundation includes help/version, argument errors, and a pure argument resolver.                                                                                                                                               | Implement real `check`, file options, safe reads, terminal/JSON reports, and analysis exit codes. Cross-platform behavior remains unverified.                                                         |
-| 5 — Testing           | In Progress | 60 passing tests; parser coverage 100% lines/branches/functions; CLI, offline package consumer, privacy, malformed-input, non-execution, and unchanged-file checks.                                                            | Add analyzer/reporter tests as features land. Verify the supported Node/runtime/platform matrix in CI.                                                                                                |
-| 6 — Documentation     | In Progress | README with parser API example; docs/PARSER.md defines grammar, schema, issue codes, safe errors, input limit, privacy, and multiline recovery; progress log updated.                                                          | Add comparison/CLI analysis docs, troubleshooting, contributing/security/changelog documents, and remaining package metadata.                                                                         |
+| 5 — Testing           | In Progress | 87 passing tests; parser/analyzer 100% line coverage; analyzer 94.74% branch coverage; comparison, privacy, safe exceptions, non-execution, and offline packaged API verified.                                                 | Add CLI file/reporter tests in Milestone 4 and verify supported Node/platform combinations in CI.                                                                                                     |
+| 6 — Documentation     | In Progress | README examples for parse/compare; docs/PARSER.md and docs/REPORT.md define grammar, schema, stable codes, severity, ordering, recovery, privacy, and limits; progress updated.                                                | Add full CLI docs, troubleshooting, contributing/security/changelog documents, and remaining package metadata.                                                                                        |
 | 7 — CI/CD             | Not Started | None.                                                                                                                                                                                                                          | Add least-privilege workflows, supported-runtime/platform matrix, packaging checks, dependency updates, and approval-gated release setup. Remote repository is configured; CI is not yet implemented. |
 | 8 — Release readiness | Not Started | Private package guard, explicit runtime file allowlist, ESM exports/bin, license, and offline consumer installation/import/CLI verification passed.                                                                            | Verify ownership/name availability, TypeScript declarations, compatibility, final release archive and publishing authentication. This project is not release-ready.                                   |
 | 9 — Publication       | Not Started | None.                                                                                                                                                                                                                          | Owner approval, release checklist, npm publication, public-install verification, and GitHub release. No publication, tag, or external release authorized.                                             |
 
 ## Architectural decisions
 
-- Milestone 1 established the repository foundation. This session implements only
-  Milestone 2: pure parsing. Key-set comparison and a working CLI check remain for
-  Milestones 3–4; the CLI must not claim successful analysis before then.
+- Milestones 1–2 established the repository and parser. Milestone 3 adds pure
+  comparison and diagnostics. A working CLI check and reporters remain Milestone 4;
+  the CLI must clearly direct users to the implemented JavaScript API until then.
 - Use Node's built-in test runner and no runtime dependencies. Use maintained
   ESLint 10; its development runtime requirement is Node.js 20.19+, 22.13+, or 24+.
   The shipped runtime still targets Node.js 20+. Pin direct development dependencies
@@ -36,8 +36,10 @@ Discovery remains unfinished and must inform later product decisions.
   reported its end of support, confirmed by the
   [official support schedule](https://eslint.org/version-support/).
 - Separate the executable's process I/O from `src/cli.js`, whose argument resolver
-  has explicit inputs and outputs. The ESM entry point now exports `parseDotenv`;
-  no unfinished comparison API is exported. Parsing has no I/O or runtime dependencies.
+  has explicit inputs and outputs. The ESM entry point exports `parseDotenv`,
+  `analyzeConfig`, and frozen `ISSUE_CODES`. Parsing and comparison have no I/O or
+  runtime dependencies. One small diagnostic catalog holds both explanations and
+  recommendations to prevent parser/analyzer drift.
 - Use an exact runtime file allowlist instead of publishing entire directories.
   Every new runtime module needs a corresponding allowlist and package-test update.
   This reduces accidental packaging risk at a small maintenance cost.
@@ -151,11 +153,76 @@ Verification (macOS, Node.js 20.20.0, npm 10.8.2):
   mutation, shell/JavaScript execution, or configuration-file modification.
 - `git diff --check`: passed. Other platforms and Node.js versions remain unverified.
 
+## Milestone 3 session — 2026-10-25
+
+Status: **Complete**. Inspected the clean repository at Milestone 2 commit
+`98f59ba`. Continued the established implementation, verification, commit, and
+normal push workflow for `origin/main`.
+
+Completed:
+
+- Added pure `analyzeConfig({ template, environment, templateFile?, environmentFile? })`.
+  It parses explicit text, compares distinct accepted names, and returns only safe
+  issues, status, and counts. No filesystem, runtime environment, or project-code access.
+- Detect missing/undocumented keys at their first valid occurrence. Preserve all
+  duplicate and syntax findings with a `source` role even if file labels coincide.
+- Centralized stable codes, severities, messages, and recommendations in
+  src/diagnostics/issue-codes.js; exposed frozen `ISSUE_CODES` to consumers.
+  Existing parser result shape, codes, severity, and text are preserved.
+- Define `schemaVersion: 1`, complete/skipped comparison status, deterministic
+  severity/source/line ordering, and summary counts of issues and unique keys.
+- Added docs/REPORT.md, comparison examples in README, and parser documentation
+  links. Updated CLI status/error wording without implementing Milestone 4 commands.
+- Extended the exact package allowlist and offline consumer test for the analyzer,
+  diagnostic catalog, report contract, and all three public exports.
+
+Decisions and remaining limitations:
+
+- Missing and undocumented names are warnings, not assertions of broken deployment.
+  Missing keys may be externally provided; recommendations explicitly say to verify
+  external provisioning before changing files. No process.env fallback is implicit.
+- If either parser reports an error, suppress all cross-input differences. Add one
+  informational `COMPARISON_SKIPPED` finding and set shared/missing/undocumented
+  counts to null. Accepted per-input key counts remain partial and are documented.
+  This avoids false missing/undocumented findings from conservative parser recovery.
+- Duplicate warnings do not block comparisons or inflate key counts. Empty values
+  count as declarations, and value changes alone never create findings.
+- Keep codes, explanations, and recommendations together in one small shared module
+  rather than separate registries for six diagnostics. The public report contract
+  is explicit and versioned; parser behavior remains unchanged.
+- Physical multiline values, runtime variable resolution, severity customization,
+  policy files, filesystem CLI checks, and terminal/JSON CLI reporters remain outside
+  this milestone. No new dependency, npm publication, release tag, or external release.
+
+Verification (macOS, Node.js 20.20.0, npm 10.8.2):
+
+- `node --test test/unit/config-analyzer.test.js test/integration/analyzer.test.js`:
+  all **27 analyzer-focused tests passed**.
+- `npm run check`: passed; **87 tests**, zero failures/skips, clean ESLint with
+  zero warnings, and clean Prettier checks. All existing parser/CLI tests passed.
+- `npm test -- --experimental-test-coverage`: 87 tests passed. Analyzer: **100% lines,
+  94.74% branches, 100% functions**. Parser and shared diagnostic catalog: **100% lines,
+  branches, and functions**. Coverage does not replace supported-platform validation.
+- `npm run pack:dry-run -- --json --cache /private/tmp/configpilot-npm-cache`:
+  passed; exactly **11 intended files**. No environment/test files or unwanted assets.
+- Actual archive installed into an offline clean consumer; public analyzeConfig,
+  parseDotenv, ISSUE_CODES, report counts/codes, value non-disclosure, and CLI
+  help/version passed. Planted environment files in both new source directories
+  were excluded; the executable retained its executable mode.
+- Child-process tests verified safe success, syntax-error, and exception output;
+  no value/raw-line/multiline-body disclosure, input execution, environment changes,
+  or source-file writes. Externally set process.env did not change explicit results.
+- Executed the realistic DATABASE_URL/PORT/REDIS_URL mismatch through the public
+  API: one missing warning, one undocumented warning, one shared key, no errors.
+  Asserted the complete documented JSON report equals actual output.
+- `git diff --check`: passed. Other operating systems and Node versions remain
+  unverified until the supported-platform CI milestone.
+
 ## Next task
 
-Milestone 3: compare explicit template/environment inputs through the parser,
-merge parser findings into stable diagnostics, define severities and specific
-recommendations, order issues deterministically, and return/document a summary.
-Account for unsupported input and externally supplied variables without claiming
-that a missing local declaration proves a broken deployment. Add meaningful
-comparison/privacy tests and preserve the existing public parser contract.
+Milestone 4: implement `configpilot check` with explicit/default file paths, safe
+filesystem error handling and bounded reads, terminal/JSON reporters, a documented
+exit-code contract, and strict argument validation. Test the actual CLI from other
+working directories, paths with spaces/Unicode, read failures, malformed inputs,
+secret non-disclosure, and unchanged source files. Reuse the pure analyzer and
+schema version 1 without silently changing diagnostic semantics.

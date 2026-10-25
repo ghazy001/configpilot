@@ -22,10 +22,13 @@ const expectedFiles = [
   "README.md",
   "bin/configpilot.js",
   "docs/PARSER.md",
+  "docs/REPORT.md",
   "package.json",
   "src/cli.js",
   "src/index.js",
   "src/parser/dotenv-parser.js",
+  "src/analyzer/config-analyzer.js",
+  "src/diagnostics/issue-codes.js",
 ].sort();
 
 function execute(script, args, cwd, env = {}) {
@@ -73,6 +76,8 @@ test("tarball excludes environment files and works in an offline consumer", (t) 
     "src/.env",
     "src/credentials.env",
     "src/parser/.env",
+    "src/analyzer/.env",
+    "src/diagnostics/.env",
     "bin/.env.local",
     "unintended.txt",
   ]) {
@@ -155,12 +160,22 @@ test("tarball excludes environment files and works in an offline consumer", (t) 
   writeFileSync(
     smoke,
     `import assert from "node:assert/strict";
-import { parseDotenv } from "configpilot";
+import { analyzeConfig, parseDotenv, ISSUE_CODES } from "configpilot";
 const result = parseDotenv("TOKEN=SYNTHETIC_CONSUMER_SECRET\\nTOKEN=other", { file: ".env" });
 assert.deepEqual(result.declarations.map(({ key }) => key), ["TOKEN", "TOKEN"]);
 assert.equal(result.issues[0].code, "DUPLICATE_KEY");
 assert.equal(result.issues[0].relatedLocation.line, 1);
 assert.ok(!JSON.stringify(result).includes("SYNTHETIC_CONSUMER_SECRET"));
+const report = analyzeConfig({
+  template: "DATABASE_URL=SYNTHETIC_CONSUMER_SECRET\\nPORT=3000",
+  environment: "PORT=4000\\nREDIS_URL=SYNTHETIC_CONSUMER_SECRET"
+});
+assert.equal(report.schemaVersion, 1);
+assert.equal(report.comparison, "complete");
+assert.deepEqual(report.issues.map(({ code }) => code), [ISSUE_CODES.MISSING_KEY, ISSUE_CODES.UNDOCUMENTED_KEY]);
+assert.equal(report.summary.sharedKeys, 1);
+assert.equal(report.summary.warnings, 2);
+assert.ok(!JSON.stringify(report).includes("SYNTHETIC_CONSUMER_SECRET"));
 `,
   );
   assert.equal(execute(smoke, [], consumer), "");

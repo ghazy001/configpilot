@@ -28,7 +28,10 @@
     "src/index.js",
     "src/cli.js",
     "src/parser/dotenv-parser.js",
-    "docs/PARSER.md"
+    "docs/PARSER.md",
+    "src/analyzer/config-analyzer.js",
+    "src/diagnostics/issue-codes.js",
+    "docs/REPORT.md"
   ],
   "scripts": {
     "test": "node --test",

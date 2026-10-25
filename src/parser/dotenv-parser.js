@@ -1,31 +1,9 @@
+import { createIssue } from "../diagnostics/issue-codes.js";
+
 const MAX_SOURCE_LENGTH = 1_048_576;
 const ASSIGNMENT =
   /^[ \t]*(?:export[ \t]+)?([A-Za-z_][A-Za-z0-9_]*)[ \t]*=[ \t]*/;
 const QUOTES = new Set(["'", '"', "`"]);
-const DETAILS = {
-  INVALID_DECLARATION: {
-    severity: "error",
-    message: "Declaration does not match the supported dotenv syntax.",
-    recommendation:
-      "Use NAME=value with a portable variable name and complete single-line quotes. Check the documented parser syntax.",
-  },
-  UNSUPPORTED_MULTILINE: {
-    severity: "error",
-    message: "Quoted multiline values are not supported.",
-    recommendation:
-      "Use a single-line value with escaped line breaks, or exclude this file until multiline parsing is supported.",
-  },
-  DUPLICATE_KEY: {
-    severity: "warning",
-    message: "Variable is declared more than once in this input.",
-    recommendation:
-      "Keep one declaration for this variable to avoid loader-dependent overrides.",
-  },
-};
-
-function issue(code, location) {
-  return { code, ...DETAILS[code], location };
-}
 
 // Values are scanned only to find boundaries. Never decode or retain them.
 function closingQuote(line, start, quote) {
@@ -111,7 +89,7 @@ export function parseDotenv(source, options = {}) {
     const line = lines[index];
     const location = { file, line: index + 1 };
     if (line.includes("\0")) {
-      issues.push(issue("INVALID_DECLARATION", location));
+      issues.push(createIssue("INVALID_DECLARATION", location));
       index = skipMalformedBlock(lines, index);
       continue;
     }
@@ -119,7 +97,7 @@ export function parseDotenv(source, options = {}) {
 
     const assignment = ASSIGNMENT.exec(line);
     if (!assignment) {
-      issues.push(issue("INVALID_DECLARATION", location));
+      issues.push(createIssue("INVALID_DECLARATION", location));
       index = skipMalformedBlock(lines, index);
       continue;
     }
@@ -131,7 +109,7 @@ export function parseDotenv(source, options = {}) {
       if (end === -1) {
         const block = skipQuotedBlock(lines, index, quote);
         issues.push(
-          issue(
+          createIssue(
             block.closed ? "UNSUPPORTED_MULTILINE" : "INVALID_DECLARATION",
             location,
           ),
@@ -140,7 +118,7 @@ export function parseDotenv(source, options = {}) {
         continue;
       }
       if (!/^[ \t]*(?:#|$)/.test(line.slice(end + 1))) {
-        issues.push(issue("INVALID_DECLARATION", location));
+        issues.push(createIssue("INVALID_DECLARATION", location));
         index = skipMalformedBlock(lines, index, end + 1);
         continue;
       }
@@ -150,7 +128,7 @@ export function parseDotenv(source, options = {}) {
     declarations.push({ key, location });
     if (firstLocations.has(key)) {
       issues.push({
-        ...issue("DUPLICATE_KEY", location),
+        ...createIssue("DUPLICATE_KEY", location),
         key,
         relatedLocation: { ...firstLocations.get(key) },
       });
