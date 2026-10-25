@@ -65,6 +65,10 @@ test("tarball excludes environment files and works in an offline consumer", (t) 
   const consumer = join(directory, "consumer");
   mkdirSync(staging);
   mkdirSync(consumer);
+  const stagedArchives = join(directory, "staged-archives");
+  const actualArchives = join(directory, "actual-archives");
+  mkdirSync(stagedArchives);
+  mkdirSync(actualArchives);
 
   for (const file of expectedFiles) {
     const destination = join(staging, file);
@@ -98,7 +102,13 @@ test("tarball excludes environment files and works in an offline consumer", (t) 
   const [archive] = JSON.parse(
     execute(
       npmCli,
-      ["pack", "--ignore-scripts", "--json", "--pack-destination", directory],
+      [
+        "pack",
+        "--ignore-scripts",
+        "--json",
+        "--pack-destination",
+        stagedArchives,
+      ],
       staging,
       npmEnv,
     ),
@@ -109,6 +119,32 @@ test("tarball excludes environment files and works in an offline consumer", (t) 
       0o111,
     "The packaged CLI must be executable.",
   );
+  // The staged secret test cannot detect accidental publishable files that only
+  // exist in the checkout. Independently check its real file list before packing.
+  const [dryRun] = JSON.parse(
+    execute(
+      npmCli,
+      ["pack", "--dry-run", "--ignore-scripts", "--json"],
+      root,
+      npmEnv,
+    ),
+  );
+  assert.deepEqual(dryRun.files.map(({ path }) => path).sort(), expectedFiles);
+  const [actual] = JSON.parse(
+    execute(
+      npmCli,
+      [
+        "pack",
+        "--ignore-scripts",
+        "--json",
+        "--pack-destination",
+        actualArchives,
+      ],
+      root,
+      npmEnv,
+    ),
+  );
+  assert.deepEqual(actual.files.map(({ path }) => path).sort(), expectedFiles);
   writeFileSync(
     join(consumer, "package.json"),
     JSON.stringify({ private: true, type: "module" }),
@@ -117,7 +153,7 @@ test("tarball excludes environment files and works in an offline consumer", (t) 
     npmCli,
     [
       "install",
-      join(directory, archive.filename),
+      join(actualArchives, actual.filename),
       "--ignore-scripts",
       "--no-audit",
       "--no-fund",
@@ -130,6 +166,11 @@ test("tarball excludes environment files and works in an offline consumer", (t) 
   const installed = join(consumer, "node_modules", "configpilot");
   assert.deepEqual(listFiles(installed).sort(), expectedFiles);
   for (const file of expectedFiles) {
+    assert.deepEqual(
+      readFileSync(join(installed, file)),
+      readFileSync(join(root, file)),
+      `Installed content differs from checkout: ${file}`,
+    );
     assert.ok(
       !readFileSync(join(installed, file), "utf8").includes(
         "SYNTHETIC_PACKAGE_SECRET",
@@ -195,12 +236,26 @@ assert.ok(!JSON.stringify(report).includes("SYNTHETIC_CONSUMER_SECRET"));
     execute(installedCli, ["check", "--json"], consumer),
   );
   assert.equal(clean.summary.total, 0);
-  if (process.platform !== "win32") {
-    const executable = spawnSync(
-      join(consumer, "node_modules", ".bin", "configpilot"),
-      ["check", "--json"],
-      { cwd: consumer, encoding: "utf8", timeout: 10_000 },
+  {
+    const shim = join(
+      consumer,
+      "node_modules",
+      ".bin",
+      process.platform === "win32" ? "configpilot.cmd" : "configpilot",
     );
+    const executable =
+      process.platform === "win32"
+        ? spawnSync("cmd.exe", ["/d", "/s", "/c", `""${shim}" check --json"`], {
+            cwd: consumer,
+            encoding: "utf8",
+            timeout: 10_000,
+            windowsVerbatimArguments: true,
+          })
+        : spawnSync(shim, ["check", "--json"], {
+            cwd: consumer,
+            encoding: "utf8",
+            timeout: 10_000,
+          });
     assert.ifError(executable.error);
     assert.equal(executable.status, 0);
     assert.equal(executable.stderr, "");

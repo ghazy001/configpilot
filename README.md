@@ -5,9 +5,9 @@ Explainable environment-configuration diagnostics for developers and CI.
 ConfigPilot compares environment-variable declarations, explains configuration
 inconsistencies, and recommends safe actions without reporting values.
 
-**Development status:** Milestone 4 (working CLI). Use `configpilot check` or the
+**Development status:** Milestone 5 (testing and quality). Use `configpilot check` or the
 JavaScript API to compare a documented dotenv subset, with actionable terminal or
-JSON reports that omit values. Cross-platform CI, the full release-readiness review,
+JSON reports that omit values. Cross-platform verification is in progress; the full release-readiness review
 and npm publication remain pending. This project has not published to npm yet.
 
 ## Try the current CLI
@@ -130,17 +130,20 @@ diagnostic codes, recovery behavior, and input errors.
 
 Use Node.js 20.19+, 22.13+, or 24+ for development, matching the
 [ESLint 10 requirements](https://eslint.org/docs/latest/use/getting-started#prerequisites).
-The dependency-free runtime package targets Node.js 20+; compatibility beyond the
-locally tested version remains to be verified in CI.
+The dependency-free runtime package targets Node.js 20+. The quality workflow tests
+Linux, Windows, and macOS; see [the testing guide](docs/TESTING.md) for the matrix,
+platform-specific skips, and links to recorded verification results.
 
 ```sh
 npm ci
 npm run check
+npm run test:coverage
 npm run pack:dry-run
 ```
 
 - `npm test`: unit, CLI integration, and isolated package installation tests using
   Node's built-in test runner.
+- `npm run test:coverage`: all tests with Node's experimental coverage report.
 - `npm run lint`: ESLint with zero warnings allowed.
 - `npm run format`: apply Prettier formatting.
 - `npm run format:check`: verify formatting without changes.
@@ -184,8 +187,8 @@ milestone. The source repository is
 not yet verified.
 
 See [the progress log](docs/PROGRESS.md) for outstanding milestones and verification,
-and [AGENTS.md](AGENTS.md) for the full product specification. Next: Milestone 5,
-testing and quality across supported environments.
+and [AGENTS.md](AGENTS.md) for the full product specification. After Milestone 5
+verification: Milestone 6, documentation and developer experience.
 
 ## License
 
