@@ -1,2 +1,1 @@
-// The analysis API will be introduced with the parser and diagnostic milestones.
-export {};
+export { parseDotenv } from "./parser/dotenv-parser.js";

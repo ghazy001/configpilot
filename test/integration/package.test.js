@@ -21,9 +21,11 @@ const expectedFiles = [
   "LICENSE",
   "README.md",
   "bin/configpilot.js",
+  "docs/PARSER.md",
   "package.json",
   "src/cli.js",
   "src/index.js",
+  "src/parser/dotenv-parser.js",
 ].sort();
 
 function execute(script, args, cwd, env = {}) {
@@ -70,6 +72,7 @@ test("tarball excludes environment files and works in an offline consumer", (t) 
     ".env.production",
     "src/.env",
     "src/credentials.env",
+    "src/parser/.env",
     "bin/.env.local",
     "unintended.txt",
   ]) {
@@ -151,7 +154,14 @@ test("tarball excludes environment files and works in an offline consumer", (t) 
   const smoke = join(consumer, "smoke.mjs");
   writeFileSync(
     smoke,
-    'import assert from "node:assert/strict";\nimport * as api from "configpilot";\nassert.deepEqual(Object.keys(api), []);\n',
+    `import assert from "node:assert/strict";
+import { parseDotenv } from "configpilot";
+const result = parseDotenv("TOKEN=SYNTHETIC_CONSUMER_SECRET\\nTOKEN=other", { file: ".env" });
+assert.deepEqual(result.declarations.map(({ key }) => key), ["TOKEN", "TOKEN"]);
+assert.equal(result.issues[0].code, "DUPLICATE_KEY");
+assert.equal(result.issues[0].relatedLocation.line, 1);
+assert.ok(!JSON.stringify(result).includes("SYNTHETIC_CONSUMER_SECRET"));
+`,
   );
   assert.equal(execute(smoke, [], consumer), "");
 });

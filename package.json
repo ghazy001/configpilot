@@ -26,7 +26,9 @@
   "files": [
     "bin/configpilot.js",
     "src/index.js",
-    "src/cli.js"
+    "src/cli.js",
+    "src/parser/dotenv-parser.js",
+    "docs/PARSER.md"
   ],
   "scripts": {
     "test": "node --test",

@@ -5,10 +5,11 @@ Explainable environment-configuration diagnostics for developers and CI.
 ConfigPilot is being built to compare environment-variable declarations, explain
 configuration inconsistencies, and recommend safe actions without reporting values.
 
-**Development status:** Milestone 1 (repository and tooling foundation). Help and
-version commands work. Configuration parsing, comparison, JSON reports, and the
-JavaScript analysis API are planned and are **not implemented**. This package is
-not ready for production use or published to npm by this project.
+**Development status:** Milestone 2 (dotenv parser). The JavaScript API parses a
+documented dotenv subset into variable names, source locations, and safe diagnostics.
+Help and version commands work. Configuration comparison, CLI `check`, and JSON
+reports are **not implemented**. This package is not yet ready for production use
+or published to npm by this project.
 
 ## Try the current CLI
 
@@ -39,6 +40,36 @@ when `check` is implemented. Output uses plain text with no ANSI colors, includi
 when `NO_COLOR` is set or output is redirected. Help/version use stdout; errors use
 stderr.
 
+## Parse configuration text
+
+From this checkout or a locally installed package:
+
+```js
+import { parseDotenv } from "configpilot";
+
+const result = parseDotenv("PORT=3000\nPORT=4000", { file: ".env" });
+console.log(result.declarations);
+// [
+//   { key: "PORT", location: { file: ".env", line: 1 } },
+//   { key: "PORT", location: { file: ".env", line: 2 } }
+// ]
+console.log(result.issues[0].code); // DUPLICATE_KEY
+```
+
+The parser supports portable variable names, comments, optional `export` prefixes,
+spaces/tabs, empty and quoted values, escapes, embedded equals signs, and Windows
+or Unix line endings. It reports duplicates, invalid declarations, and unsupported
+multiline values. Returned objects never contain assignment values or raw source.
+
+This is a presence-only parser: empty values count as declarations, references are
+not expanded, and input is never executed. Full dotenv compatibility is not claimed.
+Multiline quoted bodies are skipped to protect credentials; unclosed quotes suppress
+the remaining input. Review issues before using declarations. Inputs above 1,048,576
+UTF-16 code units are rejected with a safe `RangeError`.
+
+See [the parser contract](docs/PARSER.md) for the exact grammar, result schema,
+diagnostic codes, recovery behavior, and input errors.
+
 ## Development
 
 Use Node.js 20.19+, 22.13+, or 24+ for development, matching the
@@ -63,19 +94,21 @@ There are no runtime dependencies or build steps. Tests execute the CLI in separ
 processes and verify an actual tarball in a temporary consumer project without
 network access. ESLint and Prettier are development dependencies only. Source uses
 ES modules, named exports, kebab-case filenames, and `*.test.js` test filenames.
-The ESM package entry point currently exports no API; CommonJS is not a target.
+The ESM package entry point exports `parseDotenv`; CommonJS is not a target.
 
 The CLI entry point handles process I/O; `src/cli.js` resolves arguments independently.
-Future parsing and analysis will remain separate from filesystem and presentation
-code. Only explicitly listed runtime files, plus npm's mandatory metadata, README,
-and license, are packaged. Adding runtime modules requires updating the allowlist
-and packaging tests.
+Parsing is pure and independent of filesystem and presentation code. Comparison
+will follow the same separation. Only explicitly listed runtime files and parser
+documentation, plus npm's mandatory metadata, README, and license, are packaged.
+Adding runtime modules requires updating the allowlist and packaging tests.
 
 ## Privacy and release safety
 
 The current CLI never reads configuration files, executes their contents, writes
-configuration, or makes network requests. No parsing or secret-detection guarantees
-are claimed for the planned analyzer. Avoid passing credentials on the command line;
+configuration, or makes network requests. The parser only examines text passed to
+it and returns names, caller-provided file labels, locations, and fixed diagnostic
+text. Names and labels are public metadata; do not encode credentials in them.
+ConfigPilot is not a secret scanner. Avoid passing credentials on the command line;
 your shell and operating system may retain arguments independently of ConfigPilot.
 
 Environment files are ignored by Git and formatting. Do not commit real credentials,
@@ -89,8 +122,8 @@ milestone. The source repository is
 not yet verified.
 
 See [the progress log](docs/PROGRESS.md) for outstanding milestones and verification,
-and [AGENTS.md](AGENTS.md) for the full product specification. Next: implement and
-document a value-free dotenv parser with meaningful syntax and privacy tests.
+and [AGENTS.md](AGENTS.md) for the full product specification. Next: Milestone 3,
+key-set comparison and explainable configuration diagnostics.
 
 ## License
 

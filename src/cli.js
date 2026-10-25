@@ -8,8 +8,8 @@ Options:
   --help       Show this help message.
   --version    Show the package version.
 
-Development status: repository foundation only.
-The check command and JavaScript analysis API are not implemented yet.
+Development status: parser available through the JavaScript API.
+The check command and configuration comparison API are not implemented yet.
 `;
 
 /** Resolve CLI arguments without accessing files, streams, or the environment. */
