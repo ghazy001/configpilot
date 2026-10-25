@@ -142,3 +142,7 @@ node bin/configpilot.js check --template examples/reference.txt --env examples/e
 It reports `DATABASE_URL` as missing, `REDIS_URL` as undocumented, and `PORT` as
 shared. The summary is 0 errors and 2 warnings, and the exit code is **1**.
 Append `--json` for the same findings in report schema 1. No files are modified.
+
+See [troubleshooting](TROUBLESHOOTING.md) for installation, operational failures,
+parser recovery, and CI questions. Source-checkout scenarios and a runnable library
+example are in the [examples guide](https://github.com/ghazy001/configpilot/blob/main/examples/README.md).

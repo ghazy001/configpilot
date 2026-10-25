@@ -33,6 +33,9 @@
     "src/diagnostics/issue-codes.js",
     "docs/REPORT.md",
     "docs/CLI.md",
+    "docs/TROUBLESHOOTING.md",
+    "SECURITY.md",
+    "CHANGELOG.md",
     "src/reporters/json.js",
     "src/reporters/terminal.js",
     "src/utils/read-config-file.js"

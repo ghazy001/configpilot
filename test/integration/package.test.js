@@ -11,7 +11,7 @@ import {
   writeFileSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
-import { dirname, join } from "node:path";
+import { dirname, join, relative, resolve, sep } from "node:path";
 import process from "node:process";
 import test from "node:test";
 import { fileURLToPath, URL } from "node:url";
@@ -24,6 +24,9 @@ const expectedFiles = [
   "docs/PARSER.md",
   "docs/REPORT.md",
   "docs/CLI.md",
+  "docs/TROUBLESHOOTING.md",
+  "SECURITY.md",
+  "CHANGELOG.md",
   "package.json",
   "src/cli.js",
   "src/index.js",
@@ -182,6 +185,22 @@ test("tarball excludes environment files and works in an offline consumer", (t) 
         "SYNTHETIC_PACKAGE_SECRET",
       ),
     );
+    if (file.endsWith(".md")) {
+      const content = readFileSync(join(installed, file), "utf8");
+      for (const [, href] of content.matchAll(/\[[^\]\n]+\]\(([^)]+)\)/g)) {
+        if (/^https?:|^#/.test(href)) continue;
+        const target = relative(
+          installed,
+          resolve(dirname(join(installed, file)), href.split("#")[0]),
+        )
+          .split(sep)
+          .join("/");
+        assert.ok(
+          expectedFiles.includes(target),
+          `Broken installed link in ${file}: ${href}`,
+        );
+      }
+    }
   }
   const metadata = JSON.parse(
     readFileSync(join(installed, "package.json"), "utf8"),

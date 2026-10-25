@@ -11,18 +11,18 @@ Discovery remains unfinished and must inform later product decisions.
 
 ## Milestones
 
-| Milestone             | Status      | Completed                                                                                                                                                                                                                      | Outstanding work and remaining risks                                                                                                                                    |
-| --------------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 0 — Discovery         | In Progress | Product specification identifies personas, problems, and positioning.                                                                                                                                                          | Review five competitors; document a v0.1 boundary, three usage scenarios, real-project evaluation candidates, and assumptions. No real-world validation yet.            |
-| 1 — Repository setup  | Complete    | Initialized Git on `main`; added ESM package metadata, CLI entry point, npm scripts, ESLint, Prettier, EditorConfig, ignore rules, MIT license, README, built-in test runner, naming conventions, and Node.js 20+ requirement. | Foundation checks passed; runtime/platform verification passed under Milestone 5.                                                                                       |
-| 2 — Parser            | Complete    | Pure public `parseDotenv` API; portable keys/locations, comments, exports, whitespace, quotes/escapes, line endings/BOM, duplicates, safe syntax diagnostics, bounded input, and value-free results.                           | Physical multiline values remain unsupported and are quarantined. Exact syntax and recovery are documented in docs/PARSER.md; full dotenv compatibility is not claimed. |
-| 3 — Diagnostics       | Complete    | Pure analyzeConfig API; key-set comparison, shared diagnostic catalog, six stable codes, actionable recommendations, deterministic ordering, versioned report, and summary counts.                                             | Parser errors deliberately skip differences; external runtime provisioning is not inspected. CLI reporting was delivered in Milestone 4.                                |
-| 4 — CLI               | Complete    | Working check command, path options, help/version, terminal/JSON reports, strict arguments, exit codes, safe bounded reads, CI-compatible output, and integration tests.                                                       | CLI contract is unchanged. Native Windows/Linux verification passed under Milestone 5.                                                                                  |
-| 5 — Testing           | Complete    | 139 tests; 100% local runtime line coverage; seeded invariants, isolated I/O faults, actual-checkout archive/offline installation checks; all 13 hosted runtime/platform jobs passed.                                          | Matrix samples supported runtime lines; Windows skips two POSIX-only tests. Coverage and tests do not replace real-project validation or release readiness.             |
-| 6 — Documentation     | In Progress | README quick start and real terminal excerpt; CLI/PARSER/REPORT contracts cover implemented behavior, schema, exit codes, errors, privacy, and limits; safe examples and progress log updated.                                 | Add troubleshooting and contributing/security/changelog/community documents; complete release metadata during readiness work.                                           |
-| 7 — CI/CD             | In Progress | Verified least-privilege pinned Quality workflow: Linux/Windows/macOS, runtime matrix, lint/format/tests/coverage, archive/import/installed-CLI checks.                                                                        | Add dependency updates, repository protection/required checks, and approval-gated release setup. No publishing workflow yet.                                            |
-| 8 — Release readiness | Not Started | Private package guard, explicit runtime file allowlist, ESM exports/bin, license, and offline consumer installation/import/CLI verification passed.                                                                            | Verify ownership/name availability, TypeScript declarations, compatibility, final release archive and publishing authentication. This project is not release-ready.     |
-| 9 — Publication       | Not Started | None.                                                                                                                                                                                                                          | Owner approval, release checklist, npm publication, public-install verification, and GitHub release. No publication, tag, or external release authorized.               |
+| Milestone             | Status      | Completed                                                                                                                                                                                                                      | Outstanding work and remaining risks                                                                                                                                                             |
+| --------------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 0 — Discovery         | In Progress | Product specification identifies personas, problems, and positioning.                                                                                                                                                          | Review five competitors; document a v0.1 boundary, three usage scenarios, real-project evaluation candidates, and assumptions. No real-world validation yet.                                     |
+| 1 — Repository setup  | Complete    | Initialized Git on `main`; added ESM package metadata, CLI entry point, npm scripts, ESLint, Prettier, EditorConfig, ignore rules, MIT license, README, built-in test runner, naming conventions, and Node.js 20+ requirement. | Foundation checks passed; runtime/platform verification passed under Milestone 5.                                                                                                                |
+| 2 — Parser            | Complete    | Pure public `parseDotenv` API; portable keys/locations, comments, exports, whitespace, quotes/escapes, line endings/BOM, duplicates, safe syntax diagnostics, bounded input, and value-free results.                           | Physical multiline values remain unsupported and are quarantined. Exact syntax and recovery are documented in docs/PARSER.md; full dotenv compatibility is not claimed.                          |
+| 3 — Diagnostics       | Complete    | Pure analyzeConfig API; key-set comparison, shared diagnostic catalog, six stable codes, actionable recommendations, deterministic ordering, versioned report, and summary counts.                                             | Parser errors deliberately skip differences; external runtime provisioning is not inspected. CLI reporting was delivered in Milestone 4.                                                         |
+| 4 — CLI               | Complete    | Working check command, path options, help/version, terminal/JSON reports, strict arguments, exit codes, safe bounded reads, CI-compatible output, and integration tests.                                                       | CLI contract is unchanged. Native Windows/Linux verification passed under Milestone 5.                                                                                                           |
+| 5 — Testing           | Complete    | 139 tests; 100% local runtime line coverage; seeded invariants, isolated I/O faults, actual-checkout archive/offline installation checks; all 13 hosted runtime/platform jobs passed.                                          | Matrix samples supported runtime lines; Windows skips two POSIX-only tests. Coverage and tests do not replace real-project validation or release readiness.                                      |
+| 6 — Documentation     | In Progress | Reworked README; contribution/security/conduct/changelog and troubleshooting guides; executable examples and scenario guide; verified local install paths, examples, packaged documentation and links.                         | Local checks pass; awaiting hosted verification and fresh-checkout quick start. Registry ownership, declarations, release metadata and private reporting configuration remain readiness/CI work. |
+| 7 — CI/CD             | In Progress | Verified least-privilege pinned Quality workflow: Linux/Windows/macOS, runtime matrix, lint/format/tests/coverage, archive/import/installed-CLI checks.                                                                        | Add dependency updates, repository protection/required checks, and approval-gated release setup. No publishing workflow yet.                                                                     |
+| 8 — Release readiness | Not Started | Private package guard, explicit runtime file allowlist, ESM exports/bin, license, and offline consumer installation/import/CLI verification passed.                                                                            | Verify ownership/name availability, TypeScript declarations, compatibility, final release archive and publishing authentication. This project is not release-ready.                              |
+| 9 — Publication       | Not Started | None.                                                                                                                                                                                                                          | Owner approval, release checklist, npm publication, public-install verification, and GitHub release. No publication, tag, or external release authorized.                                        |
 
 ## Architectural decisions
 
@@ -373,8 +373,76 @@ Verification (local macOS and actual GitHub-hosted runners):
   installation and privacy assertions.
 - `git diff --check`: passed. No npm package, tag, or external release was created.
 
+## Milestone 6 session — 2026-10-25
+
+Status: **In Progress**. Read the project specification, inspected source/contracts,
+examples, package allowlist, tests, and clean Milestone 5 commit `fbb1146`.
+
+Completed:
+
+- Reworked the README around the concrete configuration problem and a no-install
+  checkout quick start, with full actual terminal output and its expected exit 1.
+  Included local global/archive installation, every CLI option, exit statuses, JSON
+  result/error distinction, API example, privacy limits, runtime requirements and
+  repository links. Kept the unreleased state explicit and avoided registry claims.
+- Added CONTRIBUTING.md with clean setup, architecture, naming, privacy, focused
+  changes, test/archive verification, safe issue/PR guidance and owner release gates.
+- Added SECURITY.md covering controlled error/report boundaries, public metadata,
+  input bounds, filesystem/runtime limits, pre-release support and responsible
+  disclosure. Followed official GitHub private-reporting guidance with a contact-only
+  fallback if private reporting is unavailable; no invented inbox, SLA or bounty.
+- Added a concise project code of conduct and an Unreleased changelog covering
+  implemented behavior and compatibility limitations without claiming a release.
+- Added docs/TROUBLESHOOTING.md for installation/runtime problems, all operational
+  and analysis codes, skipped comparisons, malformed quotes, encoding, native paths,
+  CI status handling, and safe bug reports. Linked it from the CLI reference.
+- Added examples/README.md with local, maintainer and pipeline scenarios plus clean
+  and mismatch commands. Added examples/analyze.mjs using public self-reference
+  imports, explicit fixture reads and source labels; it runs from another directory.
+- Added three example integration tests: exact README terminal output, executed
+  README API snippet, clean CLI example, library/CLI JSON equality, example input
+  integrity and absence of output files. Updated the test guide.
+- Ship SECURITY.md, CHANGELOG.md and troubleshooting with the package; update the
+  exact allowlist and archive test to **18 intended files**. Added installed Markdown
+  link checks. Contributor/testing/example/progress links in the distributed README
+  point to their repository pages, so excluded development assets create no broken
+  local links after installation.
+
+Decisions and remaining work:
+
+- No runtime behavior, public API, schema, diagnostic severity, dependencies or CLI
+  flags changed. The example's caller-owned file reading remains outside the pure API.
+- Keep the npm package small: ship end-user reference/help/security/change history;
+  keep contribution/testing guides and synthetic examples in the source repository.
+- Private-reporting settings and maintainer notification/contact routing are not
+  claimed enabled or tested by adding a policy. Confirm them during repository/
+  release setup; the documented fallback shares no vulnerability details publicly.
+- No npm name ownership, TypeScript support, registry installation, release dates,
+  publication or security certification is claimed. No package/release/tag created.
+- Hosted matrix and clean remote-clone quick start are pending before completion.
+
+Verification so far (macOS Node 20.20.0, npm 10.8.2):
+
+- `npm run check`: **142 passed**, zero failures/skips, ESLint with zero warnings
+  and Prettier passed. Existing parser/analyzer/privacy/file/package checks passed.
+- `npm run test:coverage`: **142 passed**. Every runtime module and the new example
+  measured **100% lines/functions**; parser/analyzer also **100% branches**. Reader
+  branches remain **96.77%** locally; Windows-specific fallback is in the CI matrix.
+- Actual offline package installation verified **18 exact files**, installed byte
+  equality, no synthetic environment/unintended files, public imports and executable
+  behavior. Every relative Markdown link in the installed package resolves to a
+  shipped file. Validated **51** local/repository link targets across **12** documents.
+- Executed documented global source installation using a disposable npm prefix and
+  cache, offline and with scripts disabled. Installed help/version and clean default
+  `check --json` passed from another directory; no system-global installation changed.
+- The README's terminal output and API snippet were executed, not invented. The
+  CLI mismatch exits 1, the clean comparison exits 0, and the library example exits
+  0 after returning the same mismatch report. Example inputs remain byte-identical.
+- `git diff --check`: passed. No changes to the owner specification or runtime code.
+
 ## Next task
 
-Milestone 6: troubleshooting, contribution/security/changelog/community documentation
-and a coherent first-time developer experience. Discovery and real-project evaluation
-remain open; the remaining CI/release and publishing safeguards retain their milestones.
+Complete Milestone 6 hosted verification and fresh-clone quick start, then Milestone 7:
+dependency update automation, repository protection/required checks, security-report
+settings and approval-gated release preparation. Discovery and real-project evaluation
+remain open; publication remains subject to readiness and explicit owner approval.
