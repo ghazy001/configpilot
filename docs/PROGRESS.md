@@ -14,13 +14,13 @@ Discovery remains unfinished and must inform later product decisions.
 | Milestone             | Status      | Completed                                                                                                                                                                                                                      | Outstanding work and remaining risks                                                                                                                                    |
 | --------------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 0 — Discovery         | In Progress | Product specification identifies personas, problems, and positioning.                                                                                                                                                          | Review five competitors; document a v0.1 boundary, three usage scenarios, real-project evaluation candidates, and assumptions. No real-world validation yet.            |
-| 1 — Repository setup  | Complete    | Initialized Git on `main`; added ESM package metadata, CLI entry point, npm scripts, ESLint, Prettier, EditorConfig, ignore rules, MIT license, README, built-in test runner, naming conventions, and Node.js 20+ requirement. | Foundation checks passed; ongoing runtime/platform verification is tracked under Milestone 5.                                                                           |
+| 1 — Repository setup  | Complete    | Initialized Git on `main`; added ESM package metadata, CLI entry point, npm scripts, ESLint, Prettier, EditorConfig, ignore rules, MIT license, README, built-in test runner, naming conventions, and Node.js 20+ requirement. | Foundation checks passed; runtime/platform verification passed under Milestone 5.                                                                                       |
 | 2 — Parser            | Complete    | Pure public `parseDotenv` API; portable keys/locations, comments, exports, whitespace, quotes/escapes, line endings/BOM, duplicates, safe syntax diagnostics, bounded input, and value-free results.                           | Physical multiline values remain unsupported and are quarantined. Exact syntax and recovery are documented in docs/PARSER.md; full dotenv compatibility is not claimed. |
-| 3 — Diagnostics       | Complete    | Pure analyzeConfig API; key-set comparison, shared diagnostic catalog, six stable codes, actionable recommendations, deterministic ordering, versioned report, and summary counts.                                             | Parser errors deliberately skip differences; external runtime provisioning is not inspected. CLI reporting remains Milestone 4.                                         |
-| 4 — CLI               | Complete    | Working check command, path options, help/version, terminal/JSON reports, strict arguments, exit codes, safe bounded reads, CI-compatible output, and integration tests.                                                       | CLI contract is unchanged. Native Windows/Linux verification is tracked under Milestone 5.                                                                              |
-| 5 — Testing           | In Progress | 139 local passing tests; 100% runtime line coverage, seeded configuration invariants, isolated I/O fault tests, actual-checkout archive verification and offline installation.                                                 | Local Node 20.19.0/20.20.0/22.22.1 checks passed. Await actual hosted matrix results before completion; see session below.                                              |
+| 3 — Diagnostics       | Complete    | Pure analyzeConfig API; key-set comparison, shared diagnostic catalog, six stable codes, actionable recommendations, deterministic ordering, versioned report, and summary counts.                                             | Parser errors deliberately skip differences; external runtime provisioning is not inspected. CLI reporting was delivered in Milestone 4.                                |
+| 4 — CLI               | Complete    | Working check command, path options, help/version, terminal/JSON reports, strict arguments, exit codes, safe bounded reads, CI-compatible output, and integration tests.                                                       | CLI contract is unchanged. Native Windows/Linux verification passed under Milestone 5.                                                                                  |
+| 5 — Testing           | Complete    | 139 tests; 100% local runtime line coverage; seeded invariants, isolated I/O faults, actual-checkout archive/offline installation checks; all 13 hosted runtime/platform jobs passed.                                          | Matrix samples supported runtime lines; Windows skips two POSIX-only tests. Coverage and tests do not replace real-project validation or release readiness.             |
 | 6 — Documentation     | In Progress | README quick start and real terminal excerpt; CLI/PARSER/REPORT contracts cover implemented behavior, schema, exit codes, errors, privacy, and limits; safe examples and progress log updated.                                 | Add troubleshooting and contributing/security/changelog/community documents; complete release metadata during readiness work.                                           |
-| 7 — CI/CD             | In Progress | Verification-only least-privilege pinned GitHub Actions workflow, brought forward to satisfy Milestone 5 platform acceptance.                                                                                                  | Verify hosted matrix runs; add dependency updates, repository protection/required checks, and approval-gated release setup. No publishing workflow yet.                 |
+| 7 — CI/CD             | In Progress | Verified least-privilege pinned Quality workflow: Linux/Windows/macOS, runtime matrix, lint/format/tests/coverage, archive/import/installed-CLI checks.                                                                        | Add dependency updates, repository protection/required checks, and approval-gated release setup. No publishing workflow yet.                                            |
 | 8 — Release readiness | Not Started | Private package guard, explicit runtime file allowlist, ESM exports/bin, license, and offline consumer installation/import/CLI verification passed.                                                                            | Verify ownership/name availability, TypeScript declarations, compatibility, final release archive and publishing authentication. This project is not release-ready.     |
 | 9 — Publication       | Not Started | None.                                                                                                                                                                                                                          | Owner approval, release checklist, npm publication, public-install verification, and GitHub release. No publication, tag, or external release authorized.               |
 
@@ -298,7 +298,7 @@ Verification (macOS, Node.js 20.20.0, npm 10.8.2):
 
 ## Milestone 5 session — 2026-10-25
 
-Status: **In Progress**. Inspected the full specification, source, tests, package
+Status: **Complete**. Inspected the full specification, source, tests, package
 contents, runtime inventory, and clean Milestone 4 commit `0412d8e` before changes.
 
 Completed:
@@ -331,10 +331,11 @@ Decisions and remaining work:
 - Keep the Node 20+ runtime contract. Development tools have a higher minimum;
   minimum-runtime CI runs dependency-free tests rather than incompatible lint tooling.
 - No production/API/schema/exit-code changes, new dependencies, release tags,
-  publication, or external release. Native platform branches still need hosted results.
-- Hosted workflow results are pending. Do not treat matrix configuration as a pass.
+  publication, or external release. Native platform checks passed as recorded below.
+- Matrix samples release lines and hosted OS images rather than every patch/OS.
+  No real-project compatibility or full dotenv support is implied by coverage.
 
-Verification so far (macOS):
+Verification (local macOS and actual GitHub-hosted runners):
 
 - `npm run check` on Node **20.19.0**, **20.20.0**, and **22.22.1**: **139 passed**,
   zero failures/skips per runtime, clean ESLint and Prettier.
@@ -349,15 +350,31 @@ Verification so far (macOS):
   matrix jobs passed. Windows exposed an invalid POSIX-mode assertion in the
   package test: Windows archives do not preserve Unix executable bits. Restricted
   that assertion to POSIX and retained mandatory installed-shim execution on every
-  platform. A follow-up hosted run must pass before milestone completion.
+  platform. The final successful run below verifies that change.
 - Follow-up run `40220713276`: Linux/macOS and minimum runtime still passed;
   Windows progressed to a byte-integrity assertion. Git's automatic CRLF checkout
   converted the shebang, which npm normalizes to LF when installing. Added
   `.gitattributes` to keep repository text on LF across platforms; retained strict
   installed-byte equality rather than normalizing away differences in the test.
 
+- Final quality run for code commit `f116f5c`: [all 13 jobs passed](https://github.com/ghazy001/configpilot/actions/runs/40221334220).
+  Linux/Windows/macOS each passed on Node **20.19.0**, **22.13.0**, **24.x**, and
+  **26.x**, including npm ci, lint, tests, formatting, and instrumented coverage.
+  Linux also passed the complete runtime suite on **Node 20.0.0** without dev tools.
+- Inspected the successful Windows 20.19.0 log: **137 passed, 0 failed, 2 explicit
+  POSIX-only skips** (permissions and FIFO/device tests), both normal and coverage
+  runs. Regular-file/directory symlinks, native paths, spaces/Unicode, strict package
+  byte equality, and the installed `.cmd` shim all passed. POSIX jobs run the skipped
+  permission/device tests; local macOS ran all **139** without skips.
+- Windows Node 20.19.0 instrumentation measured **100% lines, branches, and
+  functions for every runtime module**, including the reader's platform fallback.
+- No runtime behavior changes were needed. The two observed Windows packaging-test
+  failures were fixed and the full matrix was rerun successfully, preserving strict
+  installation and privacy assertions.
+- `git diff --check`: passed. No npm package, tag, or external release was created.
+
 ## Next task
 
-Finish Milestone 5 by inspecting actual hosted matrix results and resolving any
-failures. Then Milestone 6: troubleshooting, contribution/security/changelog/community
-documentation and a coherent first-time developer experience. Keep publication gated.
+Milestone 6: troubleshooting, contribution/security/changelog/community documentation
+and a coherent first-time developer experience. Discovery and real-project evaluation
+remain open; the remaining CI/release and publishing safeguards retain their milestones.

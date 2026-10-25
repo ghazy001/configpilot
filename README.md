@@ -5,10 +5,11 @@ Explainable environment-configuration diagnostics for developers and CI.
 ConfigPilot compares environment-variable declarations, explains configuration
 inconsistencies, and recommends safe actions without reporting values.
 
-**Development status:** Milestone 5 (testing and quality). Use `configpilot check` or the
+**Development status:** Milestone 5 complete (testing and quality). Use `configpilot check` or the
 JavaScript API to compare a documented dotenv subset, with actionable terminal or
-JSON reports that omit values. Cross-platform verification is in progress; the full release-readiness review
-and npm publication remain pending. This project has not published to npm yet.
+JSON reports that omit values. Quality checks pass on Linux, Windows, and macOS across
+the configured Node runtime matrix. The full release-readiness review and npm
+publication remain pending. This project has not published to npm yet.
 
 ## Try the current CLI
 
@@ -187,8 +188,8 @@ milestone. The source repository is
 not yet verified.
 
 See [the progress log](docs/PROGRESS.md) for outstanding milestones and verification,
-and [AGENTS.md](AGENTS.md) for the full product specification. After Milestone 5
-verification: Milestone 6, documentation and developer experience.
+and [AGENTS.md](AGENTS.md) for the full product specification. Next: Milestone 6,
+documentation and developer experience.
 
 ## License
 
