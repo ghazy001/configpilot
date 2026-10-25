@@ -345,6 +345,11 @@ Verification so far (macOS):
 - Package tests verified exactly **15 intended archive files**, no synthetic
   environment files/unintended assets, offline API/CLI use, and installed byte equality.
 - Coverage figures are from executed instrumentation, not proof of every platform.
+- Initial hosted run `40220194142`: Linux minimum-runtime and all Linux/macOS
+  matrix jobs passed. Windows exposed an invalid POSIX-mode assertion in the
+  package test: Windows archives do not preserve Unix executable bits. Restricted
+  that assertion to POSIX and retained mandatory installed-shim execution on every
+  platform. A follow-up hosted run must pass before milestone completion.
 
 ## Next task
 

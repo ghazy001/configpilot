@@ -114,11 +114,6 @@ test("tarball excludes environment files and works in an offline consumer", (t) 
     ),
   );
   assert.deepEqual(archive.files.map(({ path }) => path).sort(), expectedFiles);
-  assert.ok(
-    archive.files.find(({ path }) => path === "bin/configpilot.js").mode &
-      0o111,
-    "The packaged CLI must be executable.",
-  );
   // The staged secret test cannot detect accidental publishable files that only
   // exist in the checkout. Independently check its real file list before packing.
   const [dryRun] = JSON.parse(
@@ -145,6 +140,17 @@ test("tarball excludes environment files and works in an offline consumer", (t) 
     ),
   );
   assert.deepEqual(actual.files.map(({ path }) => path).sort(), expectedFiles);
+  // Windows filesystems do not preserve POSIX executable bits. Verify those on
+  // POSIX; both platforms still execute their actual installed npm shim below.
+  if (process.platform !== "win32") {
+    for (const packed of [archive, actual]) {
+      assert.ok(
+        packed.files.find(({ path }) => path === "bin/configpilot.js").mode &
+          0o111,
+        "The packaged CLI must be executable on POSIX.",
+      );
+    }
+  }
   writeFileSync(
     join(consumer, "package.json"),
     JSON.stringify({ private: true, type: "module" }),

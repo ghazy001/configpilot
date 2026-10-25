@@ -76,6 +76,8 @@ Platform-specific POSIX permission/device tests are explicitly skipped on Window
 Windows runs the installed `.cmd` shim and native path tests instead. Symlink tests
 can skip on Windows when creating a symlink requires privileges. These skips are
 reported by the runner. Other unexpected skips or failures need investigation.
+Archive executable bits are asserted on POSIX, where they are meaningful; both
+platforms must successfully execute their installed npm shim.
 
 The matrix samples the minimum runtime, development-tool boundaries, and current
 even-numbered release lines. It does not test every Node patch or OS version.
