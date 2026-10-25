@@ -19,7 +19,7 @@ Discovery remains unfinished and must inform later product decisions.
 | 3 — Diagnostics       | Complete    | Pure analyzeConfig API; key-set comparison, shared diagnostic catalog, six stable codes, actionable recommendations, deterministic ordering, versioned report, and summary counts.                                             | Parser errors deliberately skip differences; external runtime provisioning is not inspected. CLI reporting was delivered in Milestone 4.                                                         |
 | 4 — CLI               | Complete    | Working check command, path options, help/version, terminal/JSON reports, strict arguments, exit codes, safe bounded reads, CI-compatible output, and integration tests.                                                       | CLI contract is unchanged. Native Windows/Linux verification passed under Milestone 5.                                                                                                           |
 | 5 — Testing           | Complete    | 139 tests; 100% local runtime line coverage; seeded invariants, isolated I/O faults, actual-checkout archive/offline installation checks; all 13 hosted runtime/platform jobs passed.                                          | Matrix samples supported runtime lines; Windows skips two POSIX-only tests. Coverage and tests do not replace real-project validation or release readiness.                                      |
-| 6 — Documentation     | In Progress | Reworked README; contribution/security/conduct/changelog and troubleshooting guides; executable examples and scenario guide; verified local install paths, examples, packaged documentation and links.                         | Local checks pass; awaiting hosted verification and fresh-checkout quick start. Registry ownership, declarations, release metadata and private reporting configuration remain readiness/CI work. |
+| 6 — Documentation     | Complete    | Reworked README; contribution/security/conduct/changelog and troubleshooting guides; executable examples and scenario guide; verified local install paths, examples, packaged documentation and links.                         | Local and 13 hosted checks passed; no-install fresh-clone quick start verified. Registry ownership, declarations, release metadata and private reporting configuration remain readiness/CI work. |
 | 7 — CI/CD             | In Progress | Verified least-privilege pinned Quality workflow: Linux/Windows/macOS, runtime matrix, lint/format/tests/coverage, archive/import/installed-CLI checks.                                                                        | Add dependency updates, repository protection/required checks, and approval-gated release setup. No publishing workflow yet.                                                                     |
 | 8 — Release readiness | Not Started | Private package guard, explicit runtime file allowlist, ESM exports/bin, license, and offline consumer installation/import/CLI verification passed.                                                                            | Verify ownership/name availability, TypeScript declarations, compatibility, final release archive and publishing authentication. This project is not release-ready.                              |
 | 9 — Publication       | Not Started | None.                                                                                                                                                                                                                          | Owner approval, release checklist, npm publication, public-install verification, and GitHub release. No publication, tag, or external release authorized.                                        |
@@ -375,7 +375,7 @@ Verification (local macOS and actual GitHub-hosted runners):
 
 ## Milestone 6 session — 2026-10-25
 
-Status: **In Progress**. Read the project specification, inspected source/contracts,
+Status: **Complete**. Read the project specification, inspected source/contracts,
 examples, package allowlist, tests, and clean Milestone 5 commit `fbb1146`.
 
 Completed:
@@ -419,9 +419,9 @@ Decisions and remaining work:
   release setup; the documented fallback shares no vulnerability details publicly.
 - No npm name ownership, TypeScript support, registry installation, release dates,
   publication or security certification is claimed. No package/release/tag created.
-- Hosted matrix and clean remote-clone quick start are pending before completion.
+- All hosted jobs and the clean remote-clone quick start passed as recorded below.
 
-Verification so far (macOS Node 20.20.0, npm 10.8.2):
+Verification (macOS Node 20.20.0/npm 10.8.2 and GitHub-hosted runners):
 
 - `npm run check`: **142 passed**, zero failures/skips, ESLint with zero warnings
   and Prettier passed. Existing parser/analyzer/privacy/file/package checks passed.
@@ -440,9 +440,24 @@ Verification so far (macOS Node 20.20.0, npm 10.8.2):
   0 after returning the same mismatch report. Example inputs remain byte-identical.
 - `git diff --check`: passed. No changes to the owner specification or runtime code.
 
+- For implementation/docs commit `cc99cbe`, [all 13 hosted jobs passed](https://github.com/ghazy001/configpilot/actions/runs/40223251432):
+  Linux, Windows and macOS each on Node 20.19.0, 22.13.0, 24.x and 26.x ran clean
+  installation, lint, tests, formatting and coverage. Linux Node 20.0.0 passed the
+  runtime suite, including the new example and installed-documentation checks.
+  Windows retains the documented platform-specific POSIX test skips.
+- Cloned the pushed repository into a fresh disposable directory with **no
+  node_modules**. Actual help/version, README terminal output and API snippet,
+  mismatch JSON and library example from another directory all passed; fixture
+  files remained unchanged and no dependency installation was needed. This verifies
+  the initial user path independently of the developed checkout's installed tools.
+- Standalone `npm run pack:dry-run -- --json --cache /private/tmp/configpilot-npm-cache`:
+  passed with exactly **18 intended files**. Security, changelog and troubleshooting
+  are included; contribution docs, examples, tests, environment files and progress
+  remain excluded. The private publication guard remains set.
+
 ## Next task
 
-Complete Milestone 6 hosted verification and fresh-clone quick start, then Milestone 7:
-dependency update automation, repository protection/required checks, security-report
-settings and approval-gated release preparation. Discovery and real-project evaluation
-remain open; publication remains subject to readiness and explicit owner approval.
+Milestone 7: dependency update automation, repository protection/required checks,
+security-report settings and approval-gated release preparation. Existing quality CI
+is already verified. Discovery and real-project evaluation remain open; publication
+remains subject to readiness and explicit owner approval.
