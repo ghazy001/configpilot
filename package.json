@@ -31,7 +31,11 @@
     "docs/PARSER.md",
     "src/analyzer/config-analyzer.js",
     "src/diagnostics/issue-codes.js",
-    "docs/REPORT.md"
+    "docs/REPORT.md",
+    "docs/CLI.md",
+    "src/reporters/json.js",
+    "src/reporters/terminal.js",
+    "src/utils/read-config-file.js"
   ],
   "scripts": {
     "test": "node --test",

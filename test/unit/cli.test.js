@@ -1,37 +1,43 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { runCli } from "../../src/cli.js";
+import { parseArguments, runCli } from "../../src/cli.js";
 
 const options = { version: "0.1.0" };
 
-test("help describes only available commands and the current limitation", () => {
-  for (const args of [[], ["--help"]]) {
-    const result = runCli(args, options);
+test("help describes the available command, options, and exit codes", async () => {
+  for (const args of [[], ["--help"], ["check", "--help"]]) {
+    const result = await runCli(args, options);
     assert.equal(result.exitCode, 0);
     assert.equal(result.stderr, "");
     assert.match(result.stdout, /Usage:/);
     assert.match(result.stdout, /configpilot --help/);
     assert.match(result.stdout, /configpilot --version/);
-    assert.match(result.stdout, /not implemented yet/);
+    assert.match(result.stdout, /--template PATH/);
+    assert.match(result.stdout, /--env PATH/);
+    assert.match(result.stdout, /--json/);
+    assert.match(result.stdout, /Exit codes:/);
   }
 });
 
-test("version is provided by the caller and ends with a newline", () => {
-  assert.deepEqual(runCli(["--version"], { version: "0.2.0" }), {
+test("version is provided by the caller and ends with a newline", async () => {
+  assert.deepEqual(await runCli(["--version"], { version: "0.2.0" }), {
     exitCode: 0,
     stdout: "0.2.0\n",
     stderr: "",
   });
 });
 
-test("check does not pretend to have analyzed configuration", () => {
-  const result = runCli(["check"], options);
-  assert.equal(result.exitCode, 2);
-  assert.equal(result.stdout, "");
-  assert.match(result.stderr, /check command is not implemented/);
+test("check analyzes the explicitly read configuration", async () => {
+  const result = await runCli(["check"], {
+    ...options,
+    readFile: async () => "PORT=3000",
+  });
+  assert.equal(result.exitCode, 0);
+  assert.equal(result.stderr, "");
+  assert.match(result.stdout, /No configuration issues found/);
 });
 
-test("unknown, mixed, and extra arguments fail without being echoed", () => {
+test("unknown, mixed, and extra arguments fail without being echoed", async () => {
   const secret = "SYNTHETIC_TOKEN_DO_NOT_ECHO";
   for (const args of [
     [secret],
@@ -39,11 +45,11 @@ test("unknown, mixed, and extra arguments fail without being echoed", () => {
     ["--help", secret],
     ["--version", secret],
     ["--help", "--version"],
-    ["check", "--env", secret],
+    ["check", "--env", secret, "extra"],
     [`--password=${secret}`],
     [`\u001b[31m${secret}\n`],
   ]) {
-    const result = runCli(args, options);
+    const result = await runCli(args, options);
     assert.equal(result.exitCode, 2);
     assert.equal(result.stdout, "");
     assert.match(result.stderr, /configpilot --help/);
@@ -54,6 +60,5 @@ test("unknown, mixed, and extra arguments fail without being echoed", () => {
 
 test("argument resolution is deterministic and leaves inputs unchanged", () => {
   const args = Object.freeze(["check", "--json"]);
-  const metadata = Object.freeze({ version: "0.1.0" });
-  assert.deepEqual(runCli(args, metadata), runCli(args, metadata));
+  assert.deepEqual(parseArguments(args), parseArguments(args));
 });

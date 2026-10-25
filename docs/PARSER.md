@@ -20,7 +20,7 @@ const result = parseDotenv("PORT=3000\nPORT=4000", { file: ".env" });
 
 This API is available from the local checkout or a locally packed installation.
 The project has not published this package to npm. For comparisons, use
-[`analyzeConfig`](REPORT.md). The `configpilot check` command is not implemented yet.
+[`analyzeConfig`](REPORT.md) or the [`configpilot check` command](CLI.md).
 
 ## Inputs and results
 

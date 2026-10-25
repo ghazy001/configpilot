@@ -5,11 +5,10 @@ Explainable environment-configuration diagnostics for developers and CI.
 ConfigPilot compares environment-variable declarations, explains configuration
 inconsistencies, and recommends safe actions without reporting values.
 
-**Development status:** Milestone 3 (comparison and diagnostics). The JavaScript
-API parses and compares a documented dotenv subset, with value-free structured
-reports. Help and version commands work. CLI `check` and terminal/JSON CLI reports
-are **not implemented**. This package is not yet ready for production use or
-published to npm by this project.
+**Development status:** Milestone 4 (working CLI). Use `configpilot check` or the
+JavaScript API to compare a documented dotenv subset, with actionable terminal or
+JSON reports that omit values. Cross-platform CI, the full release-readiness review,
+and npm publication remain pending. This project has not published to npm yet.
 
 ## Try the current CLI
 
@@ -19,26 +18,51 @@ Requires Node.js **20 or newer** and npm. From this checkout:
 npm ci
 node bin/configpilot.js --help
 node bin/configpilot.js --version
+node bin/configpilot.js check --template examples/reference.txt --env examples/environment.txt
 ```
 
 For a local executable installation, run `npm install --global .` from this checkout,
-then `configpilot --help`. No registry installation is required. Package-name
+then `configpilot --help` or `configpilot check`. No registry installation is required. Package-name
 availability and ownership have not yet been verified; do not install a registry
 package based on this README.
 
-With no arguments, the CLI displays help. `configpilot check` currently returns a
-clear message directing you to the JavaScript analysis API. Unknown commands, extra arguments,
-and unsupported flags also fail. Arguments are never repeated in errors.
+The example uses synthetic values and reports `DATABASE_URL` as missing and
+`REDIS_URL` as undocumented. Its **exit code is 1**, indicating findings to review.
+The terminal report includes these lines:
 
-| Exit code | Current meaning                                             |
-| --------- | ----------------------------------------------------------- |
-| `0`       | Help or version completed successfully.                     |
-| `2`       | Unsupported arguments or a command that is not implemented. |
+```text
+WARNING DATABASE_URL [MISSING_KEY]
+WARNING REDIS_URL [UNDOCUMENTED_KEY]
+Summary: 0 errors, 2 warnings, 0 info.
+No files were modified.
+```
 
-This is the foundation contract. The analysis exit-code contract will be documented
-when `check` is implemented. Output uses plain text with no ANSI colors, including
-when `NO_COLOR` is set or output is redirected. Help/version use stdout; errors use
-stderr.
+For your project, run these commands from the directory containing your configuration:
+
+```sh
+configpilot check
+configpilot check --template .env.example --env .env
+configpilot check --json
+```
+
+Defaults are `.env.example` and `.env` relative to the working directory. Paths may
+contain spaces or Unicode; use shell quoting as needed. Path options also support
+`--template=PATH` and `--env=PATH`. Files are read only, limited to 1 MiB each, and
+must be regular UTF-8 files. With no arguments the CLI displays help.
+
+| Exit code | Current meaning                                                                  |
+| --------- | -------------------------------------------------------------------------------- |
+| `0`       | No warnings/errors, or help/version succeeded.                                   |
+| `1`       | Analysis contains warnings or errors; review the findings.                       |
+| `2`       | Invalid arguments, file access/type/encoding/size error, or operational failure. |
+
+Warnings are potential inconsistencies, not proof that a deployment is broken.
+They still make CI checks nonzero for review. Output is deterministic plain text
+without ANSI colors, including when `NO_COLOR` is set or output is redirected.
+Analysis reports and help/version use stdout; terminal usage/read failures use
+stderr. JSON mode emits one parseable object on stdout, including a safe error
+envelope for operational failures. See [the CLI contract](docs/CLI.md) for all
+options, exit codes, streams, error codes, and file/privacy limits.
 
 ## Compare configurations
 
@@ -129,7 +153,9 @@ ES modules, named exports, kebab-case filenames, and `*.test.js` test filenames.
 The ESM package entry point exports `parseDotenv`, `analyzeConfig`, and
 `ISSUE_CODES`; CommonJS is not a target.
 
-The CLI entry point handles process I/O; `src/cli.js` resolves arguments independently.
+The CLI entry point handles process I/O; `src/cli.js` separates pure argument parsing
+from asynchronous command orchestration. A bounded UTF-8 reader and pure terminal/
+JSON reporters support the command without adding filesystem access to the API.
 Parsing and comparison are pure and independent of filesystem and presentation
 code. A shared diagnostic catalog keeps codes, messages, and recommendations
 consistent. Only explicitly listed runtime files and API documentation, plus
@@ -138,8 +164,9 @@ Adding runtime modules requires updating the allowlist and packaging tests.
 
 ## Privacy and release safety
 
-The current CLI never reads configuration files, executes their contents, writes
-configuration, or makes network requests. The parser and analyzer only examine
+The CLI reads only the two selected configuration files; it never executes their
+contents, writes configuration, loads project modules, or makes network requests.
+The parser and analyzer only examine
 explicit text inputs and return names, caller-provided file labels, locations,
 fixed diagnostic text, status, and counts. They never inspect `process.env` or
 execute project code. Names and labels are public metadata; do not encode credentials in them.
@@ -157,8 +184,8 @@ milestone. The source repository is
 not yet verified.
 
 See [the progress log](docs/PROGRESS.md) for outstanding milestones and verification,
-and [AGENTS.md](AGENTS.md) for the full product specification. Next: Milestone 4,
-the working `configpilot check` command and CLI reports.
+and [AGENTS.md](AGENTS.md) for the full product specification. Next: Milestone 5,
+testing and quality across supported environments.
 
 ## License
 

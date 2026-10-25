@@ -17,26 +17,28 @@ Discovery remains unfinished and must inform later product decisions.
 | 1 — Repository setup  | Complete    | Initialized Git on `main`; added ESM package metadata, CLI entry point, npm scripts, ESLint, Prettier, EditorConfig, ignore rules, MIT license, README, built-in test runner, naming conventions, and Node.js 20+ requirement. | All foundation checks passed locally. Other Node versions and operating systems remain to be verified in Milestone 7.                                                                                 |
 | 2 — Parser            | Complete    | Pure public `parseDotenv` API; portable keys/locations, comments, exports, whitespace, quotes/escapes, line endings/BOM, duplicates, safe syntax diagnostics, bounded input, and value-free results.                           | Physical multiline values remain unsupported and are quarantined. Exact syntax and recovery are documented in docs/PARSER.md; full dotenv compatibility is not claimed.                               |
 | 3 — Diagnostics       | Complete    | Pure analyzeConfig API; key-set comparison, shared diagnostic catalog, six stable codes, actionable recommendations, deterministic ordering, versioned report, and summary counts.                                             | Parser errors deliberately skip differences; external runtime provisioning is not inspected. CLI reporting remains Milestone 4.                                                                       |
-| 4 — CLI               | Not Started | Foundation includes help/version, argument errors, and a pure argument resolver.                                                                                                                                               | Implement real `check`, file options, safe reads, terminal/JSON reports, and analysis exit codes. Cross-platform behavior remains unverified.                                                         |
-| 5 — Testing           | In Progress | 87 passing tests; parser/analyzer 100% line coverage; analyzer 94.74% branch coverage; comparison, privacy, safe exceptions, non-execution, and offline packaged API verified.                                                 | Add CLI file/reporter tests in Milestone 4 and verify supported Node/platform combinations in CI.                                                                                                     |
-| 6 — Documentation     | In Progress | README examples for parse/compare; docs/PARSER.md and docs/REPORT.md define grammar, schema, stable codes, severity, ordering, recovery, privacy, and limits; progress updated.                                                | Add full CLI docs, troubleshooting, contributing/security/changelog documents, and remaining package metadata.                                                                                        |
+| 4 — CLI               | Complete    | Working check command, path options, help/version, terminal/JSON reports, strict arguments, exit codes, safe bounded reads, CI-compatible output, and integration tests.                                                       | Local verification is macOS/Node 20.20.0. Native Windows/Linux execution remains for supported-platform quality/CI verification.                                                                      |
+| 5 — Testing           | In Progress | 128 passing tests; parser, analyzer, command logic, and reporters have 100% line coverage; actual CLI and offline package consumer verified with privacy and filesystem edge cases.                                            | Verify supported Node/platform combinations, audit remaining critical coverage gaps, and make results reproducible across environments.                                                               |
+| 6 — Documentation     | In Progress | README quick start and real terminal excerpt; CLI/PARSER/REPORT contracts cover implemented behavior, schema, exit codes, errors, privacy, and limits; safe examples and progress log updated.                                 | Add troubleshooting and contributing/security/changelog/community documents; complete release metadata during readiness work.                                                                         |
 | 7 — CI/CD             | Not Started | None.                                                                                                                                                                                                                          | Add least-privilege workflows, supported-runtime/platform matrix, packaging checks, dependency updates, and approval-gated release setup. Remote repository is configured; CI is not yet implemented. |
 | 8 — Release readiness | Not Started | Private package guard, explicit runtime file allowlist, ESM exports/bin, license, and offline consumer installation/import/CLI verification passed.                                                                            | Verify ownership/name availability, TypeScript declarations, compatibility, final release archive and publishing authentication. This project is not release-ready.                                   |
 | 9 — Publication       | Not Started | None.                                                                                                                                                                                                                          | Owner approval, release checklist, npm publication, public-install verification, and GitHub release. No publication, tag, or external release authorized.                                             |
 
 ## Architectural decisions
 
-- Milestones 1–2 established the repository and parser. Milestone 3 adds pure
-  comparison and diagnostics. A working CLI check and reporters remain Milestone 4;
-  the CLI must clearly direct users to the implemented JavaScript API until then.
+- Milestones 1–3 established the repository, parser, and pure comparison engine.
+  Milestone 4 adds the working CLI, safe file reads, and reporters. Public parser
+  and analyzer contracts remain unchanged; broader quality/platform verification
+  is the next milestone.
 - Use Node's built-in test runner and no runtime dependencies. Use maintained
   ESLint 10; its development runtime requirement is Node.js 20.19+, 22.13+, or 24+.
   The shipped runtime still targets Node.js 20+. Pin direct development dependencies
   and commit the npm lockfile for repeatability. ESLint 9 was rejected after npm
   reported its end of support, confirmed by the
   [official support schedule](https://eslint.org/version-support/).
-- Separate the executable's process I/O from `src/cli.js`, whose argument resolver
-  has explicit inputs and outputs. The ESM entry point exports `parseDotenv`,
+- Separate the executable's process I/O from `src/cli.js`, which now has a pure
+  `parseArguments` function and asynchronous command orchestration with injectable
+  reads. File reading and terminal/JSON formatting live in separate modules. The ESM entry point exports `parseDotenv`,
   `analyzeConfig`, and frozen `ISSUE_CODES`. Parsing and comparison have no I/O or
   runtime dependencies. One small diagnostic catalog holds both explanations and
   recommendations to prevent parser/analyzer drift.
@@ -45,9 +47,10 @@ Discovery remains unfinished and must inform later product decisions.
   This reduces accidental packaging risk at a small maintenance cost.
 - Set `private: true` to block accidental publication until an approved release
   readiness change. Do not invent owner identity, repository URLs, or npm ownership.
-- Current CLI exit codes: 0 for help/version, 2 for unsupported arguments and
-  unavailable commands. No arguments displays help. Reject extra/mixed arguments.
-  The future analysis contract is still to be designed and documented.
+- Current CLI exit codes: 0 for clean analysis or help/version, 1 for analysis
+  warnings/errors, and 2 for argument, file, or operational failures. No arguments
+  displays help. Reject extra/mixed/duplicate options. JSON errors use a separate
+  safe envelope; analysis reports keep schema version 1.
 - Use plain output with no colors. Never repeat arbitrary CLI arguments in errors.
   Ignore environment files in Git and formatting. Preserve `AGENTS.md` verbatim
   and exclude it from formatting to avoid rewriting the owner's specification.
@@ -218,11 +221,84 @@ Verification (macOS, Node.js 20.20.0, npm 10.8.2):
 - `git diff --check`: passed. Other operating systems and Node versions remain
   unverified until the supported-platform CI milestone.
 
+## Milestone 4 session — 2026-10-25
+
+Status: **Complete**. Started from clean Milestone 3 commit `1da0060` and followed
+this project's established verify/commit/normal-push workflow for `origin/main`.
+
+Completed:
+
+- Implemented `configpilot check`, default .env.example/.env inputs, explicit
+  --template/--env paths in split or equals forms, --json, root/check help, and
+  standalone version. Validate all arguments before reading configuration.
+- Split pure argument parsing from asynchronous orchestration. Added separate
+  terminal/JSON reporters and a regular-file UTF-8 reader; no runtime dependencies.
+  Public parseDotenv/analyzeConfig/ISSUE_CODES exports and report schema are unchanged.
+- Define exit 0 for clean reports/help/version, 1 for review findings (warnings or
+  errors), and 2 for usage/read/operational errors. Warning severity stays advisory;
+  nonzero status is a CI review signal, not proof of a broken deployment.
+- Keep analysis on stdout; terminal operational failures go to stderr. JSON mode
+  emits exactly one stdout object for analysis or a safe operational-error envelope.
+  Errors never echo native messages, paths, arbitrary arguments, or source values.
+- Restrict reads to selected regular files with checks before/after opening, use
+  read-only/nonblocking flags where available, enforce 1 MiB per file before and
+  during reads, reject malformed UTF-8, and close descriptors on all read paths.
+- Follow symlinks to regular files; reject directory/device/FIFO selections. Quote
+  and escape terminal controls, C1 controls, bidi/format characters, and line
+  separators in labels while preserving exact JSON.parse data.
+- Handle closed output pipes without uncaught stack traces. Keep plain text output
+  consistent for NO_COLOR, non-TTY, and redirected streams.
+- Added docs/CLI.md, updated README/API links and the package allowlist, and added
+  examples/reference.txt and examples/environment.txt using synthetic values only.
+- Updated offline package tests to execute the installed check command and verify
+  clean/mismatch JSON results. The POSIX executable shim is also executed directly.
+
+Decisions and limitations:
+
+- JSON operational failures are distinct from analysis issues: { schemaVersion: 1,
+  error: { code, source?, message, recommendation } }. They exit 2 and include no
+  partial report. The six analysis ISSUE_CODES and their semantics remain unchanged.
+- CLI file size is bounded in UTF-8 bytes, whereas the pure parser retains its
+  UTF-16 code-unit limit. This is intentionally stricter for multibyte input.
+- Reads do not provide atomic snapshots of concurrently edited files. Operating
+  system permissions/I/O behavior still apply; use stable CI inputs.
+- File paths are metadata in successful reports. Operational errors identify only
+  the input role to avoid accidentally reflecting credentials passed as arguments.
+- No short aliases, stdin loading, -- terminator, policy/config-code loading,
+  automatic rewriting, severity overrides, runtime variable expansion, publication,
+  tag, or external release is introduced. These choices are documented explicitly.
+
+Verification (macOS, Node.js 20.20.0, npm 10.8.2):
+
+- Focused CLI/argument/reporter tests: **48 passed**, zero failures/skips.
+- `npm run check`: **128 tests passed**, zero failures/skips; ESLint and Prettier
+  checks passed. Existing parser/analyzer privacy and compatibility tests passed.
+- `npm test -- --experimental-test-coverage`: all 128 tests passed. Parser,
+  analyzer, command logic, diagnostics, and reporters measured **100% line/branch/
+  function coverage**. Reader: **100% lines/functions, 93.55% branches**. Executable:
+  **83.33% lines**; package-metadata failure fallback remains unexercised. Overall
+  coverage is not a substitute for supported-platform verification.
+- `npm run pack:dry-run -- --json --cache /private/tmp/configpilot-npm-cache`:
+  passed; exactly **15 intended files**, executable CLI, no real environment files,
+  fixtures, examples, tests, or unrelated assets. The offline consumer test verified
+  the installed public API and working CLI with clean/mismatch exit codes.
+- Actual integration checks passed for default and explicit paths from another
+  working directory, spaces/Unicode, equals signs, leading-dash names, native path
+  joining, Windows-style option preservation, UTF-8 BOM, and CRLF source locations.
+- Confirmed exit 2 with safe output for missing files, permissions, directories,
+  symlink-to-directory, FIFO/device, invalid UTF-8, and oversized inputs; exactly
+  1 MiB succeeds. Regular-file symlinks work. Closed-pipe behavior passed.
+- Confirmed values never appear in clean/warning/syntax-error/JSON output, source
+  files stay byte-for-byte unchanged, and shell expressions/project modules are not
+  executed. Terminal control escaping and JSON round-trip tests passed.
+- Ran the safe examples through the actual CLI: DATABASE_URL missing, REDIS_URL
+  undocumented, PORT shared, 0 errors/2 warnings, expected exit **1**.
+- `git diff --check`: passed. Linux/Windows and other supported Node versions are
+  not claimed as verified; native platform execution remains outstanding.
+
 ## Next task
 
-Milestone 4: implement `configpilot check` with explicit/default file paths, safe
-filesystem error handling and bounded reads, terminal/JSON reporters, a documented
-exit-code contract, and strict argument validation. Test the actual CLI from other
-working directories, paths with spaces/Unicode, read failures, malformed inputs,
-secret non-disclosure, and unchanged source files. Reuse the pure analyzer and
-schema version 1 without silently changing diagnostic semantics.
+Milestone 5: audit critical branch and privacy coverage, verify the supported
+runtime/platform matrix, and make quality checks reproducible. Preserve the
+public API/report schema and documented 0/1/2 CLI exit contract. Follow with
+community/troubleshooting documentation and least-privilege CI in their milestones.

@@ -18,8 +18,9 @@ console.log(report.issues[0].code === ISSUE_CODES.MISSING_KEY); // true
 ```
 
 This is the JavaScript API available from the checkout or a locally installed
-archive. `configpilot check` and terminal/JSON CLI reporters are not implemented
-yet. Reports can already be serialized directly using `JSON.stringify(report)`.
+archive. The [`configpilot check` command](CLI.md) provides terminal and JSON
+reports using this same schema. Reports can also be serialized directly using
+`JSON.stringify(report)`.
 
 ## Inputs
 

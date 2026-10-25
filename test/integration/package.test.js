@@ -23,15 +23,19 @@ const expectedFiles = [
   "bin/configpilot.js",
   "docs/PARSER.md",
   "docs/REPORT.md",
+  "docs/CLI.md",
   "package.json",
   "src/cli.js",
   "src/index.js",
   "src/parser/dotenv-parser.js",
   "src/analyzer/config-analyzer.js",
   "src/diagnostics/issue-codes.js",
+  "src/reporters/json.js",
+  "src/reporters/terminal.js",
+  "src/utils/read-config-file.js",
 ].sort();
 
-function execute(script, args, cwd, env = {}) {
+function execute(script, args, cwd, env = {}, expectedStatus = 0) {
   const result = spawnSync(process.execPath, [script, ...args], {
     cwd,
     env: { ...process.env, ...env },
@@ -39,7 +43,7 @@ function execute(script, args, cwd, env = {}) {
     timeout: 30_000,
   });
   assert.ifError(result.error);
-  assert.equal(result.status, 0, result.stderr);
+  assert.equal(result.status, expectedStatus, result.stderr);
   return result.stdout;
 }
 
@@ -78,6 +82,8 @@ test("tarball excludes environment files and works in an offline consumer", (t) 
     "src/parser/.env",
     "src/analyzer/.env",
     "src/diagnostics/.env",
+    "src/reporters/.env",
+    "src/utils/.env",
     "bin/.env.local",
     "unintended.txt",
   ]) {
@@ -179,4 +185,32 @@ assert.ok(!JSON.stringify(report).includes("SYNTHETIC_CONSUMER_SECRET"));
 `,
   );
   assert.equal(execute(smoke, [], consumer), "");
+  writeFileSync(join(consumer, ".env.example"), "PORT=3000\nTOKEN=example");
+  writeFileSync(
+    join(consumer, ".env"),
+    "PORT=4000\nTOKEN=SYNTHETIC_INSTALLED_SECRET",
+  );
+  const installedCli = join(installed, metadata.bin.configpilot);
+  const clean = JSON.parse(
+    execute(installedCli, ["check", "--json"], consumer),
+  );
+  assert.equal(clean.summary.total, 0);
+  if (process.platform !== "win32") {
+    const executable = spawnSync(
+      join(consumer, "node_modules", ".bin", "configpilot"),
+      ["check", "--json"],
+      { cwd: consumer, encoding: "utf8", timeout: 10_000 },
+    );
+    assert.ifError(executable.error);
+    assert.equal(executable.status, 0);
+    assert.equal(executable.stderr, "");
+    assert.deepEqual(JSON.parse(executable.stdout), clean);
+  }
+  writeFileSync(
+    join(consumer, ".env"),
+    "PORT=4000\nEXTRA=SYNTHETIC_INSTALLED_SECRET",
+  );
+  const output = execute(installedCli, ["check", "--json"], consumer, {}, 1);
+  assert.equal(JSON.parse(output).summary.warnings, 2);
+  assert.ok(!output.includes("SYNTHETIC_INSTALLED_SECRET"));
 });

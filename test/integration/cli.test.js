@@ -32,12 +32,7 @@ test("actual CLI routes help/version to stdout and errors to stderr", () => {
   }
   assert.equal(run(["--version"]).stdout, `${metadata.version}\n`);
 
-  for (const args of [
-    ["check"],
-    ["unknown"],
-    ["--json"],
-    ["--version", "extra"],
-  ]) {
+  for (const args of [["unknown"], ["--json"], ["--version", "extra"]]) {
     const result = run(args);
     assert.equal(result.status, 2);
     assert.equal(result.stdout, "");
@@ -52,6 +47,9 @@ test("runs in a Unicode directory with spaces without touching configuration", (
   const sentinel = "API_TOKEN=SYNTHETIC_TOKEN\nPASSWORD=SYNTHETIC_PASSWORD\n";
   const envPath = join(directory, ".env");
   writeFileSync(envPath, sentinel);
+  const templatePath = join(directory, ".env.example");
+  const template = "API_TOKEN=\nPASSWORD=\n";
+  writeFileSync(templatePath, template);
 
   for (const args of [["--help"], ["--version"], ["check"], [sentinel]]) {
     const result = run(args, {
@@ -63,5 +61,6 @@ test("runs in a Unicode directory with spaces without touching configuration", (
     assert.ok(!output.includes("SYNTHETIC_PASSWORD"));
     assert.ok(!output.includes("\u001b"));
     assert.equal(readFileSync(envPath, "utf8"), sentinel);
+    assert.equal(readFileSync(templatePath, "utf8"), template);
   }
 });

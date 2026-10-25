@@ -1,0 +1,2 @@
+DATABASE_URL=example
+PORT=3000
