@@ -1,0 +1,72 @@
+name: Release preparation
+
+on:
+  workflow_dispatch:
+    inputs:
+      request_review:
+        description: Request owner review of the prepared candidate (never publishes)
+        type: boolean
+        default: false
+        required: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-preparation
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    name: Prepare unpublished candidate
+    if: github.repository == 'ghazy001/configpilot' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      checks: read
+    outputs:
+      artifact_url: ${{ steps.upload.outputs.artifact-url }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: 24.x
+          package-manager-cache: false
+      - name: Require successful CI for this exact commit
+        run: node scripts/check-release-quality.js
+        env:
+          GH_TOKEN: ${{ github.token }}
+      - run: npm ci --ignore-scripts --no-audit --no-fund
+      - run: npm run check
+      - run: npm run test:coverage
+      - name: Inspect and pack an unpublished candidate
+        run: npm run release:prepare -- "$RUNNER_TEMP/configpilot-candidate"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        id: upload
+        with:
+          name: configpilot-candidate-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/configpilot-candidate/*.tgz
+            ${{ runner.temp }}/configpilot-candidate/candidate.json
+          if-no-files-found: error
+          retention-days: 7
+          include-hidden-files: false
+
+  review:
+    name: Owner candidate review
+    if: inputs.request_review
+    needs: prepare
+    environment: release-review
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Record candidate review without publishing
+        env:
+          CANDIDATE_ARTIFACT: ${{ needs.prepare.outputs.artifact_url }}
+          CANDIDATE_COMMIT: ${{ github.sha }}
+        run: |
+          printf 'Reviewed candidate for commit %s\n\nArtifact: %s\n\nNo package, tag, or release was published.\n' "$CANDIDATE_COMMIT" "$CANDIDATE_ARTIFACT" >> "$GITHUB_STEP_SUMMARY"

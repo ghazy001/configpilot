@@ -5,8 +5,9 @@
 Do not post vulnerability details, exploit steps, credentials, or configuration
 contents in public issues, pull requests, comments, or CI logs.
 
-Use the repository's [Security page](https://github.com/ghazy001/configpilot/security)
-and select **Report a vulnerability** if private reporting is available. If the
+Private reporting is enabled for the upstream repository. Use
+[Report a vulnerability](https://github.com/ghazy001/configpilot/security/advisories/new)
+to submit privately. If the
 button is unavailable, open an [issue](https://github.com/ghazy001/configpilot/issues)
 with only the title **Request private security contact** and ask for a private
 channel. Include no technical vulnerability details or sensitive attachments in

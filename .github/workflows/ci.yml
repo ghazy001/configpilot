@@ -49,3 +49,18 @@ jobs:
           package-manager-cache: false
       # Runtime tests use only Node/npm; modern lint tools have a higher minimum.
       - run: npm test
+
+  gate:
+    name: Quality gate
+    if: always()
+    needs: [quality, minimum-runtime]
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Require every quality job to succeed
+        env:
+          MATRIX_RESULT: ${{ needs.quality.result }}
+          MINIMUM_RESULT: ${{ needs.minimum-runtime.result }}
+        run: |
+          test "$MATRIX_RESULT" = success
+          test "$MINIMUM_RESULT" = success

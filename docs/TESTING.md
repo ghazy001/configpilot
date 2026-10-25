@@ -69,9 +69,17 @@ requests, and manual dispatches:
 Actions are pinned to verified immutable commits, checkout credentials are not
 persisted, and permissions are limited to reading repository contents. Jobs have
 timeouts and obsolete runs on the same branch are cancelled. This verification
-workflow was brought forward from Milestone 7 to support Milestone 5 acceptance;
-it has no release or publishing capability. Repository branch protection and release
-automation remain separate work.
+workflow was brought forward from Milestone 7 to support Milestone 5 acceptance.
+The final **Quality gate** requires all matrix and minimum-runtime jobs to succeed
+and is the stable branch-protection check. See [CI.md](CI.md) for repository
+permissions, dependency updates and required-check configuration, and
+[RELEASING.md](RELEASING.md) for the separate unpublished candidate workflow.
+
+Release-tool tests use an isolated synthetic Git repository with global Git config,
+hooks and signing disabled. They verify private/clean/tracked-file guards, safe
+paths, offline packing, commit/hash manifests, no candidate overwrites, unchanged
+ignored synthetic environment files, and rejection of stale/failed CI checks.
+No test submits an owner approval or publishes a package.
 
 Platform-specific POSIX permission/device tests are explicitly skipped on Windows;
 Windows runs the installed `.cmd` shim and native path tests instead. Symlink tests

@@ -104,6 +104,12 @@ tradeoffs, checks executed, and any remaining limitations. Include synthetic bef
 after examples when they clarify the change. Maintainers review scope, compatibility,
 privacy, and verification; passing CI is necessary evidence, not automatic acceptance.
 
+`main` requires an up-to-date successful **Quality gate**, a pull request, resolved
+conversations and linear history, including for administrators. Use a branch and
+PR rather than pushing directly. See [docs/CI.md](docs/CI.md) for dependency updates,
+repository protections and the solo-maintainer review policy, and
+[docs/RELEASING.md](docs/RELEASING.md) for unpublished candidate preparation.
+
 For a non-security bug, include:
 
 - ConfigPilot version or commit, Node/npm versions, operating system, and shell.

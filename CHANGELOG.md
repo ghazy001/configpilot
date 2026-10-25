@@ -22,6 +22,9 @@ work, not an npm publication or GitHub release. The package version currently re
   examples, and development progress tracking.
 - Exact package allowlist, private publication guard, MIT license, ESM metadata,
   lint/format tooling, and cross-platform LF text policy.
+- Stable required Quality gate, weekly npm/Actions dependency updates, restricted
+  SHA-pinned Actions policy, private vulnerability reporting and owner-reviewed
+  unpublished candidate preparation with commit/hash manifests. No publishing step.
 
 ### Compatibility and limits
 

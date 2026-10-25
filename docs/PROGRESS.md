@@ -20,7 +20,7 @@ Discovery remains unfinished and must inform later product decisions.
 | 4 — CLI               | Complete    | Working check command, path options, help/version, terminal/JSON reports, strict arguments, exit codes, safe bounded reads, CI-compatible output, and integration tests.                                                       | CLI contract is unchanged. Native Windows/Linux verification passed under Milestone 5.                                                                                                           |
 | 5 — Testing           | Complete    | 139 tests; 100% local runtime line coverage; seeded invariants, isolated I/O faults, actual-checkout archive/offline installation checks; all 13 hosted runtime/platform jobs passed.                                          | Matrix samples supported runtime lines; Windows skips two POSIX-only tests. Coverage and tests do not replace real-project validation or release readiness.                                      |
 | 6 — Documentation     | Complete    | Reworked README; contribution/security/conduct/changelog and troubleshooting guides; executable examples and scenario guide; verified local install paths, examples, packaged documentation and links.                         | Local and 13 hosted checks passed; no-install fresh-clone quick start verified. Registry ownership, declarations, release metadata and private reporting configuration remain readiness/CI work. |
-| 7 — CI/CD             | In Progress | Verified least-privilege pinned Quality workflow: Linux/Windows/macOS, runtime matrix, lint/format/tests/coverage, archive/import/installed-CLI checks.                                                                        | Add dependency updates, repository protection/required checks, and approval-gated release setup. No publishing workflow yet.                                                                     |
+| 7 — CI/CD             | In Progress | Quality matrix and stable gate; weekly dependency updates; restricted SHA-pinned Actions; private reports/security fixes; owner-only candidate environment; private archive/manifest workflow and guard tests.                 | Await pushed matrix, candidate rehearsals, main protection read-back and final PR verification. Publication remains disabled; see session below.                                                 |
 | 8 — Release readiness | Not Started | Private package guard, explicit runtime file allowlist, ESM exports/bin, license, and offline consumer installation/import/CLI verification passed.                                                                            | Verify ownership/name availability, TypeScript declarations, compatibility, final release archive and publishing authentication. This project is not release-ready.                              |
 | 9 — Publication       | Not Started | None.                                                                                                                                                                                                                          | Owner approval, release checklist, npm publication, public-install verification, and GitHub release. No publication, tag, or external release authorized.                                        |
 
@@ -455,9 +455,75 @@ Verification (macOS Node 20.20.0/npm 10.8.2 and GitHub-hosted runners):
   are included; contribution docs, examples, tests, environment files and progress
   remain excluded. The private publication guard remains set.
 
+## Milestone 7 session — 2026-10-25
+
+Status: **In Progress**. Read the full specification and inspected clean Milestone 6
+commit `2676379`, source/contracts, existing workflows, tests and actual GitHub settings.
+
+Completed:
+
+- Add stable **Quality gate**, dependent on all matrix/minimum-runtime jobs and
+  failing unless both succeed, including skipped/cancelled/failing dependencies.
+- Add weekly Monday 08:00 Africa/Tunis Dependabot npm-development and Actions
+  updates, bounded PR counts, grouped compatible development minor/patch updates,
+  separate majors and no automatic merge/publication.
+- Configure and read back private vulnerability reporting, vulnerability alerts and
+  automated dependency security fixes. Preserve default read-only tokens and disallow
+  workflow PR-review approval. Restrict Actions to checkout/setup-node/upload-artifact
+  with required immutable SHA pins. Preserve existing secret-scanning protection.
+- Create **release-review**, restricted to main, owner `ghazy001` as required reviewer,
+  administrator bypass disabled. Self-review prevention is deliberately false so the
+  sole owner can dispatch and manually approve; agents must never provide that approval.
+- Add manual-only Release preparation, restricted to upstream main and triggering
+  SHA, read-only contents/checks access, no stored checkout credentials or npm token.
+  Require successful GitHub Actions Quality gate for the exact commit. Repeat quality
+  checks, then inspect/pack/upload only a private candidate and commit/hash/file manifest.
+- Add source-only release helpers: safe exact file allowlist, regular tracked files,
+  clean commit, new external output directory, dry-run/actual pack equality, offline
+  script-disabled package operations, SHA-256 manifest and no existing-directory
+  overwrite. Preserve the `private` publication guard; no publishing/tag/release step.
+- Test private/path/archive guards; stale/provider/pending/failing CI outcomes; API
+  HTTP/JSON/network errors with redacted synthetic tokens; isolated Git candidate
+  creation, ignored synthetic environment-file integrity, dirty/untracked rejection,
+  no overwrite and a verified archive hash/commit.
+- Add docs/CI.md and docs/RELEASING.md; update contributor/testing/security guidance,
+  README navigation and Unreleased changelog. No runtime API, schema, severity,
+  dependencies or CLI changes. Source-only automation stays outside the 18-file package.
+
+Decisions and remaining work:
+
+- Main protection will require a PR, strict up-to-date **Quality gate** from the
+  GitHub Actions app, resolved conversations and linear history; admins included,
+  force-push/deletion disabled. Apply after the new required gate has actually passed.
+- For the sole maintainer, code PRs require CI with zero independent approving
+  reviews. Candidate review still requires the owner. Add independent reviewers as
+  maintainership expands; do not silently bypass checks to keep working.
+- Candidate review is separate from approval to publish. The workflow has neither
+  npm authentication nor OIDC/write-content permission and cannot publish a package,
+  create a tag or create an external release. Milestone 8/9 readiness/approval remains.
+- GitHub settings were read back after application; no test vulnerability report or
+  security notification was sent. Owner notification preferences remain personal settings.
+- Still pending: hosted matrix, real candidate artifact/consumer verification,
+  unapproved environment-gate rehearsal, main protection and final protected-PR path.
+
+Verification so far (macOS Node 20.20.0/npm 10.8.2):
+
+- `npm run check`: **148 passed**, zero failures/skips, clean lint and formatting.
+- `npm run test:coverage`: all tests executed; core parser/analyzer/runtime behavior
+  remains covered. New release-guard and network-preflight paths are exercised with
+  isolated synthetic fixtures rather than real credentials or external API requests.
+- Parsed CI/release/Dependabot YAML with an available local parser: no syntax errors
+  or duplicate keys. This complements, but does not replace, actual GitHub execution.
+- Existing package tests verify exactly **18 files**, offline installed API/CLI,
+  byte integrity, packaged links and exclusion of synthetic environment files.
+- Repository setting read-back confirms SHA pinning, three allowed actions, read-only
+  defaults, no workflow PR approvals, private reporting/security fixes and main-only
+  owner environment with no admin bypass. Main is not claimed protected yet.
+- `git diff --check`: passed. No npm package, release tag or external release created.
+
 ## Next task
 
-Milestone 7: dependency update automation, repository protection/required checks,
-security-report settings and approval-gated release preparation. Existing quality CI
-is already verified. Discovery and real-project evaluation remain open; publication
-remains subject to readiness and explicit owner approval.
+Finish hosted Milestone 7 verification and protections, then Milestone 8: name
+ownership, TypeScript declarations, final consumer/archive review and approved
+publishing-security design. Discovery and real-project evaluation remain open;
+actual publication still requires explicit owner approval.
