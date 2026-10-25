@@ -34,6 +34,12 @@ exact file list. Verify that the hash matches the downloaded tarball and review 
 full archive and consumer behavior. A matching hash binds the manifest to that
 archive; it is not a provenance attestation or an approval to publish.
 
+`private: true` is an npm publication guard, not an artifact confidentiality setting.
+People signed in to GitHub with repository read access can
+[download workflow artifacts](https://docs.github.com/en/actions/how-tos/manage-workflow-runs/download-workflow-artifacts).
+Artifacts in this public repository must contain only reviewed distributable source
+and documentation, never credentials or private configuration.
+
 The workflow uploads only these explicit files, never a workspace directory,
 environment files, logs, credentials or a cache. Ordinary package tests independently
 verify the reviewed distribution list, installed bytes, import/CLI behavior and
