@@ -1,0 +1,51 @@
+{
+  "name": "configpilot",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Explainable environment-configuration diagnostics for developers and CI.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ghazy001/configpilot.git"
+  },
+  "homepage": "https://github.com/ghazy001/configpilot#readme",
+  "bugs": {
+    "url": "https://github.com/ghazy001/configpilot/issues"
+  },
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "main": "./src/index.js",
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "bin": {
+    "configpilot": "./bin/configpilot.js"
+  },
+  "files": [
+    "bin/configpilot.js",
+    "src/index.js",
+    "src/cli.js"
+  ],
+  "scripts": {
+    "test": "node --test",
+    "lint": "eslint . --max-warnings 0",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "check": "npm run lint && npm test && npm run format:check",
+    "pack:dry-run": "npm pack --dry-run --ignore-scripts"
+  },
+  "keywords": [
+    "dotenv",
+    "environment",
+    "configuration",
+    "cli",
+    "diagnostics"
+  ],
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "eslint": "10.13.0",
+    "prettier": "3.9.10"
+  }
+}
