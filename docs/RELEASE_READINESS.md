@@ -49,8 +49,9 @@ immutable commit/workflow evidence are recorded in [PROGRESS.md](PROGRESS.md).
    account, 2FA and name eligibility immediately before
    any approved first publication; choose another name only by owner decision.
 2. Confirm the final artifact and draft [release notes](RELEASE_NOTES_v0.1.0.md).
-   Resolve the unfinished product-discovery/real-project validation risks recorded
-   in progress before claiming the first release is proven useful in real projects.
+   [Discovery](DISCOVERY.md) and [three public-template evaluations](REAL_PROJECT_EVALUATION.md)
+   are recorded. Real maintainer feedback and broader compatibility sampling remain
+   open; do not claim ecosystem-wide compatibility or established adoption.
 3. Obtain explicit approval for a narrowly scoped change to the private guard and
    first publication/authentication plan. Existing preparation guards require private
    metadata, so any publisher/guard change must be reviewed and verified together.
@@ -65,3 +66,7 @@ The roadmap's package-ownership task remains open until the name is registered
 through a separately approved first publication; logging in does not establish
 ownership. This confirmation does not authorize publication. Registry availability
 and authentication are time-sensitive.
+
+The concrete proposed publication scope and ordered checks are in the
+[first-release approval plan](RELEASE_PLAN_v0.1.0.md). That plan is pending approval;
+it does not enable publication or change private metadata.

@@ -7,13 +7,14 @@ Last updated: 2026-10-26 (Africa/Tunis).
 Read `AGENTS.md` completely. The initial directory contained only `AGENTS.md`;
 there was no Git repository, implementation, package metadata, or test suite.
 Started Milestone 1 as explicitly directed by the agent starting instruction.
-Discovery remains unfinished and must inform later product decisions.
+The initial discovery gap was closed during the release review below; real user
+feedback remains outstanding and must inform later product decisions.
 
 ## Milestones
 
 | Milestone             | Status      | Completed                                                                                                                                                                                                                      | Outstanding work and remaining risks                                                                                                                                                                              |
 | --------------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 0 — Discovery         | In Progress | Product specification identifies personas, problems, and positioning.                                                                                                                                                          | Review five competitors; document a v0.1 boundary, three usage scenarios, real-project evaluation candidates, and assumptions. No real-world validation yet.                                                      |
+| 0 — Discovery         | Complete    | Five primary-source competitor reviews; explicit persona/problem/value and v0.1 boundary; three scenarios; pinned Cal.com/Immich/Supabase template evaluation; assumptions and limits documented.                              | Desk research and initial compatibility only. User interviews, adoption evidence and broader real-project feedback remain open.                                                                                   |
 | 1 — Repository setup  | Complete    | Initialized Git on `main`; added ESM package metadata, CLI entry point, npm scripts, ESLint, Prettier, EditorConfig, ignore rules, MIT license, README, built-in test runner, naming conventions, and Node.js 20+ requirement. | Foundation checks passed; runtime/platform verification passed under Milestone 5.                                                                                                                                 |
 | 2 — Parser            | Complete    | Pure public `parseDotenv` API; portable keys/locations, comments, exports, whitespace, quotes/escapes, line endings/BOM, duplicates, safe syntax diagnostics, bounded input, and value-free results.                           | Physical multiline values remain unsupported and are quarantined. Exact syntax and recovery are documented in docs/PARSER.md; full dotenv compatibility is not claimed.                                           |
 | 3 — Diagnostics       | Complete    | Pure analyzeConfig API; key-set comparison, shared diagnostic catalog, six stable codes, actionable recommendations, deterministic ordering, versioned report, and summary counts.                                             | Parser errors deliberately skip differences; external runtime provisioning is not inspected. CLI reporting was delivered in Milestone 4.                                                                          |
@@ -22,7 +23,7 @@ Discovery remains unfinished and must inform later product decisions.
 | 6 — Documentation     | Complete    | Reworked README; contribution/security/conduct/changelog and troubleshooting guides; executable examples and scenario guide; verified local install paths, examples, packaged documentation and links.                         | Local and 13 hosted checks passed; no-install fresh-clone quick start verified. Registry ownership, declarations, release metadata and private reporting configuration remain readiness/CI work.                  |
 | 7 — CI/CD             | Complete    | Quality matrix and stable gate; weekly dependency updates; restricted SHA-pinned Actions; private reports/security fixes; owner-only candidate environment; private archive/manifest workflow and guard tests.                 | Hosted gate/matrix, candidate artifact/offline consumer, owner approval barrier and main protections verified. Publishing remains disabled; owner notification preferences and release readiness remain separate. |
 | 8 — Release readiness | In Progress | Bundled declarations and installed TypeScript consumer checks; metadata/ESM/bin review; 19-file archive checks; draft release notes and authentication plan; intended npm owner confirmed.                                     | Local/hosted checks and the 19-file candidate passed. Owner login as ghazi001 and 2FA confirmed. Actual package ownership awaits approved first publication; publication remains disabled.                        |
-| 9 — Publication       | Not Started | None.                                                                                                                                                                                                                          | Owner approval, release checklist, npm publication, public-install verification, and GitHub release. No publication, tag, or external release authorized.                                                         |
+| 9 — Publication       | In Progress | First-release identity, publisher and scope documented; authentication/name/main CI rechecked; fresh private candidate prepared; release notes and post-approval sequence ready for review.                                    | Explicit approval required for publication-guard changes, npm publication, tag and GitHub release. Actual ownership and registry installation remain unverified until publication.                                |
 
 ## Architectural decisions
 
@@ -681,3 +682,71 @@ Outstanding and remaining risks:
   emitted consumer execution, lint and formatting. Archive/offline installation
   checks passed as part of the runtime suite; `git diff --check` passed. Hosted
   Quality checks remain mandatory before merging this update.
+
+## Milestone 9 release review — 2026-10-26
+
+Status: **In Progress — review prepared; explicit release approval pending**.
+The owner requested the next milestone after confirming npm login and 2FA. Read
+AGENTS.md, inspected clean main at 3f5ca871e5261325328b6c3943887acdc52071ce,
+and isolated this review on codex/release-0-1-review. No publication was inferred
+from a generic instruction to continue.
+
+Completed for review:
+
+- Read-only npm whoami independently returned **ghazi001**. A fresh explicit
+  registry lookup returned E404 for configpilot. Owner-reported 2FA remains the
+  account-security evidence; no credentials or recovery codes were inspected.
+- The final owner-confirmation main commit passed Quality workflow
+  [40250068526](https://github.com/ghazy001/configpilot/actions/runs/40250068526).
+- Closed Milestone 0's desk-research gap because discovery/real-project evidence
+  was an outstanding release-review risk. Reviewed five competitors using primary
+  docs, defined persona/problem/value, v0.1 included/excluded scope, three scenarios,
+  and explicit unvalidated assumptions in DISCOVERY.md. This adds no product feature.
+- Evaluated commit-pinned public Cal.com, Immich and Supabase templates: 174, 6
+  and 71 accepted unique keys; no parser issues; actual CLI self-checks exited 0.
+  Repeated API reports matched; input hashes remained unchanged; controlled
+  synthetic variants each produced one missing and one undocumented key. Source
+  URLs, hashes, methodology and privacy assertions are in REAL_PROJECT_EVALUATION.md.
+  No upstream project code was run and no template values were committed.
+- Directus had no matching example-template candidate in its inspected current
+  tree and was not reported as passing. Real user interviews/adoption evidence
+  remain open; three samples do not establish complete dotenv compatibility.
+- Prepared a new private candidate from the CI-verified source commit above, using
+  the unchanged safe helper. Its exact 19-file archive has SHA-256
+  **8a0eb298dea440359bfac20f2ec436d908636efbfe24c5987ca3abecf5194845**.
+  Local review artifact and manifest are outside the checkout at
+  /private/tmp/configpilot-v0.1.0-review-20261026. This is not publishable metadata.
+- Added RELEASE_PLAN_v0.1.0.md: proposed configpilot@0.1.0, publisher ghazi001,
+  public npm registry/latest tag, v0.1.0 Git tag and GitHub release. It defines the
+  metadata/guard PR, final CI/archive review, interactive owner 2FA, publication
+  verification, registry installation, release notes and ownership checks after
+  explicit approval. First-publication local authentication has no OIDC provenance;
+  a future protected trusted publisher needs its own verified setup.
+
+Verification and remaining work:
+
+- Runtime tests (148), installed TypeScript checks and lint passed during the first
+  check run; formatting caught two newly written documents. Formatted those files
+  and reran final checks after documentation edits, with results recorded below.
+- Private true, package file allowlist, production code, workflows and publishing
+  permissions remain unchanged. No npm publication/staging, Git tag, GitHub release
+  or trusted-publisher mutation was performed.
+- Publication approval, actual package ownership, public-registry installation,
+  final release metadata/date and release URLs remain outstanding. Do not mark
+  Milestones 8 or 9 complete until their registry/ownership checks actually pass.
+
+Final local verification for the release review:
+
+- `npm run check` passed: 148 runtime tests, zero failures/skips; installed strict
+  NodeNext/Bundler positive/negative declaration checks and emitted execution;
+  lint zero warnings/errors and all formatting checks clean.
+- Independently inspected the new candidate's complete 19-file archive. SHA-256
+  and npm integrity matched; every archived byte matched the CI-verified source;
+  CLI executable/shebang, private version metadata and zero runtime dependencies
+  were verified. No new review/discovery documents enter the package allowlist.
+- Installed that exact archive offline into a new temporary consumer. TypeScript
+  checks in both modes, emitted ESM, CLI help/version/clean/mismatch exits and
+  synthetic-secret non-disclosure all passed. Temporary consumer files were removed.
+- `git diff --check` passed. This session changes release-review documentation only;
+  product code, package metadata, preparation guards, dependency graph and workflows
+  remain unchanged. Required hosted CI must pass before merge.
