@@ -1,8 +1,8 @@
 # ConfigPilot CLI
 
 Requires Node.js 20+. From the checkout, run `node bin/configpilot.js`; a local
-installation also provides the `configpilot` executable. Version 0.1.0 is published; the current checkout contains unreleased stability
-fixes and retains that version until an owner-approved release decision. No command changes configuration files or executes their
+installation also provides the `configpilot` executable. Version 1.0.0 defines the
+stable CLI contract. No command changes configuration files or executes their
 contents, project scripts, or project-provided configuration modules.
 
 ```sh
@@ -147,7 +147,7 @@ See [troubleshooting](TROUBLESHOOTING.md) for installation, operational failures
 parser recovery, and CI questions. Source-checkout scenarios and a runnable library
 example are in the [examples guide](https://github.com/ghazy001/configpilot/blob/main/examples/README.md).
 
-## Unreleased resource hardening
+## Resource limits
 
 The [parser budgets](PARSER.md#resource-budgets) also apply to CLI input: 2,048
 recognized declarations/invalid lines, 4,096-code-unit labels and 131,072-code-unit

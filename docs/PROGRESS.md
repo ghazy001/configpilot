@@ -4,13 +4,12 @@ Last updated: 2026-10-26 (Africa/Tunis).
 
 ## Current target — stable v1.0.0
 
-Status: **In Progress**. Stability fixes and review tooling are local to
-`codex/stable-readiness`; the owner requested private coordinated review. Package
-version remains 0.1.0. The public archive predates these fixes; nothing new is
-authorized for publication. See [STABILITY.md](STABILITY.md) and the latest session
-record below for current evidence, compatibility effects and remaining platform,
-developer-feedback and owner-review gates. Earlier milestone counts and hosted
-runs below describe the historical first release, not the new private branch.
+Status: **Release preparation in progress**. The owner explicitly approved releasing
+**v1.0.0** on 2026-10-26 after accepting external developer feedback as post-release
+work. Current code passed the private hosted Windows/Linux/macOS matrix and a
+maintainer security/API review. Package metadata now targets 1.0.0. Publication is
+not yet claimed: final committed-source checks, exact archive and registry verification
+will be recorded below. Historical counts/receipts refer to their stated revisions.
 
 ## Initial session scope and inspection
 
@@ -1109,3 +1108,72 @@ Status: local Linux runtime matrix **Complete**; stable release validation remai
 - No push, public CI, release, tag, npm publication or version change occurred.
   The unchanged validation archive still says 0.1.0 and must never be published
   under that already-existing version.
+
+### Hosted compatibility, security/API review and trial kit — 2026-10-26
+
+Status: hosted compatibility **Complete**; maintainer security/API review **Complete**
+for the current implementation; external feedback **Pending — Requires Human Participation**.
+
+- Owner authorized GitHub-hosted windows-latest testing and will distribute the trial
+  package after participants consent. The latest instruction explicitly withholds
+  v1.0.0 publication, release tags and public releases until separate approval.
+- Created and verified private owner repository `ghazy001/configpilot-private-validation`,
+  then pushed only reviewed revision **f3c99164f9a3479d90908a00353a545d92451475** to
+  its main branch. Public upstream was not pushed; no public PR/release was created.
+- Private Quality run **40305989425** passed all **12 OS/runtime jobs**, the minimum
+  Node **20.0.0** runtime job and final **Quality gate**. Windows used Node
+  **20.19.0 / 22.13.0 / 24.22.1 / 26.12.1**; Ubuntu/macOS 24.x resolved to
+  **24.21.0**. Other development matrix versions matched their requested versions.
+- Each Windows runtime ran **165 tests: 163 passed, 2 documented POSIX-only skips,
+  zero failures**. Skips were permission behavior and FIFO/device checks. Each ran
+  **7 contract tests**, zero failures/skips, lint/format, installed TypeScript
+  5.0.4/7.0.2 checks and installed package/shim tests. Coverage independently passed
+  with parser/analyzer **100% lines/branches/functions** on all four Windows jobs.
+  Do not report those Windows runs as zero-skip runs.
+- Hosted Ubuntu Node 24.21.0 resource probes all passed: max RSS **168.61 MiB**,
+  largest JSON **1,854,703 bytes**. Downloaded/inspected the private log archive
+  `/private/tmp/configpilot-private-matrix-40305989425.zip`; job metadata is retained
+  locally. Matrix results apply to the reviewed source, not a future version bump.
+- Completed a direct maintainer review of runtime modules, types/schema, diagnostic
+  contracts and preparation/verification controls; no additional confirmed blocker
+  found. Scope, evidence, residual boundaries and proposed freeze are documented in
+  `docs/SECURITY_API_REVIEW.md`. This is not an independent security certification.
+- Fresh macOS Node20.20 quality check passed **165 runtime + 7 contract tests**, no
+  failures/skips, lint/type/format. npm **11.21.1** advisory audit succeeded with
+  **zero known vulnerabilities** across the locked graph. Exact 21-file candidate
+  acceptance passed again; published-version text and shipped bytes remain unchanged.
+- Prepared `docs/DEVELOPER_TRIAL.md`, a structured feedback form, installation
+  instructions and three synthetic frontend/service/CI scenarios. The local kit is
+  `/private/tmp/configpilot-developer-trial-6e827ae.zip` (12 files), SHA-256
+  **105ebed69087395ce50df5e251a392c4eeb277b0b35145adbe8e12a5b86369b7**.
+  Zip integrity/contents passed inspection; all three scenario expectations passed
+  actual CLI checks. The kit includes the unchanged reviewed candidate and per-file
+  checksums, not real configuration. These automated checks are not human trials.
+- Added an optional manual Windows runbook. Its commands are documented, not falsely
+  claimed executed; hosted CI provides the actual Windows evidence above.
+- Remaining: owner-arranged human trials and feedback resolution, final API freeze,
+  approved unused version and final archive, then explicit publication/disclosure
+  approval. No participant was contacted, no trial outcome invented, no package
+  version changed and no package/tag/release published.
+- Final documentation formatting and `git diff --check` passed. The local commit
+  attempt was not executed: automatic approval review could not complete because
+  its usage limit was reached, not because it determined the action unsafe.
+  The seven documentation files remain saved and uncommitted; no approval bypass
+  was attempted. The owner reiterated that engineering should continue toward a
+  mature v1.0.0 and publication will be a later joint decision.
+
+### Owner-approved v1.0.0 preparation — 2026-10-26
+
+- Owner explicitly requested: “okay let's realse the new version v1.0.0”. This
+  authorizes the v1.0.0 release/public delivery after verification; prior hold on
+  publication is superseded for this version. No future publication is authorized.
+- External developer feedback remains **Pending — Requires Human Participation**,
+  accepted as a post-release activity, not a fabricated completed requirement.
+- Prepared version 1.0.0 in package/lock metadata, stable API/CLI documentation,
+  migration notes and support policy. Simplified normal installation commands:
+  global CLI, project development dependency, or ordinary runtime dependency.
+  `--ignore-scripts`, `--no-audit`, `--no-fund` remain optional test controls, not
+  package requirements. The package has no install scripts or runtime dependencies.
+- Existing npm authentication identifies ghazi001 and registry metadata lists that
+  maintainer; 1.0.0 was absent at preflight. Final verification/publication receipts
+  follow. No successful publication is inferred from authorization or metadata edits.

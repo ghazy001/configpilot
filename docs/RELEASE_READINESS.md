@@ -1,8 +1,9 @@
 # Release readiness
 
-Reviewed 2026-10-26. **Stable v1.0.0 is not yet release-ready.** The current checkout
-contains unreleased stability work and deliberately retains package version 0.1.0.
-Never publish these changed bytes under the already registered version.
+Reviewed 2026-10-26. **v1.0.0 release approved; final execution in progress.**
+The owner accepted external feedback as post-release work. Technical validation and
+maintainer review passed; final release-source/registry receipts remain mandatory.
+The old 0.1.0 validation archive must never be published as changed 0.1.0 bytes.
 
 ## Published 0.1.0 evidence
 
@@ -29,17 +30,20 @@ with zero runtime dependencies. The distribution now has 21 explicit files.
 Private validation now includes a Linux ARM64 container running Node 24.22.1:
 full quality/installed TypeScript checks, coverage/resources and offline acceptance
 of the exact macOS-prepared archive passed with networking disconnected. macOS
-Node 20/22/24/26 checks and minimum Node 20.0.0 runtime tests also passed. These
+Node 20/22/24/26 checks and minimum Node 20.0.0 runtime tests also passed.
 Additional private Linux ARM64 checks passed on Node 20.19.0/22.13.0/26.12.1
 (quality, coverage and exact-archive acceptance) and 20.0.0 (runtime and archive).
-These are executed results for the private source, not evidence of Windows or
-hosted x64 runs. The current archive identity is in [STABILITY.md](STABILITY.md).
+The complete hosted Windows/Linux/macOS matrix subsequently passed privately at
+f3c9916 in run 40305989425. The maintainer security/API review found no additional
+confirmed blocker. External feedback is **Pending — Requires Human Participation**.
+The current archive identity is in [STABILITY.md](STABILITY.md).
 
 Before declaring stable v1:
 
 - Complete current-source lint, runtime/contract/type/coverage/resource/archive checks.
 - Verify new code on the complete hosted OS/Node matrix; old CI is historical evidence.
-- Complete six pinned public-template evaluations and real developer trials.
+- Retain six pinned public-template results; external developer trials remain an
+  explicitly accepted post-release follow-up, not a completed validation claim.
 - Review remaining false positives, compatibility decisions and privacy behavior.
 - Freeze API/schema/CLI contracts, version/support policy and approved release notes.
 - Select an unused version and review the final committed archive/manifest and full

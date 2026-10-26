@@ -189,5 +189,5 @@ Input type errors throw fixed-message `TypeError`; source/resource/label limits
 throw fixed-message `RangeError`. Configuration syntax produces findings, not
 exceptions. See [parser resource budgets](PARSER.md#resource-budgets). The CLI adds
 `INPUT_LIMIT_EXCEEDED` to its operational envelope; it is not an analysis issue code.
-The current checkout's additions are unreleased and do not retroactively change the
+These additions are included in v1.0.0; they do not retroactively change the
 published 0.1.0 archive.

@@ -10,10 +10,9 @@ Use the CLI for local checks and pipelines, or the dependency-free JavaScript AP
 for your own tooling. It finds missing and undocumented keys, duplicate assignments,
 and syntax outside its [documented dotenv subset](docs/PARSER.md).
 
-**Development status:** this checkout contains unreleased privacy and resource
-hardening. Published 0.1.0 does not include these fixes. Validate the reviewed source
-or a local archive while the next release is prepared; do not assume matching version
-text means matching source. Stable v1.0.0 remains gated on validation and owner approval.
+**v1.0.0** provides a stable API and CLI contract, bounded input handling, and
+verified Windows, Linux and macOS compatibility. External developer feedback has
+not yet been collected; usability validation will continue after release.
 
 Runtime: **Node.js 20+**, ES modules. License: [MIT](LICENSE).
 
@@ -22,15 +21,20 @@ Runtime: **Node.js 20+**, ES modules. License: [MIT](LICENSE).
 For the CLI:
 
 ```sh
-npm install --global configpilot@0.1.0 --ignore-scripts --no-audit --no-fund
+npm install --global configpilot@1.0.0
 configpilot --help
 ```
 
-For a project's npm scripts or JavaScript API:
+For a project's development scripts:
 
 ```sh
-npm install --save-dev configpilot@0.1.0 --ignore-scripts --no-audit --no-fund
+npm install --save-dev configpilot@1.0.0
 ```
+
+For an application importing the JavaScript API at runtime, use
+`npm install configpilot@1.0.0` instead. The version suffix pins this release;
+omit it to install the latest version. No extra installation flags are required.
+ConfigPilot has no runtime dependencies or install lifecycle scripts.
 
 Add `"config:check": "configpilot check"` to your npm scripts, then run
 `npm run config:check` from the project containing `.env.example` and `.env`.
@@ -79,7 +83,7 @@ recommendation before changing files; ConfigPilot does not inspect runtime provi
 For an executable available outside the checkout, run this from the cloned repository:
 
 ```sh
-npm install --global . --ignore-scripts --no-audit --no-fund
+npm install --global .
 configpilot --help
 configpilot --version
 ```
@@ -92,7 +96,7 @@ For a project's development dependency or library consumer, build an archive in
 the checkout with `npm pack --ignore-scripts`. Then, from the consumer project:
 
 ```sh
-npm install --save-dev "/absolute/path/to/configpilot/configpilot-0.1.0.tgz" --ignore-scripts --no-audit --no-fund
+npm install --save-dev "/absolute/path/to/configpilot/configpilot-1.0.0.tgz"
 ```
 
 Replace the archive path with your actual path, using native Windows paths on
@@ -111,7 +115,7 @@ configpilot check --template .env.example --env ".env.local" --json
 Paths resolve from the working directory. Without an installation, replace
 `configpilot` with `node "/absolute/path/to/configpilot/bin/configpilot.js"`.
 Both inputs must exist and be regular UTF-8 files, at most **1 MiB each**.
-The checkout also bounds declarations and public metadata; see the
+ConfigPilot also bounds declarations and public metadata; see the
 [resource budgets](docs/PARSER.md#resource-budgets).
 
 | Option            | Meaning                                                                 |
@@ -235,7 +239,7 @@ for commands, coverage interpretation, matrix details, and intentional platform 
 - [Contributing](https://github.com/ghazy001/configpilot/blob/main/CONTRIBUTING.md): setup, focused changes, safe bug reports, and review expectations.
 - [Code of conduct](https://github.com/ghazy001/configpilot/blob/main/CODE_OF_CONDUCT.md): respectful project participation.
 - [Changelog](CHANGELOG.md): release history and upcoming changes.
-- [Repository safeguards](https://github.com/ghazy001/configpilot/blob/main/docs/CI.md) and [candidate preparation](https://github.com/ghazy001/configpilot/blob/main/docs/RELEASING.md): required CI, dependency updates, and owner review before future publishing capability.
+- [Repository safeguards](https://github.com/ghazy001/configpilot/blob/main/docs/CI.md) and [candidate preparation](https://github.com/ghazy001/configpilot/blob/main/docs/RELEASING.md): required CI, dependency updates, and owner review before publication.
 - [Progress](https://github.com/ghazy001/configpilot/blob/main/docs/PROGRESS.md) and [project specification](https://github.com/ghazy001/configpilot/blob/main/AGENTS.md): completed work, decisions, and outstanding milestones.
 - [Issues](https://github.com/ghazy001/configpilot/issues): reproducible bugs and focused feature proposals; follow the security policy for vulnerabilities.
 

@@ -3,10 +3,17 @@
 Release history for ConfigPilot. Verification evidence and release status are
 recorded in the repository's development progress log.
 
-## Unreleased
+## 1.0.0 — 2026-10-26
 
-Changes below are **unreleased source changes**. Package version remains 0.1.0;
-these changes require an owner-approved new version before registry distribution.
+Stable API and CLI contracts for the documented dotenv subset. External developer
+feedback has not yet been collected; no adoption or user-validation claim is made.
+
+### Migration from 0.1.0
+
+Public function signatures, six diagnostic codes, schema version 1 and CLI exits
+remain unchanged. New resource limits can throw RangeError / return exit 2, and
+ambiguous or nonportable quoted syntax can now produce parser errors. Review those
+findings before relying on key differences. The schema subpath is a new export.
 
 ### Security and reliability
 
@@ -27,7 +34,8 @@ these changes require an owner-approved new version before registry distribution
 - Add pinned development-only dotenv comparison and schema validation; retain zero
   runtime dependencies. Verify installed TypeScript 5.0.4 and 7.0.2 consumers.
 - Enforce 90% core line/branch coverage and add isolated resource-budget probes.
-- Correct release/support documentation and track remaining v1 validation gates.
+- Verify the full Windows/Linux/macOS Node 20/22/24/26 matrix and document support boundaries.
+- Simplify ordinary npm installation commands; testing-only flags are not required.
 - Add offline candidate acceptance with archive/source identity, installed byte
   equality and real API/CLI workflows for private cross-platform review.
 - Bind candidate source to committed blobs even when Git index flags hide edits

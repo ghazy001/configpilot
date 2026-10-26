@@ -118,9 +118,9 @@ These codes describe ConfigPilot's grammar. An unsupported construct may be vali
 in another loader; an error does not prove a deployment is broken. Diagnostics
 use fixed text and expose a key only for confirmed duplicate declarations.
 
-## Unreleased stability hardening
+## Stability hardening in v1.0.0
 
-The source checkout adds a privacy safeguard for quotes following paired
+Version 1.0.0 adds a privacy safeguard for quotes following paired
 backslashes. Some loaders treat that delimiter as escaped, while the portable
 scanner can treat it as closed. If an alternative closing delimiter exists on a
 later line, ConfigPilot quarantines through the later boundary and reports

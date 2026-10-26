@@ -6,8 +6,8 @@ Git tag and GitHub release on **2026-10-26**. The approved execution plan is in
 source/archive identities are recorded in [PROGRESS.md](PROGRESS.md).
 The initial npm publication and existing tag are verified in
 [the historical receipt](releases/0.1.0.json). This approval does not extend to later
-versions or package-name changes. Current source fixes remain unpublished; never
-reuse the existing 0.1.0 version for changed bytes. See [STABILITY.md](STABILITY.md).
+versions or package-name changes. The owner separately approved v1.0.0 on 2026-10-26; see
+[the v1.0.0 plan](RELEASE_PLAN_v1.0.0.md). Never reuse 0.1.0 for changed bytes.
 
 The package has explicit public-registry metadata. The GitHub workflow still only
 prepares **unpublished candidates**; it cannot publish, tag or create releases.
@@ -115,7 +115,7 @@ and [progress](PROGRESS.md) for repository policy, boundaries and actual evidenc
 
 For every proposed new version retain: the clean source SHA, exact archive member
 list and executable modes, SHA-256 and npm integrity, full quality results, pinned
-public-template results, real trial feedback, compatibility decisions, release notes
+public-template results, available trial feedback (or its explicitly accepted absence), compatibility decisions, release notes
 and the owner's approval scope. Candidate manifests are evidence, not publication
 permission. Reinstall the exact approved archive before publishing; after publication
 compare the registry bytes and run a fresh unauthenticated consumer. Preserve the

@@ -1,9 +1,16 @@
 # Developer validation before v1.0.0
 
-Status: **not started with external developers**. Six public-template evaluations
+Status: **Pending — Requires Human Participation**. The owner will distribute the
+[developer trial instructions](DEVELOPER_TRIAL.md) after developers consent. Six public-template evaluations
 are recorded separately; no user interviews, successful adoptions or retention
 claims are made from those results. Do not contact people on the owner's behalf
 without explicit authorization.
+
+External feedback is a post-release improvement activity, not a mandatory launch
+blocker. The owner accepted this uncertainty when approving v1.0.0. Automated
+compatibility/security checks are evidence of technical behavior, not human adoption.
+The earlier private trial archive remains a historical validation build; use the
+released version for new trials once publication is verified.
 
 Recruit 3–5 consenting developers across a Node service, frontend app and CI workflow.
 Give them a reviewed source commit or local archive including the unreleased fixes,
@@ -45,4 +52,4 @@ Stars/downloads and an engineering checklist cannot replace these observations.
 
 After trials, summarize participant count, workflow diversity, actual setup times,
 interpretation failures, warning noise and fixes. Do not mark this gate complete
-until evidence exists. A stable release needs owner acceptance of the results.
+until evidence exists. Review feedback as it arrives and prioritize correctness, security and usability fixes.

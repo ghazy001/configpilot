@@ -1,8 +1,9 @@
 # Stable v1.0.0 readiness
 
-The owner approved implementing necessary stability work after the 2026-10-26
-audit. Version remains 0.1.0 while work is reviewed; current changes are unreleased.
-No npm publication/staging, new tag or external release is authorized by this document.
+The owner approved v1.0.0 release on 2026-10-26 after accepting missing human
+feedback as a post-release uncertainty. Technical contracts are frozen for v1;
+final release verification and registry results are tracked in PROGRESS.md.
+Package metadata is 1.0.0; preparation is not evidence of completed publication.
 
 ## Audit backlog
 
@@ -13,8 +14,8 @@ No npm publication/staging, new tag or external release is authorized by this do
 | CP-003 inaccurate release/support docs | Updated             | Historical public 0.1.0 receipt; current source explicitly unreleased; GitHub release remains absent                                        |
 | CP-004 independent parser corpus       | Implemented         | Pinned dotenv 18.0.9 comparisons; intentional differences; no full compatibility claim                                                      |
 | CP-005 API/schema policy               | Implemented         | Shipped schema, negative mutations, documented SemVer/schema and prose policy                                                               |
-| CP-006 compiler/runtime policy         | Partially verified  | TypeScript 5/7; macOS Node 20/22/24/26 and private Linux ARM64 Node 20/22/24/26 passed; Windows/hosted matrix pending                       |
-| CP-007 real-world validation           | Partially complete  | Six pinned templates passed; 3–5 real developer trials still pending                                                                        |
+| CP-006 compiler/runtime policy         | Verified            | TypeScript 5/7 and full private hosted Windows/Linux/macOS matrix passed at f3c9916; see PROGRESS.md                                        |
+| CP-007 real-world validation           | Partially complete  | Six pinned templates passed; Human feedback pending; accepted post-release follow-up                                                        |
 | CP-008 release process                 | Prepared            | Durable old-release evidence, offline candidate verifier, final checklist and active immutable-tag rules; final owner review still required |
 | CP-009 finding policy controls         | Deferred, optional  | Warnings already fail CLI; no redundant strict flag or implicit process.env merge                                                           |
 | CP-010 OIDC/provenance/prereleases     | Deferred, optional  | Existing workflow remains preparation-only; future setup needs separate review                                                              |
@@ -27,13 +28,13 @@ No npm publication/staging, new tag or external release is authorized by this do
 - [x] Current-source local quality, committed 21-file candidate/consumer, coverage and resource checks recorded.
 - [x] Private Linux ARM64 / Node 24 full checks, coverage, resources and exact-archive acceptance passed.
 - [x] Remaining private Linux ARM64 Node 20.19.0/22.13.0/26.12.1 quality, coverage and archive checks; Node 20.0.0 runtime/archive checks passed.
-- [ ] Current-source full hosted OS/architecture matrix passed; Windows remains unverified. Local Linux/macOS evidence is ARM64, not a hosted x64 run.
+- [x] Current-source hosted Windows/Linux/macOS matrix, minimum runtime and final quality gate passed privately at f3c9916 (run 40305989425).
 - [x] Six public templates pinned and evaluated without executing upstream code.
-- [ ] 3–5 developer trials recorded; material feedback resolved and owner-reviewed.
-- [ ] Security/compatibility review of final changes complete with no unresolved release blockers.
-- [ ] Final API/schema/CLI freeze and supported-version policy approved.
-- [ ] Unused package version selected by the owner; final source/archive manifest reviewed.
-- [ ] Explicit owner approval for the exact publication/staging/tag/release scope.
+- [ ] Post-release developer trials: **Pending — Requires Human Participation**. Owner will distribute the prepared private trial kit and return sanitized feedback.
+- [x] Maintainer security/API review of current implementation complete; no additional confirmed blockers found. See SECURITY_API_REVIEW.md; re-review any later changes.
+- [x] Current API/schema/CLI and support policy frozen for the owner-approved v1.0.0 scope.
+- [x] Owner selected unused version 1.0.0; final archive verification is tracked in PROGRESS.md.
+- [x] Explicit owner approval to release v1.0.0; no later version is authorized.
 - [ ] After approved publication, public installation and byte-integrity verification recorded.
 
 ## Decisions and tradeoffs
@@ -45,7 +46,7 @@ Resource limits now reject unusually dense inputs rather than silently truncate 
 Nonportable whitespace before quoted values is rejected and quarantined rather
 than widening the supported grammar or exposing potential credential-body names.
 These compatibility effects require release notes and an unused release version.
-The schema export and INPUT_LIMIT_EXCEEDED operational code are unreleased additions.
+The schema export and INPUT_LIMIT_EXCEEDED operational code are v1.0.0 additions.
 
 Reference parser, schema validator and compiler aliases are pinned development-only
 dependencies. The runtime remains dependency-free. Minimum Node runtime tests run
@@ -59,13 +60,11 @@ extend its upstream security support; recommend maintained runtimes for producti
 
 ## Delivery and disclosure
 
-SECURITY.md requires vulnerability details/reproductions to stay out of public
-issues, PRs and CI logs. The owner explicitly selected **Keep private for coordinated review** after
-reviewable implementation and archive verification. Keep this patch local; do not
-push the branch, open a public PR or upload public artifacts. Do not publicly push a regression
-reproduction just to obtain hosted CI. Local macOS and private Linux ARM64 evidence
-does not establish Windows or the complete matrix; finish remaining entries after
-the owner agrees to public delivery or provides an appropriate private review/CI route.
+Private coordinated review and hosted testing are complete. The owner now approved
+releasing v1.0.0, including its public source and release documentation. Future
+vulnerability reports still follow SECURITY.md. No real configuration or credentials
+are included in source, regression fixtures or release artifacts. The private trial
+kit is historical; external feedback remains uncollected and will follow release.
 
 ## Local review material
 

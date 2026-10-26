@@ -21,13 +21,11 @@ does not currently promise a response deadline, bounty, or dedicated security te
 
 ## Supported code
 
-The latest published package is 0.1.0. Security reports are accepted for that
-release and current main. This checkout contains unreleased privacy/resource fixes;
-registry installation does not include those fixes until a separately approved new
-version is published. We do not promise a response deadline or long-term support for
-older pre-1.0 versions. For v1, the newest stable minor line will receive security
-fixes; older lines may require upgrading. Compatibility/security changes are recorded
-in the changelog rather than changing an existing published archive.
+Security reports are accepted for v1.0.0 and current main. Upgrade from 0.1.0
+for the privacy and resource-handling fixes described in the changelog. The newest
+stable minor line receives security fixes; older lines may require upgrading.
+Compatibility/security changes are recorded rather than replacing a published
+archive. We do not promise a response deadline or long-term pre-1.0 support.
 
 Runtime compatibility remains Node.js 20+ and ESM. For production, use a maintained
 Node release; Node 20 is upstream EOL. The project keeps its compatibility floor
