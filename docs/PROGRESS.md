@@ -1071,3 +1071,41 @@ security/compatibility/API/owner approval; the private-delivery decision is pres
 - The follow-up documentation records evidence only and changes no shipped archive
   bytes. The older 83ba726 validation archive lacks CP-012 and is superseded for
   current review; public 0.1.0 remains the distinct historical npm release.
+
+### Remaining private Linux runtime matrix — 2026-10-26
+
+Status: local Linux runtime matrix **Complete**; stable release validation remains
+**In Progress**. No source behavior or shipped bytes changed in this session.
+
+- Reused the pinned official Node 24 Linux ARM64 image recorded above. Downloaded
+  official Linux ARM64 Node **20.0.0, 20.19.0, 22.13.0 and 26.12.1** archives and
+  verified each against its official SHA-256 listing before extraction.
+- Created a disposable nonroot container from a read-only source Git bundle and
+  read-only candidate mount. Installed 87 locked development packages with scripts
+  disabled, then disconnected networking. Networks were `{}` throughout testing
+  and at final inspection; no private source, reports or credentials were uploaded.
+- Full `npm run check` passed on **20.19.0, 22.13.0 and 26.12.1**: each ran
+  **165 runtime + 7 contract tests**, zero failures/skips, lint and formatting,
+  installed TypeScript 5.0.4/7.0.2 NodeNext/Bundler positive/negative checks and
+  emitted ESM/CommonJS dynamic import checks.
+- `npm run test:coverage` passed separately on all three runtimes: **165 tests**
+  each, parser/analyzer **100% lines, branches and functions**. Minimum Node
+  **20.0.0** passed all **165 runtime tests**, zero failures/skips; modern
+  development tools were not run under that unsupported development runtime.
+- The same 21-file archive from implementation commit **6e827ae** passed offline
+  `candidate:verify` on all four added runtimes. Source/hash/installed bytes matched;
+  imports, schema, npm shim, CLI exits, privacy/resource failures and unchanged
+  input checks passed. Receipts remain in the candidate directory as
+  `verification-linux-<version>.json`; quality/coverage logs are local under
+  `/private/tmp/configpilot-linux-{check,coverage}-<version>.log`.
+- The private source checkout stayed clean. Removed only this task's container
+  and temporary Git bundle after retaining receipts. Earlier Linux Node 24 resource
+  results remain applicable; no new performance measurement is claimed.
+- Read-only Parallels inventory returned no registered VMs. Thus no local Windows
+  run is available or claimed. Linux/macOS evidence is ARM64 and does not establish
+  hosted x64 results. Windows/remaining hosted-platform evidence, 3–5 consented
+  developer trials, final security/API review and exact-release owner approval
+  remain open. No external participant was contacted.
+- No push, public CI, release, tag, npm publication or version change occurred.
+  The unchanged validation archive still says 0.1.0 and must never be published
+  under that already-existing version.

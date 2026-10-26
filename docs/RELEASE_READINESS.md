@@ -30,8 +30,10 @@ Private validation now includes a Linux ARM64 container running Node 24.22.1:
 full quality/installed TypeScript checks, coverage/resources and offline acceptance
 of the exact macOS-prepared archive passed with networking disconnected. macOS
 Node 20/22/24/26 checks and minimum Node 20.0.0 runtime tests also passed. These
-are executed results for the private source, not evidence of Windows or every
-Linux matrix entry. The current archive identity is in [STABILITY.md](STABILITY.md).
+Additional private Linux ARM64 checks passed on Node 20.19.0/22.13.0/26.12.1
+(quality, coverage and exact-archive acceptance) and 20.0.0 (runtime and archive).
+These are executed results for the private source, not evidence of Windows or
+hosted x64 runs. The current archive identity is in [STABILITY.md](STABILITY.md).
 
 Before declaring stable v1:
 
