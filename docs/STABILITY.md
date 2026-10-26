@@ -92,3 +92,10 @@ API/schema semantics. Owner-approved publication, matching registry archive byte
 fresh unauthenticated consumer checks and required hosted Windows/Linux/macOS CI
 are verified. See [the release receipt](releases/1.1.0.json) and PROGRESS.md.
 Manual font/terminal appearance checks and external developer feedback remain open.
+
+## Documentation patch v1.1.1
+
+The owner-approved v1.1.1 patch corrects the npm README and current installation
+guides. Runtime code is unchanged from v1.1.0. Registry README metadata, matching
+archive bytes, fresh installation and hosted CI are verified; see
+[the release receipt](releases/1.1.1.json).

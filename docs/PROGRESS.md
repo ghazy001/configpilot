@@ -2,19 +2,32 @@
 
 Last updated: 2026-10-26 (Africa/Tunis).
 
-## v1.1.1 documentation release — In Progress
+## v1.1.1 documentation release — Complete
 
-Owner explicitly approved v1.1.1 on 2026-10-26. The patch ships the corrected latest
-installation commands in npm's README. Runtime source and public contracts remain
-unchanged. Updated metadata, archive examples and pinned trial version; release
-notes and approval plan retained. Required checks, final archive acceptance,
-registry publication and release receipt remain outstanding.
+Owner approved the documentation-only patch on 2026-10-26. PR #12 merged as
+`cf6b1784e030ac28e6a455a178f7d400aa098327`; protected Quality gates passed on PR and
+exact main, including the full Windows/Linux/macOS/Node matrix. Local quality
+checks passed 172 tests, seven contract tests, installed TypeScript consumers,
+lint and formatting. Runtime source is byte-identical to v1.1.0.
 
-## Current release — v1.1.0
+Prepared and verified the exact 21-file archive, including corrected README commands.
+The first browser publishing challenge failed (npm auth completion returned 404);
+confirmed v1.1.1 was unpublished before retrying the same verified archive with a
+fresh owner-approved browser challenge. npm accepted publication, then propagated
+the version and latest tag. Registry bytes matched the reviewed archive and fresh
+unauthenticated ordinary local/global installs, API/TypeScript and CLI checks passed.
+Registry README metadata independently confirms the latest-version installation
+commands and absence of stale configpilot@1.0.0 commands.
 
-Status: **Complete — v1.1.0 published and verified**. npm latest points to 1.1.0.
+Created immutable v1.1.1 tag and GitHub release after verification. Exact identities
+and CI evidence are in [the receipt](releases/1.1.1.json). No future publication is
+authorized by this record. Human trials and manual font-specific checks remain open.
+
+## Current release — v1.1.1
+
+Status: **Complete — v1.1.1 published and verified**. npm latest points to 1.1.1.
 Registry bytes, fresh installation and hosted compatibility checks passed; see
-[the release receipt](releases/1.1.0.json). Historical entries below refer to their
+[the release receipt](releases/1.1.1.json). Historical entries below refer to their
 stated revisions. Human developer feedback and manual font testing remain open.
 
 ## Installation documentation correction — 2026-10-26

@@ -1,9 +1,9 @@
 # Release readiness
 
-Reviewed 2026-10-26. **v1.1.0 published and verified.** The exact release source
-4aaa83f passed hosted CI; registry bytes, ordinary local/global installs and public
+Reviewed 2026-10-26. **v1.1.1 published and verified.** The exact release source
+cf6b178 passed hosted CI; registry bytes, ordinary local/global installs and public
 API/CLI behavior were verified. npm latest, the immutable tag and GitHub release
-identify 1.1.0. See [the release receipt](releases/1.1.0.json).
+identify 1.1.1. See [the release receipt](releases/1.1.1.json).
 External feedback is explicitly accepted post-release work, not a completed claim.
 The old 0.1.0 validation archives are historical and must never be published.
 
