@@ -12,7 +12,7 @@ const metadata = {
   files: ["src/index.js"],
 };
 
-test("candidate files require the private guard and reject broad, hidden, environment, and traversal paths", () => {
+test("candidate files require guarded metadata and reject broad, hidden, environment, and traversal paths", () => {
   assert.deepEqual(candidateFiles(metadata), [
     "LICENSE",
     "README.md",
@@ -71,6 +71,37 @@ test("packing fails closed on extra, missing, duplicate or unsafe archive entrie
   assert.throws(() => verifyPack(undefined, files));
   assert.throws(() => verifyPack({ files: {} }, files));
   assert.throws(() => verifyPack({ ...report, files: [null] }, files));
+});
+
+test("public candidates require a stable version and exact explicit registry, access and tag", () => {
+  const publishing = {
+    registry: "https://registry.npmjs.org/",
+    access: "public",
+    tag: "latest",
+  };
+  const publicMetadata = {
+    name: "configpilot",
+    version: "0.1.0",
+    files: ["src/index.js"],
+    publishConfig: publishing,
+  };
+  assert.deepEqual(candidateFiles(publicMetadata), candidateFiles(metadata));
+  for (const changed of [
+    { private: false },
+    { private: "false" },
+    { version: "" },
+    { version: "v0.1.0" },
+    { version: "0.1.0-beta.1" },
+    { version: "01.1.0" },
+    { publishConfig: undefined },
+    { publishConfig: null },
+    { publishConfig: {} },
+    { publishConfig: { ...publishing, registry: "https://example.invalid/" } },
+    { publishConfig: { ...publishing, access: "restricted" } },
+    { publishConfig: { ...publishing, tag: "next" } },
+    { publishConfig: { ...publishing, unexpected: true } },
+  ])
+    assert.throws(() => candidateFiles({ ...publicMetadata, ...changed }));
 });
 
 test("release quality gate rejects failures, pending/skipped jobs, stale commits and other check providers", () => {

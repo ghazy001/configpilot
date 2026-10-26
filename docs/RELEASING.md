@@ -1,132 +1,103 @@
-# Candidate preparation and release boundary
+# Candidate preparation and releases
 
-ConfigPilot is unreleased, with `0.1.0` development metadata and `private: true`.
-Milestone 7 provides a repeatable **unpublished candidate** workflow, not publication.
-Milestone 8 adds bundled declarations, installed TypeScript consumer verification,
-and a [readiness review](RELEASE_READINESS.md) with [draft release notes](RELEASE_NOTES_v0.1.0.md).
-The owner has confirmed npm authentication and 2FA; package ownership remains
-unverified pending a first publication. Actual publication and
-external releases require explicit owner approval in Milestone 9.
+The owner explicitly approved configpilot@0.1.0, publication as ghazi001, the v0.1.0
+Git tag and GitHub release on **2026-10-26**. The approved execution plan is in
+[RELEASE_PLAN_v0.1.0.md](RELEASE_PLAN_v0.1.0.md); actual outcomes and immutable
+source/archive identities are recorded in [PROGRESS.md](PROGRESS.md).
+This approval does not extend to later versions or package-name changes.
+
+The package has explicit public-registry metadata. The GitHub workflow still only
+prepares **unpublished candidates**; it cannot publish, tag or create releases.
+Future publications and external releases require their own explicit owner approval.
 
 ## Prepare a candidate on GitHub
 
-1. Merge reviewed changes through a pull request with successful required Quality CI.
-2. Wait for **Quality gate** on the exact `main` commit to succeed.
+1. Merge reviewed changes through a PR with successful required Quality CI.
+2. Wait for **Quality gate** on the exact main commit to succeed.
 3. Open [Release preparation](https://github.com/ghazy001/configpilot/actions/workflows/release.yml),
-   select `main`, and dispatch with **request_review = false** for a rehearsal.
-4. Inspect the `configpilot-candidate-<commit>` artifact. Artifacts expire after
-   seven days; archive approved evidence separately if a later release needs it.
+   select main, and dispatch with **request_review = false** for a rehearsal.
+4. Inspect the configpilot-candidate-commit artifact. It expires after seven days;
+   retain approved release evidence separately when needed.
 
-The workflow checks out the immutable triggering SHA and refuses other branches
-or forks. A read-only API preflight requires a completed, successful GitHub Actions
-Quality gate for that exact SHA, rather than a successful check on an older commit.
-An older successful attempt cannot override a newer failing or pending gate.
-It repeats local lint/tests/formatting/coverage before preparing the archive.
+The workflow checks out the immutable triggering SHA and rejects other branches or
+forks. Its read-only API preflight requires the latest completed successful GitHub
+Actions Quality gate for that SHA. It repeats lint/tests/type checks/formatting and
+coverage before packing. Older successful attempts cannot override newer failures.
 
-The internal helper requires the private-package guard, explicit safe file paths,
-regular tracked files, a clean checkout and a new output directory outside it.
-It checks `npm pack --dry-run` and the actual archive's file list against the
-allowlist, with scripts disabled and offline package operations. An existing output
-directory is never overwritten or removed. Failed preparations remove only a new
-directory created by that invocation.
+The helper accepts either private metadata or a stable numeric version with no
+private field and exactly this publishConfig: registry https://registry.npmjs.org/,
+access public, tag latest. Wrong registries, access, tags, prereleases and unexpected
+publication options are rejected. A future prerelease channel needs deliberate
+review rather than silently using latest. Neither metadata mode authorizes publishing.
 
-The artifact contains the `.tgz` and `candidate.json`: schema version, source commit,
-package name/version, private status, archive filename, SHA-256, npm integrity and
-exact file list. Verify that the hash matches the downloaded tarball and review the
-full archive and consumer behavior. A matching hash binds the manifest to that
-archive; it is not a provenance attestation or an approval to publish.
+Both modes require safe explicit file paths, regular tracked files, a clean checkout,
+and a new output directory outside it. Scripts-disabled offline dry-run and actual
+pack lists must exactly match the allowlist. Existing output directories are never
+overwritten or removed; failures remove only the directory created by that invocation.
 
-`private: true` is an npm publication guard, not an artifact confidentiality setting.
-People signed in to GitHub with repository read access can
-[download workflow artifacts](https://docs.github.com/en/actions/how-tos/manage-workflow-runs/download-workflow-artifacts).
-Artifacts in this public repository must contain only reviewed distributable source
-and documentation, never credentials or private configuration.
+Artifacts contain the tgz and candidate.json: schema version, source commit,
+name/version, actual private status, explicit publication options for public candidates,
+archive filename, SHA-256, npm integrity and exact file list. Inspect the entire
+archive and independently install/import/execute it. Hash matching binds the manifest
+to that archive; it is neither provenance nor approval to publish.
 
-The workflow uploads only these explicit files, never a workspace directory,
-environment files, logs, credentials or a cache. Ordinary package tests independently
-verify the reviewed distribution list, installed bytes, import/CLI behavior and
-packaged Markdown links. Uploaded archives are for review, not an external release.
+Artifacts in this public repository are downloadable by signed-in GitHub users
+with repository read access. Private metadata does not make artifacts confidential.
+Only reviewed distributable source/docs may be included; never credentials or private
+configuration. The workflow uploads only the named archive and manifest, not the
+workspace, environment files, logs, credentials or cache. See
+[GitHub artifact access](https://docs.github.com/en/actions/how-tos/manage-workflow-runs/download-workflow-artifacts).
 
-## Request owner review
+## Optional owner candidate review
 
-Dispatch with **request_review = true** only when the candidate is ready for human
-review. The candidate is prepared first, then the `review` job waits for the
-**release-review** environment. That environment is restricted to `main`, requires
-`ghazy001` as reviewer and disables administrator bypass.
+Dispatch request_review = true only to request human inspection. Preparation runs
+first, then review waits for the release-review environment: main only, ghazy001 as
+required reviewer, administrator bypass disabled. Self-review prevention is disabled
+for the sole maintainer, who may dispatch and explicitly approve their own review.
+Agents must never grant that environment approval using the owner's credentials.
+Add another trusted reviewer and revisit this policy if maintainership expands.
 
-Self-review prevention is disabled deliberately: the sole owner may dispatch and
-then explicitly approve a candidate. Enabling independent-review requirements now
-would prevent the sole maintainer from using the workflow. Agents must never submit
-that approval using the owner's credentials. Add another trusted reviewer and
-reconsider this setting when the project has more maintainers.
+After approval, that job records the commit/artifact without checking out code or
+publishing. Candidate approval does not replace explicit release authorization.
+Workflows retain read-only contents permissions, with checks: read only for preflight;
+no npm credential, OIDC write permission or publishing/release command is configured.
 
-After approval, the job records the commit/artifact in its summary. It executes no
-checkout or artifact code and does not publish, tag or create a release. Candidate
-approval is not a substitute for an explicit owner instruction authorizing a future
-npm publication or GitHub release. The current workflows have no npm credential,
-`id-token: write` or `contents: write` permission, or publishing/release command.
+## Local preparation and approved first publication
 
-## Local rehearsal
-
-From a **clean source checkout**, use a development-supported Node version and an
-absolute path to a new directory outside the repository whose parent already exists:
+From a clean checkout, with a new absolute directory outside it:
 
 ```sh
 npm run check
 npm run release:prepare -- "/absolute/path/outside/configpilot-candidate"
 ```
 
-This produces the same private archive and manifest, without uploading or requesting
-review. It does not query GitHub; the GitHub workflow separately enforces exact-commit
-CI. The command is source-repository tooling, excluded from the installed npm package.
-Ignored local `.env` files are not copied or read and remain excluded by the package
-allowlist. Never put real credentials in source files, README, license or metadata;
-allowlisting cannot recognize secret values placed deliberately in allowed files.
+This prepares the same archive/manifest without upload or publication. Ignored
+local environment files are neither read nor copied. Never place credentials in
+allowed source/README/license/metadata: allowlisting cannot identify a credential
+intentionally embedded in an allowed file. See [SECURITY.md](../SECURITY.md).
 
-If preparation fails, check the private guard, tracked file allowlist, clean Git
-status, output-directory location/nonexistence, and offline npm availability. Native
-error details are omitted. Resolve the cause rather than disabling a guard.
+For the approved first release, use the owner's authenticated local npm account
+**ghazi001**, distinct from GitHub **ghazy001**. The owner handles any browser/security-key
+challenge directly; no OTP/token belongs in chat, Git, command arguments or logs.
+Recheck account identity, 2FA, the exact name and final archive immediately before
+publishing. An unavailable name requires an owner decision. Publish the reviewed
+archive with scripts disabled and explicit registry/access/tag, then verify registry
+integrity, maintainer and clean consumer installation before creating the release tag
+and GitHub release. Local first publication does not carry GitHub OIDC provenance.
 
-## Before publication becomes possible
+If preparation fails, fix metadata, tracked source, dirty checkout, destination or
+npm availability; do not disable safety checks. If publication fails, inspect the
+registry before retrying. Never upload changed bytes under an existing name/version.
 
-Complete Milestone 8, confirm package ownership and secure authentication, review
-the final artifact in an independent consumer, and obtain explicit owner approval.
-Any future publisher must consume the reviewed immutable artifact, keep the owner
-environment gate, and use least privilege. Adding publishing capability, changing
-the private guard, creating release tags and external releases are separate decisions.
-Do not add a tag-push or automatic release trigger as part of a maintenance update.
+## Future trusted publishing
 
-The [v0.1.0 approval plan](RELEASE_PLAN_v0.1.0.md) identifies the package, publisher,
-public registry, tag, release notes and ordered post-approval checks. The current
-private candidate cannot be published unchanged. No publication guard may be
-weakened merely to run a rehearsal.
+After the package exists, configure a protected OIDC trusted publisher in a separate
+reviewed workflow change. Current npm guidance requires npm 11.5.1+ and Node 22.14.0+;
+match the exact repository/workflow/environment and retain human approval. Prefer
+stage-only publishing if suitable and disable token publication once OIDC is verified.
+Recheck current guidance when that setup is authorized. No such setup is silently
+included in this first local release. See [npm trusted publishing](https://docs.npmjs.com/trusted-publishers/)
+and [npm trust prerequisites](https://docs.npmjs.com/cli/v11/commands/npm-trust/).
 
-## npm identity and future authentication
-
-The owner selected npm username **`ghazi001`**, distinct from GitHub **`ghazy001`**.
-On 2026-10-26 the owner supplied successful browser-login output and `npm whoami`
-returning **ghazi001**, then explicitly confirmed **2FA enabled**. Their repeat
-registry query returned `E404` for `configpilot`. This supersedes the earlier
-unauthenticated check, but establishes neither package ownership nor a reserved name.
-Before a separately approved first publication, recheck the authenticated account,
-2FA and exact name on the trusted machine. Never send an agent a token or OTP.
-An unavailable name requires an explicit owner naming decision.
-
-For subsequent automation, prefer npm OIDC trusted publishing on GitHub-hosted
-runners. Current requirements are npm 11.5.1+ and Node 22.14.0+. Configure the exact
-repository, workflow filename and protected environment; grant `id-token: write`
-only to the eventual protected publisher job. npm configuration requires an existing
-package, so it cannot establish ownership of this unpublished name. See the
-[npm trusted-publishing guide](https://docs.npmjs.com/trusted-publishers/) and
-[npm trust prerequisites](https://docs.npmjs.com/cli/v11/commands/npm-trust/).
-
-Prefer 2FA with token publishing disabled once trusted publishing works. Avoid
-long-lived write tokens and release caches; retain the owner approval gate. Review
-current npm requirements again when publication is actually authorized. The owner
-performed their own browser login; the agent did not handle credentials or change
-account settings. No trusted-publisher setup, staging, publishing or package-registry
-mutation has been performed as part of readiness work.
-
-See [CI.md](CI.md), [SECURITY.md](../SECURITY.md), [CHANGELOG.md](../CHANGELOG.md) and
-[PROGRESS.md](PROGRESS.md) for settings, privacy boundaries, implemented changes and
-actual verification results.
+See [CI.md](CI.md), [release readiness](RELEASE_READINESS.md), [release notes](RELEASE_NOTES_v0.1.0.md)
+and [progress](PROGRESS.md) for repository policy, boundaries and actual evidence.

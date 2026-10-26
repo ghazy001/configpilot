@@ -1,9 +1,10 @@
 # v0.1.0 first-release approval plan
 
-Prepared **2026-10-26**. **Pending explicit owner approval.** This document does not
-authorize changing publication guards, publishing, staging, tagging or creating a
-GitHub release. The repository package remains private and the workflow only prepares
-unpublished candidates.
+Prepared and **explicitly approved by the owner on 2026-10-26**. The owner answered
+“yes go ahead” to the exact request covering guard removal through reviewed checks,
+configpilot@0.1.0 publication as ghazi001, the v0.1.0 tag and GitHub release.
+This approval is limited to this first release. The workflow only prepares
+unpublished candidates; execution and verified outcomes are recorded in PROGRESS.md.
 
 ## Proposed release identity
 
@@ -34,7 +35,7 @@ silently substitute another package name or publish from a different account.
   recovery code is requested. Public package ownership cannot be verified before
   the first approved publication.
 
-## Work authorized only after explicit release approval
+## Approved execution sequence
 
 1. Prepare a protected PR that removes private: true, adds explicit public-registry
    publication metadata, finalizes the first-release changelog/README/notes, and
@@ -75,7 +76,7 @@ is not silently enabled by this first-release approval. See the current
 [npm trusted-publishing guide](https://docs.npmjs.com/trusted-publishers/) and
 [existing safeguards](RELEASING.md).
 
-Approval should explicitly cover the package/version/account above, removal of the
-private guard through reviewed checks, public npm publication, the v0.1.0 tag and
-GitHub release. Candidate inspection or a generic instruction to continue does not
-replace that explicit approval required by [AGENTS.md](../AGENTS.md).
+The owner approval covers only the package/version/account above, guard removal
+through reviewed checks, public npm publication, the v0.1.0 tag and GitHub release.
+It does not authorize future releases, a new package name or silent changes to
+the approved scope. [AGENTS.md](../AGENTS.md) still requires explicit approval.

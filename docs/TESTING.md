@@ -89,7 +89,7 @@ permissions, dependency updates and required-check configuration, and
 [RELEASING.md](RELEASING.md) for the separate unpublished candidate workflow.
 
 Release-tool tests use an isolated synthetic Git repository with global Git config,
-hooks and signing disabled. They verify private/clean/tracked-file guards, safe
+hooks and signing disabled. They verify private/explicit-public metadata, clean/tracked-file guards, safe
 paths, offline packing, commit/hash manifests, no candidate overwrites, unchanged
 ignored synthetic environment files, and rejection of stale/failed CI checks.
 No test submits an owner approval or publishes a package.

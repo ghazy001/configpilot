@@ -18,8 +18,8 @@ const result = parseDotenv("PORT=3000\nPORT=4000", { file: ".env" });
 // result.issues[0].relatedLocation: { file: ".env", line: 1 }
 ```
 
-This API is available from the local checkout or a locally packed installation.
-The project has not published this package to npm. For comparisons, use
+This API is available from the installed ESM package or the source checkout.
+For comparisons, use
 [`analyzeConfig`](REPORT.md) or the [`configpilot check` command](CLI.md).
 
 ## Inputs and results

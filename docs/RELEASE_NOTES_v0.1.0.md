@@ -1,6 +1,6 @@
-# ConfigPilot v0.1.0 — draft release notes
+# ConfigPilot v0.1.0
 
-**Unreleased draft. No release date, tag, npm publication or GitHub release.**
+Release date: **2026-10-26**. Initial public release.
 
 ConfigPilot compares environment-variable declarations and explains missing keys,
 undocumented keys, duplicate assignments and unsupported syntax. It provides a
@@ -32,12 +32,18 @@ The CLI accepts regular UTF-8 files up to 1 MiB each; the pure parser accepts up
 1,048,576 UTF-16 code units. Names/file labels are public metadata. This is not a
 secret scanner, value validator or deployment-health check.
 
-This is the initial planned release; there is no prior released API to migrate.
+This is the initial release; there is no prior released API to migrate.
 Future breaking changes must be documented explicitly, including before v1.0.
 
-## Try the unpublished candidate
+## Install
 
-Follow [the README](../README.md) to run the checkout or install a local archive.
-Registry install instructions will be verified and added only after an approved
-publication. [Release readiness](RELEASE_READINESS.md) records the remaining gates;
-the [changelog](../CHANGELOG.md) records all implemented changes.
+```sh
+npm install --global configpilot@0.1.0 --ignore-scripts --no-audit --no-fund
+configpilot --help
+```
+
+For a project dependency, use `npm install --save-dev configpilot@0.1.0`.
+Follow [the README](../README.md) for local checks and JavaScript API usage.
+The [changelog](../CHANGELOG.md) records the implemented changes. The initial local
+publication has no GitHub OIDC provenance attestation; future trusted-publisher
+automation is a separate setup.

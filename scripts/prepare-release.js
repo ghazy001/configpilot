@@ -100,7 +100,10 @@ try {
         commit,
         name: metadata.name,
         version: metadata.version,
-        private: true,
+        private: metadata.private === true,
+        ...(metadata.private === true
+          ? {}
+          : { publishConfig: metadata.publishConfig }),
         archive: archive.filename,
         sha256,
         npmIntegrity: archive.integrity,
@@ -111,12 +114,12 @@ try {
     )}\n`,
   );
   process.stdout.write(
-    "Prepared a private, unpublished candidate and its commit/hash/file manifest.\n",
+    "Prepared an unpublished candidate and its commit/hash/file manifest.\n",
   );
 } catch {
   if (created) rmSync(created, { recursive: true, force: true });
   process.stderr.write(
-    "Candidate preparation failed. Use a new directory outside the checkout and retain the private package guard and exact allowlist.\n",
+    "Candidate preparation failed. Check destination, clean tracked source, publication metadata and the exact allowlist.\n",
   );
   process.exitCode = 1;
 }

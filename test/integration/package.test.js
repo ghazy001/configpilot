@@ -206,7 +206,12 @@ test("tarball excludes environment files and works in an offline consumer", (t) 
   const metadata = JSON.parse(
     readFileSync(join(installed, "package.json"), "utf8"),
   );
-  assert.equal(metadata.private, true);
+  assert.equal(Object.hasOwn(metadata, "private"), false);
+  assert.deepEqual(metadata.publishConfig, {
+    registry: "https://registry.npmjs.org/",
+    access: "public",
+    tag: "latest",
+  });
   assert.equal(metadata.type, "module");
   assert.equal(metadata.main, "./src/index.js");
   assert.equal(metadata.types, "./src/index.d.ts");
