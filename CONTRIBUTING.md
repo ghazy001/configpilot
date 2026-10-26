@@ -56,6 +56,7 @@ service, or runtime environment expansion as a convenience feature.
 | `src/diagnostics/`              | Shared stable codes, fixed explanations, and recommendations.             |
 | `src/reporters/`                | Terminal and JSON presentation.                                           |
 | `src/cli.js`                    | Argument parsing and command orchestration.                               |
+| `src/index.d.ts`                | Public declarations; keep them aligned with runtime behavior.             |
 | `src/utils/read-config-file.js` | Bounded, read-only regular-file UTF-8 input.                              |
 | `bin/configpilot.js`            | Executable entry point and process I/O.                                   |
 | `test/`                         | Built-in Node test runner unit, integration, privacy, and archive checks. |
@@ -124,6 +125,6 @@ Do not claim competitor or runtime compatibility without reproducible evidence.
 
 The `0.1.0` metadata is unreleased and the package remains `private`. Do not run
 `npm publish`, remove the private guard, create release tags, or create external
-releases without explicit repository-owner approval. Package-name ownership,
-TypeScript declarations, final archive review, and publishing authentication remain
-release-readiness work. No contribution requires production credentials or npm tokens.
+releases without explicit repository-owner approval. See
+[release readiness](docs/RELEASE_READINESS.md) for verified evidence and outstanding
+account/ownership gates. No contribution requires production credentials or npm tokens.

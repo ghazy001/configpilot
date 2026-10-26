@@ -11,7 +11,8 @@ for your own tooling. It finds missing and undocumented keys, duplicate assignme
 and syntax outside its [documented dotenv subset](docs/PARSER.md).
 
 **Pre-release:** the checkout identifies itself as `0.1.0`, but this project has
-not published an npm package or release. npm name ownership is not yet verified.
+not published an npm package or release. The intended npm owner is `ghazi001`;
+authenticated account access and package ownership are not yet verified.
 Use this repository or a locally built archive; registry installation is not yet
 documented. Runtime: **Node.js 20+**, ES modules. License: [MIT](LICENSE).
 
@@ -143,8 +144,33 @@ Read the [parser contract](docs/PARSER.md) and [analysis/report contract](docs/R
 for all inputs, fields, errors, codes, and recovery behavior. Runnable examples and
 local/maintainer/CI scenarios are in the
 [examples guide](https://github.com/ghazy001/configpilot/blob/main/examples/README.md).
-This is an ESM package; a CommonJS entry point and TypeScript declarations are not
-currently provided.
+This is an **ESM-only** package with bundled TypeScript declarations. Use `.mjs`
+or `"type": "module"` in JavaScript consumers. CommonJS consumers can use
+asynchronous `import("configpilot")`; synchronous `require()` is not part of the
+supported contract across Node.js 20+. No separate CommonJS build is shipped.
+
+TypeScript consumers use the same named imports with `module`/`moduleResolution`
+set to `NodeNext` and an ESM file (`.mts`, or `.ts` in a `"type": "module"` project).
+Bundler resolution is also verified. Types describe source locations, diagnostics,
+options and schema-version-1 reports, including unavailable skipped counts:
+
+```ts
+import { analyzeConfig, type AnalysisReport } from "configpilot";
+
+const report: AnalysisReport = analyzeConfig({
+  template: "PORT=3000",
+  environment: "",
+});
+if (report.comparison === "complete") {
+  console.log(report.summary.missingKeys); // number
+} else {
+  console.log(report.summary.missingKeys); // null
+}
+```
+
+The shipped declarations require no `@types/node` or TypeScript installation at
+runtime. Development checks use pinned TypeScript 7.0.2 against an offline-installed
+archive; other compiler versions have not been verified.
 
 ## Privacy and limits
 
