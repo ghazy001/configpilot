@@ -1,9 +1,11 @@
 # Release readiness
 
-Reviewed 2026-10-26. **v1.0.0 release approved; final execution in progress.**
-The owner accepted external feedback as post-release work. Technical validation and
-maintainer review passed; final release-source/registry receipts remain mandatory.
-The old 0.1.0 validation archive must never be published as changed 0.1.0 bytes.
+Reviewed 2026-10-26. **v1.0.0 published and verified.** The exact release source
+66b4ad2 passed hosted CI; registry bytes, ordinary local/global installs and public
+API/CLI behavior were verified. npm latest, the immutable tag and GitHub release
+identify 1.0.0. See [the release receipt](releases/1.0.0.json).
+External feedback is explicitly accepted post-release work, not a completed claim.
+The old 0.1.0 validation archives are historical and must never be published.
 
 ## Published 0.1.0 evidence
 
@@ -20,7 +22,7 @@ Owner login and 2FA were confirmed during the first publication. No credential o
 recovery code was collected. Initial local publication has no OIDC provenance.
 The published archive does not include the current privacy/resource fixes.
 
-## Current source and stable-release gates
+## Technical evidence and future release checks
 
 Use [STABILITY.md](STABILITY.md) and [PROGRESS.md](PROGRESS.md) for current work and
 executed verification. The source adds bounded records/metadata, quote quarantine,
@@ -38,7 +40,7 @@ f3c9916 in run 40305989425. The maintainer security/API review found no addition
 confirmed blocker. External feedback is **Pending — Requires Human Participation**.
 The current archive identity is in [STABILITY.md](STABILITY.md).
 
-Before declaring stable v1:
+For any subsequent release:
 
 - Complete current-source lint, runtime/contract/type/coverage/resource/archive checks.
 - Verify new code on the complete hosted OS/Node matrix; old CI is historical evidence.

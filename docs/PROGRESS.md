@@ -4,12 +4,12 @@ Last updated: 2026-10-26 (Africa/Tunis).
 
 ## Current target — stable v1.0.0
 
-Status: **Release preparation in progress**. The owner explicitly approved releasing
-**v1.0.0** on 2026-10-26 after accepting external developer feedback as post-release
-work. Current code passed the private hosted Windows/Linux/macOS matrix and a
-maintainer security/API review. Package metadata now targets 1.0.0. Publication is
-not yet claimed: final committed-source checks, exact archive and registry verification
-will be recorded below. Historical counts/receipts refer to their stated revisions.
+Status: **Complete — v1.0.0 published and verified**. npm latest points to 1.0.0;
+registry bytes match the reviewed archive from source 66b4ad2. The immutable v1.0.0
+tag and GitHub release exist. See [the release receipt](releases/1.0.0.json) and
+execution record below. External developer feedback is still uncollected and was
+explicitly accepted as post-release work. No future release is authorized by this
+record. Historical counts/receipts refer to their stated revisions.
 
 ## Initial session scope and inspection
 
@@ -1177,3 +1177,42 @@ for the current implementation; external feedback **Pending — Requires Human P
 - Existing npm authentication identifies ghazi001 and registry metadata lists that
   maintainer; 1.0.0 was absent at preflight. Final verification/publication receipts
   follow. No successful publication is inferred from authorization or metadata edits.
+
+### v1.0.0 publication execution — 2026-10-26
+
+- Committed release preparation as 244393c; PR #7 passed all 12 development
+  OS/runtime jobs, minimum Node 20.0.0 and Quality gate in run **40316371393**.
+  GitHub reported PR #7 merged as **66b4ad2cc0f39f507fb5cb94f6c08e458a42d88d**;
+  the full merged tree exactly matched the reviewed branch. Exact-main Quality
+  gate then passed in run **40316620730** before publication.
+- Local v1 checks: 165 runtime and 7 contract tests passed with zero failures/skips;
+  lint, format, TypeScript consumers and core 100% line/branch/function coverage
+  passed. Five resource probes passed (largest JSON 1,854,703 bytes, max RSS 103.38 MiB).
+- Prepared the final clean-main archive under
+  `/private/tmp/configpilot-v1-final-66b4ad2`: exact 21-file allowlist, executable
+  CLI, no environment files or unintended contents. SHA-256:
+  **3f64ab069fde5df4c2425420dda2463b20ebbf9cd430f8e3424150cf63f0e0be**.
+  Integrity: sha512-HTPeBKh6h3otlHe7ejUXJgjvr4UZuwZXWhBEoc6ewCXW8yxqlz9Yk92nrB4AKHgontOPE2WwC8MaZ/MUPfP4cw==.
+  Preflight and merged-main archives are byte-identical. Offline acceptance and
+  fresh installed API/CLI/type checks passed. Initial local preparation could not
+  complete with the default npm cache; a dedicated writable temporary cache resolved
+  it without weakening guards or changing the package.
+- npm identity is ghazi001; 2FA readback was auth-and-writes. Owner completed npm's
+  browser challenge privately. Publishing the exact verified archive returned exit 0
+  and `+ configpilot@1.0.0`; npm said processing may take a few minutes. Registry
+  verification is pending until processing completes; no duplicate publish attempted.
+
+- Registry processing completed: v1.0.0 is publicly available and latest points to
+  1.0.0. Downloaded tarball bytes, SHA-256 and npm integrity exactly matched the
+  reviewed archive; maintainer is ghazi001. Fresh unauthenticated ordinary
+  `npm install configpilot@1.0.0` and global installation in an isolated prefix
+  passed without ignore-scripts/no-audit/no-fund. Installed byte equality,
+  ESM/CommonJS dynamic import, strict TypeScript consumer, CLI exits 0/1/2,
+  privacy and unchanged synthetic input checks passed.
+- Created annotated **v1.0.0** at source **66b4ad2**, tag object
+  **5e9f1318278f05809c6e76dadcded0e647313552**, then verified and created GitHub
+  release **424183269**: https://github.com/ghazy001/configpilot/releases/tag/v1.0.0.
+  No old tag/archive was modified. Manual 2FA publication has no OIDC provenance.
+- Durable identity and actual verification results are in `docs/releases/1.0.0.json`.
+  This completes the approved release. Human feedback stays pending as accepted
+  post-release work; no user trials or independent audit are claimed.

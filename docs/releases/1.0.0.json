@@ -1,0 +1,63 @@
+{
+  "source": "66b4ad2cc0f39f507fb5cb94f6c08e458a42d88d",
+  "name": "configpilot",
+  "version": "1.0.0",
+  "sha256": "3f64ab069fde5df4c2425420dda2463b20ebbf9cd430f8e3424150cf63f0e0be",
+  "npmIntegrity": "sha512-HTPeBKh6h3otlHe7ejUXJgjvr4UZuwZXWhBEoc6ewCXW8yxqlz9Yk92nrB4AKHgontOPE2WwC8MaZ/MUPfP4cw==",
+  "mode": "registry",
+  "registry": "https://registry.npmjs.org/configpilot/1.0.0",
+  "maintainers": ["ghazi001"],
+  "tarball": "https://registry.npmjs.org/configpilot/-/configpilot-1.0.0.tgz",
+  "registryArchiveMatched": true,
+  "files": 21,
+  "consumer": "fresh unauthenticated registry install",
+  "typeChecks": "strict NodeNext/Bundler positive/negative plus emitted execution",
+  "cli": "installed shim help/version/clean/mismatch/operational error",
+  "privacyAndUnchangedInputs": true,
+  "verifiedOn": "2026-10-26",
+  "distTag": "latest",
+  "gitTag": "v1.0.0",
+  "tagObject": "5e9f1318278f05809c6e76dadcded0e647313552",
+  "githubRelease": "https://github.com/ghazy001/configpilot/releases/tag/v1.0.0",
+  "githubReleaseId": 424183269,
+  "provenance": "No OIDC provenance attestation; manual owner-controlled 2FA publication",
+  "archiveFiles": [
+    "CHANGELOG.md",
+    "LICENSE",
+    "README.md",
+    "SECURITY.md",
+    "bin/configpilot.js",
+    "docs/CLI.md",
+    "docs/PARSER.md",
+    "docs/REPORT.md",
+    "docs/TROUBLESHOOTING.md",
+    "package.json",
+    "schemas/report.schema.json",
+    "src/analyzer/config-analyzer.js",
+    "src/cli.js",
+    "src/diagnostics/issue-codes.js",
+    "src/index.d.ts",
+    "src/index.js",
+    "src/parser/dotenv-parser.js",
+    "src/reporters/json.js",
+    "src/reporters/terminal.js",
+    "src/utils/input-limits.js",
+    "src/utils/read-config-file.js"
+  ],
+  "qualityRuns": {
+    "pullRequest": "https://github.com/ghazy001/configpilot/actions/runs/40316371393",
+    "releaseCommit": "https://github.com/ghazy001/configpilot/actions/runs/40316620730"
+  },
+  "consumerVerification": {
+    "ordinaryLocalInstall": true,
+    "ordinaryGlobalInstallInIsolatedPrefix": true,
+    "unauthenticatedRegistryInstall": true,
+    "installedCliExits": [0, 1, 2],
+    "typescript": ["7.0.2 NodeNext", "7.0.2 Bundler"],
+    "commonJSDynamicImport": true
+  },
+  "limitations": [
+    "External developer feedback has not been collected; accepted as post-release follow-up",
+    "Documented dotenv subset only; no full dotenv compatibility or value validation claim"
+  ]
+}
