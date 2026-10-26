@@ -16,6 +16,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import process from "node:process";
 import test from "node:test";
+import { stripVTControlCharacters } from "node:util";
 import { fileURLToPath, URL } from "node:url";
 import { analyzeConfig } from "../../src/index.js";
 
@@ -335,8 +336,13 @@ test(
 test("output is deterministic plain text with NO_COLOR and redirected streams", (t) => {
   const cwd = fixture(t, "A=", "B=example");
   const first = run(cwd, ["check"], { NO_COLOR: "1" });
-  const second = run(cwd, ["check"], { FORCE_COLOR: "1" });
-  assert.equal(first.stdout, second.stdout);
+  const second = run(cwd, ["check"], {
+    FORCE_COLOR: "1",
+    NO_COLOR: "",
+    TERM: "xterm",
+  });
+  assert.ok(second.stdout.includes("\u001b"));
+  assert.equal(first.stdout, stripVTControlCharacters(second.stdout));
   assert.equal(first.stderr, "");
   assert.ok(!first.stdout.includes("\u001b"));
 });
@@ -400,4 +406,61 @@ test("dense input produces a controlled limit error without a partial report", (
       assert.ok(!report.summary);
     } else assert.match(result.stderr, /INPUT_LIMIT_EXCEEDED/);
   }
+});
+
+test("display options preserve JSON, exit status, privacy, and operational failures", (t) => {
+  const cwd = fixture(t, "A=SYNTHETIC_SECRET", "B=SYNTHETIC_PASSWORD");
+  const baseline = run(cwd, ["check", "--json"]);
+  for (const flag of ["--quiet", "--verbose", "--no-color"]) {
+    const json = run(cwd, ["check", "--json", flag], {
+      FORCE_COLOR: "1",
+      NO_COLOR: "",
+      TERM: "xterm",
+    });
+    assert.equal(json.stdout, baseline.stdout);
+    assert.equal(json.status, 1);
+    const text = run(cwd, ["check", flag]);
+    assert.equal(text.status, 1);
+    assert.match(text.stdout, /MISSING_KEY/);
+    assert.match(text.stdout, /Action:/);
+    assert.doesNotMatch(text.stdout, /SYNTHETIC_SECRET|SYNTHETIC_PASSWORD/);
+  }
+  const quiet = run(cwd, ["check", "--quiet"]);
+  assert.doesNotMatch(quiet.stdout, /ConfigPilot|Summary|No files/);
+  const clean = run(cwd, ["check", "--env", ".env.example", "--quiet"]);
+  assert.equal(clean.status, 0);
+  assert.equal(clean.stdout, "");
+  const noColor = run(cwd, ["check", "--no-color"], {
+    FORCE_COLOR: "1",
+    NO_COLOR: "",
+    TERM: "xterm",
+  });
+  assert.ok(!noColor.stdout.includes("\u001b"));
+  for (const flags of [
+    ["--quiet", "--verbose"],
+    ["--quiet", "--quiet"],
+    ["--no-color=true"],
+  ]) {
+    const result = run(cwd, ["check", ...flags]);
+    assert.equal(result.status, 2);
+    assert.match(result.stderr, /INVALID_ARGUMENTS/);
+  }
+  const missing = run(
+    cwd,
+    ["check", "--env", "SYNTHETIC_PRIVATE_PATH", "--verbose", "--no-color"],
+    { FORCE_COLOR: "1" },
+  );
+  assert.equal(missing.status, 2);
+  assert.equal(missing.stdout, "");
+  assert.match(missing.stderr, /FILE_NOT_FOUND/);
+  assert.doesNotMatch(missing.stderr, /SYNTHETIC_PRIVATE_PATH/);
+  assert.ok(!missing.stderr.includes("\u001b"));
+  writeFileSync(
+    join(cwd, ".env"),
+    'A="unterminated\nSYNTHETIC_MULTILINE_SECRET\n',
+  );
+  const malformed = run(cwd, ["check", "--verbose"]);
+  assert.equal(malformed.status, 1);
+  assert.doesNotMatch(malformed.stdout, /SYNTHETIC_MULTILINE_SECRET/);
+  assert.match(malformed.stdout, /COMPARISON_SKIPPED/);
 });

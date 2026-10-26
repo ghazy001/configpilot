@@ -2,7 +2,7 @@ import { resolve } from "node:path";
 import process from "node:process";
 import { analyzeConfig } from "./analyzer/config-analyzer.js";
 import { formatJson } from "./reporters/json.js";
-import { formatTerminal } from "./reporters/terminal.js";
+import { formatTerminal, formatCliError } from "./reporters/terminal.js";
 import { inputErrorCode, readConfigFile } from "./utils/read-config-file.js";
 import { InputLimitError } from "./utils/input-limits.js";
 
@@ -18,6 +18,9 @@ Options:
   --template PATH  Reference file (default: .env.example).
   --env PATH       Environment file (default: .env).
   --json           Emit one JSON object instead of terminal text.
+  --no-color       Disable ANSI styling.
+  --quiet          Show findings only; clean checks are silent.
+  --verbose        Include safe analysis-scope details.
   --help           Show this help message.
   --version        Show the package version (standalone).
 
@@ -69,7 +72,7 @@ const ERRORS = {
 };
 
 /** Operational errors intentionally omit paths, raw arguments, and native errors. */
-export function cliFailure(code, json, source, message) {
+export function cliFailure(code, json, source, message, display = {}) {
   const [defaultMessage, recommendation] = ERRORS[code];
   const error = {
     code,
@@ -86,7 +89,7 @@ export function cliFailure(code, json, source, message) {
     : {
         exitCode: 2,
         stdout: "",
-        stderr: `ConfigPilot: ${code}${source ? ` (${source})` : ""}\n${error.message}\nAction: ${recommendation}\n`,
+        stderr: formatCliError(error, display),
       };
 }
 
@@ -115,11 +118,18 @@ export function parseArguments(args) {
   const seen = new Set();
   for (let index = 1; index < args.length; index += 1) {
     const token = args[index];
-    if (token === "--json") {
+    if (["--json", "--no-color", "--quiet", "--verbose"].includes(token)) {
       if (seen.has(token))
-        return invalid("Option --json must be supplied only once.");
+        return invalid(`Option ${token} must be supplied only once.`);
       seen.add(token);
-      options.json = true;
+      options[
+        {
+          "--json": "json",
+          "--no-color": "noColor",
+          "--quiet": "quiet",
+          "--verbose": "verbose",
+        }[token]
+      ] = true;
       continue;
     }
     const separator = token.indexOf("=");
@@ -137,15 +147,21 @@ export function parseArguments(args) {
       return invalid(`Provide a non-empty file path for ${flag}.`);
     options[names[flag]] = value;
   }
+  if (options.quiet && options.verbose)
+    return invalid("Use either --quiet or --verbose, not both.");
   return options;
 }
 
 /** CLI orchestration; injectable reads keep unit tests independent of the disk. */
 export async function runCli(
   args,
-  { version, cwd = process.cwd(), readFile = readConfigFile },
+  { version, cwd = process.cwd(), readFile = readConfigFile, display = {} },
 ) {
   const jsonRequested = args[0] === "check" && args.includes("--json");
+  const errorDisplay = {
+    ...display.stderr,
+    ...(args.includes("--no-color") ? { color: false } : {}),
+  };
   try {
     const options = parseArguments(args);
     if (options.error)
@@ -154,6 +170,7 @@ export async function runCli(
         jsonRequested,
         undefined,
         options.error,
+        errorDisplay,
       );
     if (options.command === "help")
       return { exitCode: 0, stdout: HELP, stderr: "" };
@@ -168,7 +185,13 @@ export async function runCli(
       try {
         inputs[source] = await readFile(resolve(cwd, path));
       } catch (error) {
-        return cliFailure(inputErrorCode(error), options.json, source);
+        return cliFailure(
+          inputErrorCode(error),
+          options.json,
+          source,
+          undefined,
+          errorDisplay,
+        );
       }
     }
     const report = analyzeConfig({
@@ -179,12 +202,32 @@ export async function runCli(
     return {
       exitCode:
         report.summary.errors > 0 || report.summary.warnings > 0 ? 1 : 0,
-      stdout: options.json ? formatJson(report) : formatTerminal(report),
+      stdout: options.json
+        ? formatJson(report)
+        : formatTerminal(report, {
+            ...display.stdout,
+            ...options,
+            ...(options.noColor ? { color: false } : {}),
+            templateFile: options.templatePath,
+            environmentFile: options.environmentPath,
+          }),
       stderr: "",
     };
   } catch (error) {
     if (error instanceof InputLimitError)
-      return cliFailure("INPUT_LIMIT_EXCEEDED", jsonRequested);
-    return cliFailure("INTERNAL_ERROR", jsonRequested);
+      return cliFailure(
+        "INPUT_LIMIT_EXCEEDED",
+        jsonRequested,
+        undefined,
+        undefined,
+        errorDisplay,
+      );
+    return cliFailure(
+      "INTERNAL_ERROR",
+      jsonRequested,
+      undefined,
+      undefined,
+      errorDisplay,
+    );
   }
 }

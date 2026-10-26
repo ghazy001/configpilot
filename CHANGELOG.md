@@ -3,6 +3,14 @@
 Release history for ConfigPilot. Verification evidence and release status are
 recorded in the repository's development progress log.
 
+## 1.1.0 — 2026-10-26
+
+- Redesign terminal reports with compact branding, selected paths, stacked findings,
+  friendly titles, safe actions, accurate success states, and responsive wrapping.
+- Add stream-aware colors, Unicode/ASCII fallbacks, `--no-color`, `--quiet`, and
+  `--verbose`; keep all diagnostic codes, severities, exit codes, and JSON unchanged.
+- Preserve value privacy and escaped labels without adding runtime dependencies.
+
 ## 1.0.0 — 2026-10-26
 
 Stable API and CLI contracts for the documented dotenv subset. External developer

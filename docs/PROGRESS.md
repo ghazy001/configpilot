@@ -11,6 +11,49 @@ execution record below. External developer feedback is still uncollected and was
 explicitly accepted as post-release work. No future release is authorized by this
 record. Historical counts/receipts refer to their stated revisions.
 
+## Terminal experience v1.1.0 — 2026-10-26
+
+Status: **Release preparation in progress**. Owner approved publication of the
+completed redesign on 2026-10-26. Version 1.1.0 adds display flags; this entry
+records changes after the immutable v1.0.0 release. Branch: `codex/terminal-experience`.
+
+- Design: compact branding and quoted selected paths, stacked friendly diagnostic
+  titles with stable codes, source locations, actions, accurate success state and
+  summary. Syntax errors still skip key comparison; warnings still exit 1.
+- Implementation: existing terminal reporter, CLI orchestration and executable only;
+  analyzer/parser, JSON renderer/schema, public exports and package dependencies
+  unchanged. Added `--no-color`, `--quiet` and `--verbose`. Quiet keeps every finding
+  and operational failure visible; clean checks are silent. Quiet/verbose conflict
+  is rejected. JSON ignores styling flags and retains identical output.
+- Compatibility: per-stream TTY/color policy, NO_COLOR/FORCE_COLOR/TERM=dumb,
+  Unicode capability hints and ASCII fallback. Grapheme-aware stacked wrapping
+  estimates CJK/emoji cell widths; long labels remain intact across wrapped lines.
+  Labels escape terminal controls. Errors omit raw paths/arguments; verbose never
+  exposes source lines or values. No runtime dependencies added.
+- Verification: 172 tests passed under coverage on Node 20.20.0, including actual
+  CLI privacy/exit/JSON regressions and installed-package smoke tests. Parser and
+  analyzer each retain 100% line/branch coverage; terminal reporter has 100% lines
+  and 97.89% branches. Seven contract tests and installed TypeScript 5.0.4/7.0.2
+  positive/negative consumer checks passed. Lint passed. Focused compatibility
+  tests passed on Node 20.0.0, 22.13.0, 24.22.1 and 26.12.1.
+  Real PTY preview confirmed Unicode and ANSI output with synthetic examples.
+- Performance: a maximum escaped-label probe exposed slow ICU segmentation for
+  long ASCII tokens. An ASCII fast path reduced this synthetic 1.65 MB report from
+  about 10.7 seconds to 52 milliseconds on this Mac/Node 20.20.0 (single probes, not
+  a general benchmark). An isolated 128 MiB heap / 10-second regression guard now
+  covers it; Unicode continues to use grapheme segmentation.
+- Documentation: README quick-start captured from actual CLI; CLI reference includes
+  success, warnings, syntax errors, missing-file, JSON and no-color examples.
+  CHANGELOG and STABILITY distinguish this update from published v1.0.0.
+- Package inspection: `npm pack --dry-run --ignore-scripts` passed with a temporary
+  writable npm cache after the default cache returned EPERM. Exactly 21 allowlisted
+  files; no fixtures or private configuration files added to the archive.
+- Remaining validation: native Windows/Linux and iTerm2/font visual testing of this
+  new layout has not been performed. Capability-policy tests simulate those modes;
+  historical release CI is not evidence for this update. Human developer feedback
+  remains Pending — Requires Human Participation. No publish, tag, release, or
+  external messages were performed for this task.
+
 ## Initial session scope and inspection
 
 Read `AGENTS.md` completely. The initial directory contained only `AGENTS.md`;

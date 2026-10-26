@@ -84,3 +84,12 @@ It retains the existing version text for local checks only and must not be publi
 That historical validation archive predates the whitespace-recovery follow-up;
 it is not evidence for the latest source. The progress log records current
 verification, replacement candidate identity and the owner's disclosure decision.
+
+## Post-release terminal experience
+
+The unreleased checkout update improves presentation and adds optional display
+flags without changing v1 API/schema semantics or bumping the version. Automated
+rendering and actual-CLI regressions cover quiet/verbose behavior, color controls,
+wrapping, malformed input privacy, and JSON identity. Human terminal/font testing
+on Windows, iTerm2, and Linux remains a follow-up; prior release CI evidence does
+not validate these new changes. Publication requires separate owner approval.
