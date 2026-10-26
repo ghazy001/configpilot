@@ -87,9 +87,8 @@ verification, replacement candidate identity and the owner's disclosure decision
 
 ## Post-release terminal experience
 
-The unreleased checkout update improves presentation and adds optional display
-flags without changing v1 API/schema semantics or bumping the version. Automated
-rendering and actual-CLI regressions cover quiet/verbose behavior, color controls,
-wrapping, malformed input privacy, and JSON identity. Human terminal/font testing
-on Windows, iTerm2, and Linux remains a follow-up; prior release CI evidence does
-not validate these new changes. Publication requires separate owner approval.
+Version 1.1.0 ships the terminal redesign and display flags with unchanged public
+API/schema semantics. Owner-approved publication, matching registry archive bytes,
+fresh unauthenticated consumer checks and required hosted Windows/Linux/macOS CI
+are verified. See [the release receipt](releases/1.1.0.json) and PROGRESS.md.
+Manual font/terminal appearance checks and external developer feedback remain open.

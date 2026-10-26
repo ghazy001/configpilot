@@ -9,6 +9,9 @@ The initial npm publication and existing tag are verified in
 versions or package-name changes. The owner separately approved v1.0.0 on 2026-10-26; see
 [the v1.0.0 plan](RELEASE_PLAN_v1.0.0.md). Never reuse 0.1.0 for changed bytes.
 
+The owner separately approved v1.1.0 on 2026-10-26; see
+[the v1.1.0 plan](RELEASE_PLAN_v1.1.0.md) and [receipt](releases/1.1.0.json).
+
 The package has explicit public-registry metadata. The GitHub workflow still only
 prepares **unpublished candidates**; it cannot publish, tag or create releases.
 Future publications and external releases require their own explicit owner approval.
