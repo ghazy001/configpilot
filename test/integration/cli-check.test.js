@@ -324,3 +324,43 @@ test("a closed output pipe does not produce a stack trace", async (t) => {
   assert.equal(status, 0);
   assert.equal(stderr, "");
 });
+
+test("ambiguous quoted credentials never appear in actual CLI output", (t) => {
+  for (const quote of ["'", '"', "`"]) {
+    for (const ending of ["\n", "\r\n", "\r"]) {
+      const environment = [
+        `KEY=${quote}prefix\\\\${quote}`,
+        "SYNTHETIC_CREDENTIAL_FRAGMENT=x",
+        "SYNTHETIC_CREDENTIAL_FRAGMENT=y",
+        quote,
+        "AFTER=x",
+      ].join(ending);
+      const cwd = fixture(t, "AFTER=", environment);
+      for (const flags of [[], ["--json"]]) {
+        const result = run(cwd, ["check", ...flags]);
+        assert.equal(result.status, 1);
+        assert.equal(result.stderr, "");
+        assert.ok(!result.stdout.includes("SYNTHETIC_CREDENTIAL_FRAGMENT"));
+        if (flags.length)
+          assert.equal(JSON.parse(result.stdout).comparison, "skipped");
+      }
+    }
+  }
+});
+
+test("dense input produces a controlled limit error without a partial report", (t) => {
+  const cwd = fixture(t, "A=", "A=SYNTHETIC_LIMIT_SECRET\n".repeat(2049));
+  for (const flags of [[], ["--json"]]) {
+    const result = run(cwd, ["check", ...flags]);
+    assert.equal(result.status, 2);
+    assert.ok(
+      !(result.stdout + result.stderr).includes("SYNTHETIC_LIMIT_SECRET"),
+    );
+    if (flags.length) {
+      assert.equal(result.stderr, "");
+      const report = JSON.parse(result.stdout);
+      assert.equal(report.error.code, "INPUT_LIMIT_EXCEEDED");
+      assert.ok(!report.summary);
+    } else assert.match(result.stderr, /INPUT_LIMIT_EXCEEDED/);
+  }
+});

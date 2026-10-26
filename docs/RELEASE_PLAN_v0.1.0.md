@@ -1,10 +1,14 @@
-# v0.1.0 first-release approval plan
+# Historical v0.1.0 first-release approval plan
 
 Prepared and **explicitly approved by the owner on 2026-10-26**. The owner answered
 “yes go ahead” to the exact request covering guard removal through reviewed checks,
 configpilot@0.1.0 publication as ghazi001, the v0.1.0 tag and GitHub release.
 This approval is limited to this first release. The workflow only prepares
 unpublished candidates; execution and verified outcomes are recorded in PROGRESS.md.
+
+The approved npm publication and existing tag are verified in
+[the release receipt](releases/0.1.0.json). This historical plan does not authorize
+changed bytes under 0.1.0 or a future version. Current gates are in [STABILITY.md](STABILITY.md).
 
 ## Proposed release identity
 

@@ -2,7 +2,7 @@
 
 Last updated: 2026-10-26 (Africa/Tunis).
 
-## Session scope and inspection
+## Initial session scope and inspection
 
 Read `AGENTS.md` completely. The initial directory contained only `AGENTS.md`;
 there was no Git repository, implementation, package metadata, or test suite.
@@ -22,10 +22,10 @@ feedback remains outstanding and must inform later product decisions.
 | 5 — Testing           | Complete    | 139 tests; 100% local runtime line coverage; seeded invariants, isolated I/O faults, actual-checkout archive/offline installation checks; all 13 hosted runtime/platform jobs passed.                                          | Matrix samples supported runtime lines; Windows skips two POSIX-only tests. Coverage and tests do not replace real-project validation or release readiness.                                                       |
 | 6 — Documentation     | Complete    | Reworked README; contribution/security/conduct/changelog and troubleshooting guides; executable examples and scenario guide; verified local install paths, examples, packaged documentation and links.                         | Local and 13 hosted checks passed; no-install fresh-clone quick start verified. Registry ownership, declarations, release metadata and private reporting configuration remain readiness/CI work.                  |
 | 7 — CI/CD             | Complete    | Quality matrix and stable gate; weekly dependency updates; restricted SHA-pinned Actions; private reports/security fixes; owner-only candidate environment; private archive/manifest workflow and guard tests.                 | Hosted gate/matrix, candidate artifact/offline consumer, owner approval barrier and main protections verified. Publishing remains disabled; owner notification preferences and release readiness remain separate. |
-| 8 — Release readiness | In Progress | Bundled declarations and installed TypeScript consumer checks; metadata/ESM/bin review; 19-file archive checks; draft release notes and authentication plan; intended npm owner confirmed.                                     | Local/hosted checks and the 19-file candidate passed. Owner login as ghazi001 and 2FA confirmed. Actual package ownership awaits approved first publication; publication remains disabled.                        |
-| 9 — Publication       | In Progress | First-release identity, publisher and scope documented; authentication/name/main CI rechecked; fresh private candidate prepared; release notes and post-approval sequence ready for review.                                    | Explicit approval required for publication-guard changes, npm publication, tag and GitHub release. Actual ownership and registry installation remain unverified until publication.                                |
+| 8 — Release readiness | Complete    | Published 0.1.0 identity, ghazi001 ownership, exact 19-file archive and fresh unauthenticated consumer verified; durable receipt retained.                                                                                     | Current unreleased stability source has separate verification/release gates below; existing registry bytes never change.                                                                                          |
+| 9 — Publication       | In Progress | npm 0.1.0 and existing annotated tag verified against be996e1; installation instructions and archive integrity checked.                                                                                                        | GitHub release remains absent; npm page UI not independently verified; real developer feedback is outstanding. No further release action is authorized here.                                                      |
 
-## Architectural decisions
+## Architectural decisions (historical; current stability work recorded below)
 
 - Milestones 1–3 established the repository, parser, and pure comparison engine.
   Milestone 4 adds the working CLI, safe file reads, and reporters. Public parser
@@ -551,7 +551,7 @@ Verification (macOS Node 20.20.0/npm 10.8.2 and actual GitHub workflows):
 - The final verification record is delivered via a feature branch/PR. Main protection
   remains enabled throughout; merge requires the same complete Quality gate.
 
-## Next task
+## Next task (historical after Milestone 7)
 
 Milestone 8: verify npm name availability/ownership, TypeScript declarations and
 consumer compatibility, final metadata/archive/release notes and publishing-security
@@ -801,3 +801,114 @@ Pre-PR release verification (macOS, Node v20.20.0, npm 10.8.2):
 
 - Fresh npm advisory audit reported zero known vulnerabilities for the current
   development graph at release preparation time. This is time-sensitive evidence.
+
+## Stable v1 audit and implementation — 2026-10-26
+
+Status: **In Progress**. The owner approved necessary stability work after the
+read-only audit of clean main be996e1. Read AGENTS.md completely and isolated work on
+codex/stable-readiness. Version remains 0.1.0; no publication/staging, new tag,
+external release or public security disclosure is part of this local work.
+
+The audit confirmed cross-loader quote ambiguity could expose credential-body
+fragments as duplicate key names, excessive report growth for dense 1 MiB inputs,
+and contradictory release/support docs. Its executed baseline was 149 tests and
+100% core coverage, demonstrating that coverage alone missed the privacy defect.
+
+Completed implementation:
+
+- Keep existing unambiguous single-line syntax; quarantine later plausible quote
+  boundaries and overlapping malformed blocks. New parser/API/actual CLI privacy
+  regressions cover all quote styles, line endings and paired backslash runs.
+- Enforce per-input 2048 declaration/invalid-line records, 4096-code-unit public
+  labels and 131072-code-unit emitted metadata. Fixed RangeError or CLI
+  INPUT_LIMIT_EXCEEDED/exit 2 returns no partial report. Blank/comment/quarantined
+  body lines do not consume records. Document the compatibility effects.
+- Export JSON Schema 2020-12 through configpilot/schema.json; validate complete,
+  skipped and operational envelopes and reject unsafe structural mutations.
+  Preserve the three named runtime exports, six analysis codes and schema 1.
+- Add pinned development-only dotenv 18.0.9, Ajv 8.20.0 and a TypeScript 5.0.4 alias.
+  Runtime dependencies remain empty. Test 99 conventional reference cases,
+  intentional grammar differences and quote/backslash mutations.
+- Verify installed TypeScript 5.0.4 and 7.0.2 under strict NodeNext/Bundler with empty
+  type roots, negative fixtures and emitted ESM/CJS dynamic import. Correct the
+  default-export negative test: TS5 synthetic-default imports can compile, so assert
+  namespace shape and exact runtime exports instead of relying on that compiler rule.
+- Add a fail-closed 90% parser/analyzer line/branch coverage floor and isolated
+  resource probes, including Linux/Node 24 CI wiring. Preserve minimum-runtime
+  tests without development dependencies. The archive now contains 21 exact files.
+- Correct current release/security status and retain immutable published 0.1.0
+  identity in docs/releases/0.1.0.json. That historical 19-file archive and existing
+  tag correspond to be996e1; it does not contain current fixes. No GitHub release
+  was present at read-only verification. Never publish changed bytes as 0.1.0.
+- Run six pinned public-template evaluations, now reproducible through the manual
+  scripts/evaluate-public-templates.js and value-free corpus manifest. Cal.com,
+  Immich, Supabase, Outline, Twenty and Novu passed, with 174/6/71/87/7/8 keys.
+  Reference key agreement, deterministic API, actual CLI, unchanged hashes,
+  synthetic missing/extra and duplicate checks passed for every source. Upstream
+  code was never installed/executed; public inputs were deleted after checks.
+- Add STABILITY.md with audit IDs, mandatory gates and optional deferred features;
+  VALIDATION.md provides a consented developer-trial protocol without collecting
+  real configurations. Apply and read back immutable v* tag protection under the approved release-hardening scope.
+
+Decisions and remaining gates:
+
+- Prefer conservative suppression over exposing possible credential fragments;
+  dense inputs fail explicitly rather than yielding misleading truncated reports.
+  These compatibility effects and the new operational code are documented before
+  any release. No redundant strict flag, process.env merge, full dotenv loader,
+  automatic rewriting, dual CJS build or advanced integrations were introduced.
+- Published 0.1.0 remains unchanged. New code requires a reviewed unused version
+  and exact artifact approval. No standing publication permission is inferred.
+- Actual developer feedback is still absent. Complete 3–5 trials and resolve
+  material findings before declaring stable v1.0.0.
+- Current-source hosted Windows/Linux/macOS CI is pending; historical green CI does
+  not verify these changes. SECURITY.md prohibits vulnerability details/reproductions
+  in public PRs/logs. Keep the security patch local pending coordinated public
+  delivery approval or an appropriate private review/CI route. No public message
+  or vulnerability report is sent on the owner's behalf.
+
+Verification is recorded below as final checks complete; do not infer hosted or
+real-user success from local tests or public-template sampling.
+
+Final local verification for stability implementation:
+
+- Clean offline lockfile installation with scripts disabled passed. `npm run check`
+  on Node 20.20.0 passed: **161 runtime tests + 6 independent contract tests**, zero
+  failures/skips, lint zero warnings/errors, both installed compiler checks and
+  formatting clean. The six-project manual evaluation passed separately.
+- `npm run test:coverage` passed: parser/analyzer **100% lines/branches/functions**;
+  every shipped runtime module has 100% lines/functions. Reader remains 96.77%
+  branches locally. The new 90% line/branch gate fails on missing/malformed metrics.
+- Downloaded isolated official macOS ARM64 Node 20.0.0, 22.13.0, 24.22.1 and 26.12.1
+  binaries and verified their archives against official SHA-256 manifests. Node
+  20.0.0 passed all 161 runtime tests. Full check, coverage and five resource probes
+  passed on 22.13.0/24.22.1/26.12.1. After adding the last mutation test, the expanded
+  six-contract suite separately passed on each of those three runtimes.
+- Initial cross-version coverage enforcement failed because newer Node prints a
+  directory tree instead of flat paths. Replaced text scraping with structured
+  test:coverage events and a compact reporter, kept a human TAP reporter, added
+  rejection/reporting tests and reran successfully on every tested version.
+- Resource probes stayed below 5 MiB JSON/256 MiB RSS. Highest measured per-process
+  RSS: Node 22.13.0 **110.23 MiB**, Node 24.22.1 **165.84 MiB**, Node 26.12.1
+  **179.45 MiB**; largest probe output **1,854,703 bytes**. Dense 1 MiB declarations
+  now fail safely. These are isolated local measurements, not all-platform guarantees.
+- Actual checkout archive/offline installation tests passed: exactly **21 files**,
+  executable shim, installed byte equality, schema resolution, parser privacy fix,
+  safe resource errors, API imports, documentation links and synthetic-secret
+  exclusion. Standalone dry-run also passed (31,453 packed / 106,392 unpacked bytes
+  at that check); final candidate hashes are recorded after committed preparation.
+- npm 10 advisory audit failed through a retired quick endpoint with the alias
+  dependency graph. Retried using isolated npm **11.21.1**; it succeeded with
+  **zero known vulnerabilities**. No global npm change or runtime dependency added.
+- SECURITY.md, release receipts, version metadata and docs were reviewed together.
+  No configuration contents were uploaded, and the analyzer/CLI made no network
+  requests or project-code execution during analysis. Real public examples were downloaded with GET only; only identity,
+  digests and counts were logged. All configuration fixtures are synthetic.
+- Hosted CI for this new branch and real developer trials remain unverified and
+  are not replaced by the local runtime matrix. Public security delivery and a
+  new-version release still need appropriate owner coordination/approval.
+
+- Applied and read back active tag ruleset **25863373 / Immutable release tags**:
+  refs/tags/v* updates/deletions are blocked, bypass actors empty, new creation
+  remains available for separately approved releases. Existing tags were preserved;
+  no tag/release was created and no destructive test was run.

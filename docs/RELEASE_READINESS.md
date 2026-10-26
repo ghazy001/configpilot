@@ -1,75 +1,44 @@
-# v0.1.0 release readiness
+# Release readiness
 
-Review date: **2026-10-26**. The owner explicitly approved the initial release on
-this date, including reviewed guard removal, npm publication, tag and GitHub release.
-Execution remains In Progress until the registry and public consumer checks pass.
-This is not standing approval for later releases.
+Reviewed 2026-10-26. **Stable v1.0.0 is not yet release-ready.** The current checkout
+contains unreleased stability work and deliberately retains package version 0.1.0.
+Never publish these changed bytes under the already registered version.
 
-## Identity and metadata
+## Published 0.1.0 evidence
 
-- Repository: `ghazy001/configpilot`; intended npm owner selected by the owner:
-  **`ghazi001`**. These identifiers differ intentionally.
-- Explicit public-registry query for `configpilot` returned **E404**: no public
-  package record was available at review time. This does not reserve the name,
-  prove registration eligibility or establish ownership.
-- The owner's terminal output confirms successful browser login and
-  `npm whoami --registry=https://registry.npmjs.org` returning **ghazi001**.
-  The owner explicitly confirmed **2FA enabled** on 2026-10-26. This supersedes
-  the earlier ENEEDAUTH result. The owner also rechecked the name and received E404.
-  These are owner-supplied confirmations, not an agent audit of account settings;
-  actual package ownership remains unverified until an approved first publication.
-- Name `configpilot`, version `0.1.0`, MIT license and verified GitHub repository,
-  homepage and issue links remain unchanged. No owner identity/email was invented.
-- ESM entry `src/index.js`; `types` and the first export condition point to
-  `src/index.d.ts`; default export target retains the existing ESM runtime entry.
-  The CLI mapping and executable shebang remain unchanged.
-- Node.js `>=20`, no runtime dependencies, no lifecycle scripts, exact file
-  allowlist and explicit public-registry/access/latest metadata. No synchronous
-  CommonJS entry point is promised.
+The npm registry exposes configpilot@0.1.0 with latest pointing to 0.1.0 and maintainer
+**ghazi001** (GitHub owner **ghazy001**). The public archive matches reviewed source
+be996e1297b21e245ab44e1ac4368b15b0e9bdf7 byte-for-byte. Its exact 19 files,
+SHA-256/integrity and fresh unauthenticated registry-consumer results are recorded in
+[the durable receipt](releases/0.1.0.json). The existing annotated v0.1.0 tag resolves
+to that source. A GitHub release was absent at the read-only check; no new release
+or tag is created by this stability work. The npm page UI was not independently
+verified; canonical registry metadata, tarball bytes and installations were verified.
 
-## Technical verification
+Owner login and 2FA were confirmed during the first publication. No credential or
+recovery code was collected. Initial local publication has no OIDC provenance.
+The published archive does not include the current privacy/resource fixes.
 
-The checks below are required before accepting a candidate. Executed results and
-immutable commit/workflow evidence are recorded in [PROGRESS.md](PROGRESS.md).
+## Current source and stable-release gates
 
-- Full lint, runtime/security/integration tests, formatting and coverage.
-- Installed public package imports and actual CLI shims, exit codes and unchanged
-  input files; offline installation from a tarball in a separate consumer project.
-- Strict positive/negative TypeScript 7.0.2 checks against installed declarations
-  with NodeNext and Bundler resolution, emitted ESM execution and CommonJS dynamic
-  import. Counts narrow to numbers for complete reports and null for skipped ones.
-- Real-checkout dry-run and complete archive inspection: **19 allowlisted files**,
-  including the declaration file; no environment files, credentials, tests, tooling,
-  lockfile, development dependencies or unreviewed assets. Installed bytes match.
-- Linux, Windows and macOS development matrix plus Node 20.0.0 runtime verification.
-- Clean committed candidate preparation with SHA-256/integrity/source manifest.
-  Allowlisting does not identify credentials deliberately placed in allowed source;
-  source/content review and synthetic leakage tests remain necessary.
+Use [STABILITY.md](STABILITY.md) and [PROGRESS.md](PROGRESS.md) for current work and
+executed verification. The source adds bounded records/metadata, quote quarantine,
+JSON Schema and TypeScript 5.0.4/7.0.2 checks. It remains ESM-only, Node >=20, MIT,
+with zero runtime dependencies. The distribution now has 21 explicit files.
 
-## Remaining owner and release gates
+Before declaring stable v1:
 
-1. Account authentication and owner-confirmed 2FA are recorded above. Recheck the
-   account, 2FA and name eligibility immediately before
-   any approved first publication; choose another name only by owner decision.
-2. Confirm the final artifact and draft [release notes](RELEASE_NOTES_v0.1.0.md).
-   [Discovery](DISCOVERY.md) and [three public-template evaluations](REAL_PROJECT_EVALUATION.md)
-   are recorded. Real maintainer feedback and broader compatibility sampling remain
-   open; do not claim ecosystem-wide compatibility or established adoption.
-3. Owner approval was received on 2026-10-26 for the first-release scope. Metadata
-   and preparation guards are updated together through a protected PR, retaining
-   exact file checks and commit/hash binding. No automatic publisher is added.
-4. After the package exists, verify actual npm ownership and configure a future
-   least-privilege trusted publisher as described in [RELEASING.md](RELEASING.md).
-   First-publication permission and later trusted-publisher permission are distinct.
-5. The owner authorized the v0.1.0 tag, npm publication and GitHub release. Verify
-   public installation and record actual release outcomes afterward.
+- Complete current-source lint, runtime/contract/type/coverage/resource/archive checks.
+- Verify new code on the complete hosted OS/Node matrix; old CI is historical evidence.
+- Complete six pinned public-template evaluations and real developer trials.
+- Review remaining false positives, compatibility decisions and privacy behavior.
+- Freeze API/schema/CLI contracts, version/support policy and approved release notes.
+- Select an unused version and review the final committed archive/manifest and full
+  installed consumer, including executable shims and both TypeScript compilers.
+- Obtain explicit owner approval for that exact version/artifact before publishing,
+  staging, tagging or creating an external release. Recheck account/2FA/registry.
+- Verify public registry bytes/installation afterward and record the release outcome.
 
-All executable pre-publication checks and owner account confirmations are complete.
-The roadmap's package-ownership task remains open until the name is registered
-through a separately approved first publication; logging in does not establish
-ownership. Registry availability and authentication are time-sensitive; the owner
-approval is limited to the recorded v0.1.0 scope.
-
-The approved publication scope and ordered checks are in the
-[first-release plan](RELEASE_PLAN_v0.1.0.md). Publication is manual and separate from
-the unchanged preparation-only workflow.
+Trusted publishing, provenance, multiline support and advanced integrations are
+optional; approval and correct artifact identity are mandatory. Use maintained Node
+releases for production while preserving the reviewed Node 20 compatibility floor.

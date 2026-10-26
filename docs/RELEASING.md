@@ -4,7 +4,10 @@ The owner explicitly approved configpilot@0.1.0, publication as ghazi001, the v0
 Git tag and GitHub release on **2026-10-26**. The approved execution plan is in
 [RELEASE_PLAN_v0.1.0.md](RELEASE_PLAN_v0.1.0.md); actual outcomes and immutable
 source/archive identities are recorded in [PROGRESS.md](PROGRESS.md).
-This approval does not extend to later versions or package-name changes.
+The initial npm publication and existing tag are verified in
+[the historical receipt](releases/0.1.0.json). This approval does not extend to later
+versions or package-name changes. Current source fixes remain unpublished; never
+reuse the existing 0.1.0 version for changed bytes. See [STABILITY.md](STABILITY.md).
 
 The package has explicit public-registry metadata. The GitHub workflow still only
 prepares **unpublished candidates**; it cannot publish, tag or create releases.
@@ -101,3 +104,22 @@ and [npm trust prerequisites](https://docs.npmjs.com/cli/v11/commands/npm-trust/
 
 See [CI.md](CI.md), [release readiness](RELEASE_READINESS.md), [release notes](RELEASE_NOTES_v0.1.0.md)
 and [progress](PROGRESS.md) for repository policy, boundaries and actual evidence.
+
+## Stable release review record
+
+For every proposed new version retain: the clean source SHA, exact archive member
+list and executable modes, SHA-256 and npm integrity, full quality results, pinned
+public-template results, real trial feedback, compatibility decisions, release notes
+and the owner's approval scope. Candidate manifests are evidence, not publication
+permission. Reinstall the exact approved archive before publishing; after publication
+compare the registry bytes and run a fresh unauthenticated consumer. Preserve the
+record in docs/releases/ without credentials or configuration contents.
+
+Release tags now have separate protection from main: active ruleset **25863373**,
+Immutable release tags, blocks updates/deletions of refs/tags/v* with no bypass actors.
+It was applied under the owner's authorization for necessary release hardening and
+read back successfully. Its declarative configuration is in
+[release-tag-ruleset.json](release-tag-ruleset.json). New tag creation remains available
+for separately approved releases. Existing tags were preserved; no deletion/retagging
+test was performed on a real release.
+Manual 2FA release with these checks is acceptable; no automatic publisher is required.

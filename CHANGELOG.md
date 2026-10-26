@@ -5,7 +5,26 @@ recorded in the repository's development progress log.
 
 ## Unreleased
 
-No additional changes recorded.
+Changes below are **unreleased source changes**. Package version remains 0.1.0;
+these changes require an owner-approved new version before registry distribution.
+
+### Security and reliability
+
+- Quarantine ambiguous quoted multiline boundaries before body fragments can become
+  declaration names or duplicate findings. Conservative recovery can suppress later
+  declarations; previously accepted ambiguous inputs may now report syntax errors.
+- Bound each input to 2,048 declarations/invalid lines, labels to 4,096 UTF-16 code
+  units, and emitted key/label metadata to 131,072 code units. Excess raises a safe
+  RangeError or CLI INPUT_LIMIT_EXCEEDED (exit 2), without partial results.
+
+### Contracts and verification
+
+- Export JSON Schema 2020-12 as configpilot/schema.json for complete/skipped analysis
+  and operational-error envelopes; document schema/API evolution policies.
+- Add pinned development-only dotenv comparison and schema validation; retain zero
+  runtime dependencies. Verify installed TypeScript 5.0.4 and 7.0.2 consumers.
+- Enforce 90% core line/branch coverage and add isolated resource-budget probes.
+- Correct release/support documentation and track remaining v1 validation gates.
 
 ## 0.1.0 — 2026-10-26
 

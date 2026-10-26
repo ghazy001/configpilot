@@ -34,6 +34,8 @@ jobs:
       - run: npm ci --ignore-scripts --no-audit --no-fund
       - run: npm run check
       - run: npm run test:coverage
+      - run: npm run test:resources
+        if: matrix.os == 'ubuntu-latest' && matrix.node == '24.x'
 
   minimum-runtime:
     name: Minimum runtime / Node 20.0.0

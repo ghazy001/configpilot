@@ -4,6 +4,7 @@ import { analyzeConfig } from "./analyzer/config-analyzer.js";
 import { formatJson } from "./reporters/json.js";
 import { formatTerminal } from "./reporters/terminal.js";
 import { inputErrorCode, readConfigFile } from "./utils/read-config-file.js";
+import { InputLimitError } from "./utils/input-limits.js";
 
 const HELP = `ConfigPilot — Explainable environment-configuration diagnostics
 
@@ -22,7 +23,9 @@ Options:
 
 Path options also accept --template=PATH and --env=PATH.
 Paths are relative to the working directory. Only regular UTF-8 files up to
-1,048,576 bytes are accepted. Files are never modified; values are never reported.
+1,048,576 bytes are accepted. Per input: at most 2,048 declarations/invalid lines,
+4,096-code-unit labels and 131,072 code units of key/label metadata.
+Files are never modified; values are never reported.
 
 Exit codes:
   0  No warnings/errors, or help/version completed.
@@ -54,6 +57,10 @@ const ERRORS = {
   INVALID_ENCODING: [
     "Selected input is not valid UTF-8 text.",
     "Save the selected configuration file as UTF-8 and rerun.",
+  ],
+  INPUT_LIMIT_EXCEEDED: [
+    "Selected inputs exceed the declaration or public-metadata budget.",
+    "Use at most 2,048 declarations or invalid lines per input and shorter public labels. See the documented resource limits.",
   ],
   INTERNAL_ERROR: [
     "ConfigPilot could not complete the command.",
@@ -175,7 +182,9 @@ export async function runCli(
       stdout: options.json ? formatJson(report) : formatTerminal(report),
       stderr: "",
     };
-  } catch {
+  } catch (error) {
+    if (error instanceof InputLimitError)
+      return cliFailure("INPUT_LIMIT_EXCEEDED", jsonRequested);
     return cliFailure("INTERNAL_ERROR", jsonRequested);
   }
 }

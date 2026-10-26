@@ -17,7 +17,7 @@ npm run pack:dry-run
 
 `check` runs lint with zero warnings, runtime tests, installed TypeScript consumer
 verification, and formatting verification. `npm run test:types` runs that consumer
-check separately with pinned TypeScript 7.0.2. It packs the real checkout, installs
+check separately with pinned TypeScript 5.0.4 and 7.0.2. It packs the real checkout, installs
 it offline in a temporary project, and compiles positive/negative fixtures from
 `type-tests/` with strict checking, exact optional properties, and library checking
 enabled. Both NodeNext and Bundler resolution must pass; `@ts-expect-error` checks
@@ -29,7 +29,9 @@ The minimum Node 20.0.0 job runs runtime tests without this development-tool che
 Declaration verification runs in all twelve development matrix jobs and candidate
 preparation via `npm run check`. No compilation/build is needed to use ConfigPilot.
 
-`test:coverage` runs the same tests with Node's experimental coverage instrumentation.
+`test:coverage` runs the same tests with Node's experimental coverage instrumentation
+and fails below 90% lines or branches in the parser/analyzer (or if their rows are
+missing).
 Coverage output includes test files and child processes; inspect the individual
 `src/` and `bin/` rows when evaluating product coverage. Coverage numbers can vary
 with Node/V8 versions and operating-system branches. The core parser and analyzer
@@ -109,3 +111,39 @@ even-numbered release lines. It does not test every Node patch or OS version.
 Use [the progress log](PROGRESS.md) for executed commands, measured coverage, actual
 workflow results, and remaining limitations. Planned matrix entries are not evidence
 that a platform has passed.
+
+## Stability contract and resource checks
+
+`npm run test:contracts` uses pinned development-only dotenv 18.0.9 and Ajv 8.20.0.
+It verifies 99 conventional key/location cases, intentional grammar differences,
+quote/backslash mutations, emitted JSON schemas and rejected structural mutations.
+It is part of `check`; dependency-free minimum-runtime tests remain separate.
+The absence of assignment-value fields is also asserted at runtime and in types.
+
+`npm run test:resources` launches isolated synthetic processes for duplicate/different
+key sets, escaped long labels, rejected dense inputs and the source-size blank limit.
+Each must stay below 5 MiB JSON and 256 MiB peak RSS. These are regression budgets
+on the declared probe environment, not promises about arbitrary host processes.
+CI runs them on Linux/Node 24; record local/hosted measurements separately. No real
+configuration or production project is copied into these probes.
+
+Both compiler versions test NodeNext/Bundler, strict checking, empty type roots,
+negative declarations and emitted execution. TS5 permits some synthetic default
+imports; namespace-shape and runtime-export assertions independently establish that
+ConfigPilot has no default export. Tests do not weaken that runtime contract.
+
+The malformed-reference mutation corpus examines 5,376 combinations; in 1,728,
+the reference recognizes a body fragment as value content rather than a key.
+Every such case must keep that fragment out of both parser and analyzer metadata.
+These deterministic assertions complement actual CLI regressions and do not claim
+complete parser equivalence.
+
+Coverage enforcement reads structured test:coverage events through a custom reporter,
+not Node's version-specific flat/tree terminal tables. It fails when expected core
+statistics are missing, malformed, below floor or tests fail. Temporary coverage
+statistics contain paths/counts only and are removed after verification.
+
+Use a current compatible npm CLI for advisory audits. During this work npm 10's
+legacy quick-audit fallback rejected the compiler-alias dependency graph; the isolated
+npm 11.21.1 audit succeeded. A failed audit is not evidence of zero vulnerabilities.
+No global npm upgrade is required by the runtime package.

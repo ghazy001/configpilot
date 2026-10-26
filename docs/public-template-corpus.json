@@ -1,0 +1,38 @@
+[
+  {
+    "repository": "calcom/cal.com",
+    "commit": "0f19cc46ef6b6426ee398c670575b3c96be7af9e",
+    "path": ".env.example",
+    "sha256": "77f42817ca80ef1f691f3213a9a0f5628aa7db848e119308a8c0914f38b8b0c4"
+  },
+  {
+    "repository": "immich-app/immich",
+    "commit": "256eb55dbe92ac77e02794442f9487e88ffed2b1",
+    "path": "docker/example.env",
+    "sha256": "dda820cecbcf5fd5d6afecc54107bbd3c973088c631d380dfc83e9f0f2c6b210"
+  },
+  {
+    "repository": "supabase/supabase",
+    "commit": "478bd88d35e65c277e86c0f30b9a755851813303",
+    "path": "docker/.env.example",
+    "sha256": "57f837916e1a6118468f08d23f051f28669e1ea0fcfde372e6e066073fe3e3a2"
+  },
+  {
+    "repository": "outline/outline",
+    "commit": "82be0626dcfe1591e16cc7b33b0121600f956daf",
+    "path": ".env.sample",
+    "sha256": "fe1d91aa3c3340173ffaff939fe31dcde01a4a63712f98ccd32ae17972a87de2"
+  },
+  {
+    "repository": "twentyhq/twenty",
+    "commit": "bdad3cfb0c2e9b1325682484a06ea5dda987b400",
+    "path": "packages/twenty-server/.env.example",
+    "sha256": "d4a75ae9460bacf8df2b5be5bc089ba43a3cc15a629dd3de6bb5324d6c17d8bf"
+  },
+  {
+    "repository": "novuhq/novu",
+    "commit": "d7ff70c66565b05364276b0d39ecd3c9aad6822b",
+    "path": "apps/human-dashboard/.env.example",
+    "sha256": "44f00291a713f4f79732e326b55e9597b36dbd2bfa9090713f38412a5210dd50"
+  }
+]

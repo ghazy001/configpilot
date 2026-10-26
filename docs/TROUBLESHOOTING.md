@@ -84,3 +84,9 @@ actual exit status, and a minimal synthetic reproduction. Inspect output for
 sensitive key names and paths before posting. Do not upload real environment files,
 dump the process environment, or include credentials in filenames or screenshots.
 For a suspected vulnerability, use [SECURITY.md](../SECURITY.md) instead.
+
+For the unreleased `INPUT_LIMIT_EXCEEDED` operational error, review the
+[parser budgets](PARSER.md#resource-budgets). Reduce dense declarations/invalid lines
+or shorten labels; do not ignore the error. Quote/backslash ambiguity can quarantine
+more lines than the published 0.1.0 parser did. Review the opening syntax location.
+The stable-release hardening currently lives in source, not in the existing npm archive.

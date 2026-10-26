@@ -15,9 +15,7 @@ import { fileURLToPath, URL } from "node:url";
 const root = fileURLToPath(new URL("../", import.meta.url));
 const npmCli = process.env.npm_execpath;
 assert.ok(npmCli, "Run declaration verification through npm run test:types.");
-const compiler = fileURLToPath(
-  new URL("../node_modules/typescript/bin/tsc", import.meta.url),
-);
+const compilers = ["typescript-minimum", "typescript"];
 const directory = mkdtempSync(join(tmpdir(), "configpilot types é "));
 const env = {
   ...process.env,
@@ -39,6 +37,7 @@ function execute(script, args, cwd) {
 }
 
 try {
+  mkdirSync(join(directory, "empty-types"));
   const consumer = join(directory, "consumer");
   mkdirSync(consumer);
   writeFileSync(
@@ -67,55 +66,60 @@ try {
   for (const file of ["consumer.mts", "invalid.mts"]) {
     copyFileSync(join(root, "type-tests", file), join(consumer, file));
   }
-  const common = [
-    "--strict",
-    "--exactOptionalPropertyTypes",
-    "--target",
-    "ES2022",
-    "--skipLibCheck",
-    "false",
-    "--types",
-    "",
-    "--ignoreConfig",
-  ];
-  // Compile the installed package, with no path mapping back to this checkout.
-  for (const [module, resolution] of [
-    ["NodeNext", "NodeNext"],
-    ["ESNext", "Bundler"],
-  ]) {
+  for (const compilerName of compilers) {
+    const compiler = fileURLToPath(
+      new URL(`../node_modules/${compilerName}/bin/tsc`, import.meta.url),
+    );
+    const common = [
+      "--strict",
+      "--exactOptionalPropertyTypes",
+      "--target",
+      "ES2022",
+      "--skipLibCheck",
+      "false",
+      "--typeRoots",
+      join(directory, "empty-types"),
+      ...(compilerName === "typescript" ? ["--ignoreConfig"] : []),
+    ];
+    // Compile the installed package, with no path mapping back to this checkout.
+    for (const [module, resolution] of [
+      ["NodeNext", "NodeNext"],
+      ["ESNext", "Bundler"],
+    ]) {
+      execute(
+        compiler,
+        [
+          ...common,
+          "--module",
+          module,
+          "--moduleResolution",
+          resolution,
+          "--noEmit",
+          "consumer.mts",
+          "invalid.mts",
+        ],
+        consumer,
+      );
+    }
     execute(
       compiler,
       [
         ...common,
         "--module",
-        module,
+        "NodeNext",
         "--moduleResolution",
-        resolution,
-        "--noEmit",
+        "NodeNext",
+        "--outDir",
+        "output",
         "consumer.mts",
-        "invalid.mts",
       ],
       consumer,
     );
+    assert.equal(
+      execute(join(consumer, "output", "consumer.mjs"), [], consumer),
+      "",
+    );
   }
-  execute(
-    compiler,
-    [
-      ...common,
-      "--module",
-      "NodeNext",
-      "--moduleResolution",
-      "NodeNext",
-      "--outDir",
-      "output",
-      "consumer.mts",
-    ],
-    consumer,
-  );
-  assert.equal(
-    execute(join(consumer, "output", "consumer.mjs"), [], consumer),
-    "",
-  );
   // CommonJS consumers can use dynamic import without a synchronous CJS entry.
   writeFileSync(
     join(consumer, "smoke.cjs"),
@@ -125,7 +129,7 @@ try {
   );
   assert.equal(execute(join(consumer, "smoke.cjs"), [], consumer), "");
   process.stdout.write(
-    "Installed declarations passed NodeNext/Bundler positive and negative checks; emitted ESM and CommonJS dynamic import passed.\n",
+    "Installed declarations passed TypeScript 5.0.4/7.0.2 NodeNext/Bundler positive and negative checks; emitted ESM and CommonJS dynamic import passed.\n",
   );
 } finally {
   rmSync(directory, { recursive: true, force: true });

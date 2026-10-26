@@ -127,5 +127,5 @@ Do not run `npm publish`, change publication metadata, create release tags or cr
 external releases without explicit repository-owner approval. The owner approved
 the initial configpilot@0.1.0 release on 2026-10-26; that is not standing approval
 for future versions. Candidate preparation itself never publishes. See
-[release readiness](docs/RELEASE_READINESS.md) for verified evidence and outstanding
-account/ownership gates. No contribution requires production credentials or npm tokens.
+[release readiness](docs/RELEASE_READINESS.md) for verified evidence and remaining
+source-review, validation and release gates. No contribution requires production credentials or npm tokens.

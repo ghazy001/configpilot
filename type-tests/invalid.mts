@@ -9,8 +9,9 @@ parseDotenv(42);
 parseDotenv("", { file: 42 });
 // @ts-expect-error The runtime catalog is frozen.
 ISSUE_CODES.MISSING_KEY = "MISSING_KEY";
-// @ts-expect-error No default export is part of the API.
-import configpilot from "configpilot";
+import * as configpilot from "configpilot";
+// @ts-expect-error No default export is part of the API, including with synthetic-default compiler settings.
+configpilot.default;
 // @ts-expect-error Internal paths are not public exports.
 import { createIssue } from "configpilot/src/diagnostics/issue-codes.js";
 

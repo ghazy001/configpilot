@@ -1,4 +1,5 @@
 import { createIssue } from "../diagnostics/issue-codes.js";
+import { inputBudget } from "../utils/input-limits.js";
 
 const MAX_SOURCE_LENGTH = 1_048_576;
 const ASSIGNMENT =
@@ -17,6 +18,25 @@ function closingQuote(line, start, quote) {
   return -1;
 }
 
+// Some dotenv loaders consume a quote after *any* backslash, even a paired
+// backslash. Prefer their later boundary for quarantine, without retaining text.
+// An escaped quote can be the loader's backtracking fallback at end of input.
+function alternateBoundary(lines, start, offset, quote) {
+  let boundary = { line: start, offset };
+  for (let line = start; line < lines.length; line += 1) {
+    for (
+      let index = line === start ? offset + 1 : 0;
+      index < lines[line].length;
+      index += 1
+    ) {
+      if (lines[line][index] !== quote) continue;
+      boundary = { line, offset: index };
+      if (lines[line][index - 1] !== "\\") return boundary;
+    }
+  }
+  return boundary;
+}
+
 // Invalid assignments can still introduce quoted credentials. Quarantine any
 // unterminated quote instead of interpreting subsequent body lines as keys.
 function unclosedQuote(line, offset = 0) {
@@ -24,7 +44,7 @@ function unclosedQuote(line, offset = 0) {
     if (line[index] === "#") break;
     if (QUOTES.has(line[index])) {
       const end = closingQuote(line, index + 1, line[index]);
-      if (end === -1) return line[index];
+      if (end === -1 || line[end - 1] === "\\") return line[index];
       index = end;
     }
   }
@@ -33,8 +53,16 @@ function unclosedQuote(line, offset = 0) {
 
 function skipQuotedBlock(lines, start, quote) {
   for (let index = start + 1; index < lines.length; index += 1) {
-    const end = closingQuote(lines[index], 0, quote);
+    let end = closingQuote(lines[index], 0, quote);
     if (end !== -1) {
+      if (lines[index][end - 1] === "\\") {
+        // Overlapping malformed blocks have no trustworthy recovery point.
+        if (unclosedQuote(lines[index], end + 1) !== null)
+          return { end: lines.length, closed: false };
+        const boundary = alternateBoundary(lines, index, end, quote);
+        index = boundary.line;
+        end = boundary.offset;
+      }
       // A malformed closing line can open another quoted block. Continue
       // quarantine iteratively so chained blocks cannot leak or grow the stack.
       quote = unclosedQuote(lines[index], end + 1);
@@ -77,6 +105,7 @@ export function parseDotenv(source, options = {}) {
   if (typeof file !== "string" || file.length === 0) {
     throw new TypeError("options.file must be a non-empty string.");
   }
+  const consume = inputBudget(file);
 
   const lines = (source.startsWith("\uFEFF") ? source.slice(1) : source).split(
     /\r\n|\n|\r/,
@@ -89,6 +118,7 @@ export function parseDotenv(source, options = {}) {
     const line = lines[index];
     const location = { file, line: index + 1 };
     if (line.includes("\0")) {
+      consume();
       issues.push(createIssue("INVALID_DECLARATION", location));
       index = skipMalformedBlock(lines, index);
       continue;
@@ -97,6 +127,7 @@ export function parseDotenv(source, options = {}) {
 
     const assignment = ASSIGNMENT.exec(line);
     if (!assignment) {
+      consume();
       issues.push(createIssue("INVALID_DECLARATION", location));
       index = skipMalformedBlock(lines, index);
       continue;
@@ -107,6 +138,7 @@ export function parseDotenv(source, options = {}) {
     if (QUOTES.has(quote)) {
       const end = closingQuote(line, start + 1, quote);
       if (end === -1) {
+        consume();
         const block = skipQuotedBlock(lines, index, quote);
         issues.push(
           createIssue(
@@ -117,7 +149,20 @@ export function parseDotenv(source, options = {}) {
         index = block.end;
         continue;
       }
+      if (line[end - 1] === "\\") {
+        const boundary = alternateBoundary(lines, index, end, quote);
+        if (boundary.line > index) {
+          consume();
+          issues.push(createIssue("UNSUPPORTED_MULTILINE", location));
+          index = Math.max(
+            skipMalformedBlock(lines, index, end + 1),
+            skipMalformedBlock(lines, boundary.line, boundary.offset + 1),
+          );
+          continue;
+        }
+      }
       if (!/^[ \t]*(?:#|$)/.test(line.slice(end + 1))) {
+        consume();
         issues.push(createIssue("INVALID_DECLARATION", location));
         index = skipMalformedBlock(lines, index, end + 1);
         continue;
@@ -125,6 +170,7 @@ export function parseDotenv(source, options = {}) {
     }
 
     const key = assignment[1];
+    consume(key, firstLocations.has(key));
     declarations.push({ key, location });
     if (firstLocations.has(key)) {
       issues.push({

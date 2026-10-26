@@ -158,3 +158,36 @@ from serialization and inspection output. Secret-bearing quoted multiline bodies
 are skipped by the parser, including malformed assignments. Names and labels are
 public metadata; do not encode credentials in them. ConfigPilot is not a secret
 scanner. It never transmits contents or modifies configuration files.
+
+## Compatibility policy for the stable API
+
+The named runtime exports remain `parseDotenv`, `analyzeConfig`, and `ISSUE_CODES`.
+Calls stay synchronous and side-effect free. Inputs are explicit primitive strings;
+unknown options remain ignored. Results are fresh mutable objects with no cross-call
+state. Internal modules and reporters are not public exports. ESM is the supported
+module format; CommonJS callers may use dynamic import. A synchronous CJS build is
+not promised.
+
+`schemaVersion: 1` already versions analysis and CLI error shapes separately from
+the npm version. The shipped JSON Schema 2020-12 structural contract is exported as
+`configpilot/schema.json`. For Node consumers, locate it with
+`createRequire(import.meta.url).resolve("configpilot/schema.json")` and read it as
+JSON; no runtime validator dependency is required. A validator may use its
+`$defs.complete`, `$defs.skipped`, or `$defs.operational` definitions separately.
+Summary arithmetic, ordering and exactly one comparison-skipped finding remain
+semantic invariants verified by tests, beyond JSON Schema's structural checks.
+
+For schema 1, existing fields, nullability, code meanings, severities and deterministic
+ordering are compatibility guarantees. New fields/codes require an explicit schema
+review; do not silently add them to schema 1's closed shapes. Human explanation and
+recommendation wording may improve without a schema change; consumers must use codes
+and fields rather than scrape prose. Stable v1 changes follow Semantic Versioning;
+breaking changes need a major package version and, for changed report structures or
+semantics, a new schema version. Pre-1.0 changes must still be documented.
+
+Input type errors throw fixed-message `TypeError`; source/resource/label limits
+throw fixed-message `RangeError`. Configuration syntax produces findings, not
+exceptions. See [parser resource budgets](PARSER.md#resource-budgets). The CLI adds
+`INPUT_LIMIT_EXCEEDED` to its operational envelope; it is not an analysis issue code.
+The current checkout's additions are unreleased and do not retroactively change the
+published 0.1.0 archive.

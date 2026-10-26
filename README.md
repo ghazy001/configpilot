@@ -10,6 +10,11 @@ Use the CLI for local checks and pipelines, or the dependency-free JavaScript AP
 for your own tooling. It finds missing and undocumented keys, duplicate assignments,
 and syntax outside its [documented dotenv subset](docs/PARSER.md).
 
+**Development status:** this checkout contains unreleased privacy and resource
+hardening. Published 0.1.0 does not include these fixes. Validate the reviewed source
+or a local archive while the next release is prepared; do not assume matching version
+text means matching source. Stable v1.0.0 remains gated on validation and owner approval.
+
 Runtime: **Node.js 20+**, ES modules. License: [MIT](LICENSE).
 
 ## Install
@@ -30,7 +35,7 @@ npm install --save-dev configpilot@0.1.0 --ignore-scripts --no-audit --no-fund
 Add `"config:check": "configpilot check"` to your npm scripts, then run
 `npm run config:check` from the project containing `.env.example` and `.env`.
 The [npm package](https://www.npmjs.com/package/configpilot) and
-[release notes](https://github.com/ghazy001/configpilot/releases/tag/v0.1.0)
+[changelog](CHANGELOG.md)
 identify the distribution. Source-checkout and archive alternatives are below.
 
 ## Try it in one minute
@@ -106,6 +111,8 @@ configpilot check --template .env.example --env ".env.local" --json
 Paths resolve from the working directory. Without an installation, replace
 `configpilot` with `node "/absolute/path/to/configpilot/bin/configpilot.js"`.
 Both inputs must exist and be regular UTF-8 files, at most **1 MiB each**.
+The checkout also bounds declarations and public metadata; see the
+[resource budgets](docs/PARSER.md#resource-budgets).
 
 | Option            | Meaning                                                                 |
 | ----------------- | ----------------------------------------------------------------------- |
@@ -155,7 +162,8 @@ Both functions are synchronous and take explicit strings. They perform no file,
 network, or process-environment access. Reports have stable codes, deterministic
 ordering, source locations, recommendations, and a versioned schema. Invalid API
 arguments throw safe `TypeError`s; strings over 1,048,576 UTF-16 code units throw
-`RangeError`s. Configuration syntax problems become diagnostics.
+`RangeError`s, as do record/metadata budget violations. Configuration syntax problems
+become diagnostics.
 
 Read the [parser contract](docs/PARSER.md) and [analysis/report contract](docs/REPORT.md)
 for all inputs, fields, errors, codes, and recovery behavior. Runnable examples and
@@ -186,8 +194,10 @@ if (report.comparison === "complete") {
 ```
 
 The shipped declarations require no `@types/node` or TypeScript installation at
-runtime. Development checks use pinned TypeScript 7.0.2 against an offline-installed
-archive; other compiler versions have not been verified.
+runtime. The supported compiler floor is TypeScript 5.0.4 (Bundler resolution requires 5.0).
+Development checks exercise 5.0.4 and 7.0.2 against an offline-installed archive with
+strict checking and no ambient Node types. Intermediate compiler versions are not
+individually certified.
 
 ## Privacy and limits
 
@@ -228,6 +238,10 @@ for commands, coverage interpretation, matrix details, and intentional platform 
 - [Repository safeguards](https://github.com/ghazy001/configpilot/blob/main/docs/CI.md) and [candidate preparation](https://github.com/ghazy001/configpilot/blob/main/docs/RELEASING.md): required CI, dependency updates, and owner review before future publishing capability.
 - [Progress](https://github.com/ghazy001/configpilot/blob/main/docs/PROGRESS.md) and [project specification](https://github.com/ghazy001/configpilot/blob/main/AGENTS.md): completed work, decisions, and outstanding milestones.
 - [Issues](https://github.com/ghazy001/configpilot/issues): reproducible bugs and focused feature proposals; follow the security policy for vulnerabilities.
+
+The [stable-release plan](https://github.com/ghazy001/configpilot/blob/main/docs/STABILITY.md)
+tracks remaining validation and approval gates. Use maintained Node releases for
+production; compatibility with Node 20 does not extend its upstream security support.
 
 Publication, release tags and external releases require explicit owner approval.
 The preparation workflow inspects candidates and never publishes automatically.
