@@ -1,11 +1,11 @@
 # ConfigPilot developer trial
 
-Thank you for trying ConfigPilot v1.1.0. Participation is voluntary. Share only
+Thank you for trying ConfigPilot v1.1.1. Participation is voluntary. Share only
 sanitized observations with the maintainer privately; never send real environment
 files, credentials, process-environment dumps or screenshots containing secrets.
 You may stop at any time. The released package is open source under the MIT license.
 
-Use published **configpilot@1.1.0** for new trials. The earlier supplied private
+Use published **configpilot@1.1.1** for new trials. The earlier supplied private
 0.1.0-text archive was a historical validation build; do not substitute it or the
 older public 0.1.0 release. No developer trial has yet been recorded.
 
@@ -16,7 +16,7 @@ your Node version, OS and architecture. In that folder, install the released pac
 
 ```sh
 npm init -y
-npm install --save-dev configpilot@1.1.0
+npm install --save-dev configpilot@1.1.1
 ```
 
 Invoke `./node_modules/.bin/configpilot` on macOS/Linux, or

@@ -2,6 +2,14 @@
 
 Last updated: 2026-10-26 (Africa/Tunis).
 
+## v1.1.1 documentation release — In Progress
+
+Owner explicitly approved v1.1.1 on 2026-10-26. The patch ships the corrected latest
+installation commands in npm's README. Runtime source and public contracts remain
+unchanged. Updated metadata, archive examples and pinned trial version; release
+notes and approval plan retained. Required checks, final archive acceptance,
+registry publication and release receipt remain outstanding.
+
 ## Current release — v1.1.0
 
 Status: **Complete — v1.1.0 published and verified**. npm latest points to 1.1.0.
