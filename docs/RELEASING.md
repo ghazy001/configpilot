@@ -96,6 +96,11 @@ environment gate, and use least privilege. Adding publishing capability, changin
 the private guard, creating release tags and external releases are separate decisions.
 Do not add a tag-push or automatic release trigger as part of a maintenance update.
 
+The [v0.1.0 approval plan](RELEASE_PLAN_v0.1.0.md) identifies the package, publisher,
+public registry, tag, release notes and ordered post-approval checks. The current
+private candidate cannot be published unchanged. No publication guard may be
+weakened merely to run a rehearsal.
+
 ## npm identity and future authentication
 
 The owner selected npm username **`ghazi001`**, distinct from GitHub **`ghazy001`**.
