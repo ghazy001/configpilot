@@ -34,7 +34,7 @@ npm install --save-dev configpilot
 
 For an application importing the JavaScript API at runtime, use
 `npm install configpilot` instead. These commands install the latest release.
-To pin v1.1.0 explicitly, append `@1.1.0` to the package name. No extra installation flags are required.
+To pin v1.1.1 explicitly, append `@1.1.1` to the package name. No extra installation flags are required.
 ConfigPilot has no runtime dependencies or install lifecycle scripts.
 
 Add `"config:check": "configpilot check"` to your npm scripts, then run
@@ -110,7 +110,7 @@ For a project's development dependency or library consumer, build an archive in
 the checkout with `npm pack --ignore-scripts`. Then, from the consumer project:
 
 ```sh
-npm install --save-dev "/absolute/path/to/configpilot/configpilot-1.1.0.tgz"
+npm install --save-dev "/absolute/path/to/configpilot/configpilot-1.1.1.tgz"
 ```
 
 Replace the archive path with your actual path, using native Windows paths on

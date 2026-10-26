@@ -3,7 +3,7 @@
 Release history for ConfigPilot. Verification evidence and release status are
 recorded in the repository's development progress log.
 
-## Unreleased
+## 1.1.1 — 2026-10-26
 
 - Correct current installation commands, archive examples, trial instructions and
   release summaries after v1.1.0; ordinary installation commands select latest.
