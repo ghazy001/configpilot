@@ -4,7 +4,8 @@ ConfigPilot is unreleased, with `0.1.0` development metadata and `private: true`
 Milestone 7 provides a repeatable **unpublished candidate** workflow, not publication.
 Milestone 8 adds bundled declarations, installed TypeScript consumer verification,
 and a [readiness review](RELEASE_READINESS.md) with [draft release notes](RELEASE_NOTES_v0.1.0.md).
-Authenticated npm access and package ownership remain unresolved. Actual publication and
+The owner has confirmed npm authentication and 2FA; package ownership remains
+unverified pending a first publication. Actual publication and
 external releases require explicit owner approval in Milestone 9.
 
 ## Prepare a candidate on GitHub
@@ -98,11 +99,12 @@ Do not add a tag-push or automatic release trigger as part of a maintenance upda
 ## npm identity and future authentication
 
 The owner selected npm username **`ghazi001`**, distinct from GitHub **`ghazy001`**.
-On 2026-10-26 the public registry returned `E404` for `configpilot`, and `npm whoami`
-returned `ENEEDAUTH`. This establishes neither ownership nor a reserved name.
-Before a separately approved first publication, the owner must authenticate on a
-trusted machine, verify the account with `npm whoami --registry=https://registry.npmjs.org`,
-enable account 2FA, and recheck the exact name. Never send an agent a token or OTP.
+On 2026-10-26 the owner supplied successful browser-login output and `npm whoami`
+returning **ghazi001**, then explicitly confirmed **2FA enabled**. Their repeat
+registry query returned `E404` for `configpilot`. This supersedes the earlier
+unauthenticated check, but establishes neither package ownership nor a reserved name.
+Before a separately approved first publication, recheck the authenticated account,
+2FA and exact name on the trusted machine. Never send an agent a token or OTP.
 An unavailable name requires an explicit owner naming decision.
 
 For subsequent automation, prefer npm OIDC trusted publishing on GitHub-hosted
@@ -115,8 +117,9 @@ package, so it cannot establish ownership of this unpublished name. See the
 
 Prefer 2FA with token publishing disabled once trusted publishing works. Avoid
 long-lived write tokens and release caches; retain the owner approval gate. Review
-current npm requirements again when publication is actually authorized. No npm
-login, credential creation, trusted-publisher setup, staging, publishing or registry
+current npm requirements again when publication is actually authorized. The owner
+performed their own browser login; the agent did not handle credentials or change
+account settings. No trusted-publisher setup, staging, publishing or package-registry
 mutation has been performed as part of readiness work.
 
 See [CI.md](CI.md), [SECURITY.md](../SECURITY.md), [CHANGELOG.md](../CHANGELOG.md) and
