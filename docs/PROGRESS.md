@@ -21,7 +21,7 @@ Discovery remains unfinished and must inform later product decisions.
 | 5 — Testing           | Complete    | 139 tests; 100% local runtime line coverage; seeded invariants, isolated I/O faults, actual-checkout archive/offline installation checks; all 13 hosted runtime/platform jobs passed.                                          | Matrix samples supported runtime lines; Windows skips two POSIX-only tests. Coverage and tests do not replace real-project validation or release readiness.                                                       |
 | 6 — Documentation     | Complete    | Reworked README; contribution/security/conduct/changelog and troubleshooting guides; executable examples and scenario guide; verified local install paths, examples, packaged documentation and links.                         | Local and 13 hosted checks passed; no-install fresh-clone quick start verified. Registry ownership, declarations, release metadata and private reporting configuration remain readiness/CI work.                  |
 | 7 — CI/CD             | Complete    | Quality matrix and stable gate; weekly dependency updates; restricted SHA-pinned Actions; private reports/security fixes; owner-only candidate environment; private archive/manifest workflow and guard tests.                 | Hosted gate/matrix, candidate artifact/offline consumer, owner approval barrier and main protections verified. Publishing remains disabled; owner notification preferences and release readiness remain separate. |
-| 8 — Release readiness | In Progress | Bundled declarations and installed TypeScript consumer checks; metadata/ESM/bin review; 19-file archive checks; draft release notes and authentication plan; intended npm owner confirmed.                                     | Local checks pass. npm account ghazi001 is not authenticated; the unregistered name is not reserved or owned. Final candidate/hosted evidence follows below. Publication remains disabled.                        |
+| 8 — Release readiness | In Progress | Bundled declarations and installed TypeScript consumer checks; metadata/ESM/bin review; 19-file archive checks; draft release notes and authentication plan; intended npm owner confirmed.                                     | Local checks, all 14 PR/main jobs and the downloaded 19-file candidate passed. npm account ghazi001 is not authenticated; name ownership remains unverified. Publication remains disabled.                        |
 | 9 — Publication       | Not Started | None.                                                                                                                                                                                                                          | Owner approval, release checklist, npm publication, public-install verification, and GitHub release. No publication, tag, or external release authorized.                                                         |
 
 ## Architectural decisions
@@ -617,10 +617,46 @@ Outstanding and remaining risks:
 - Authenticate the intended npm account independently, verify account 2FA and the
   ownership/first-publication path, and recheck name eligibility at approval time.
   An unregistered public name cannot be claimed as owned before registration.
-- Record final committed candidate and hosted verification evidence below. Main
+- Technical candidate and hosted verification are complete as recorded below. Main
   remains protected; no failed or pending mandatory check may be bypassed.
 - Milestone 0 product discovery and real-project validation remain unfinished.
   Unit/security checks do not establish adoption or full dotenv compatibility.
 - Keep private true and publication disabled. Removing that guard, enabling a
   publisher, staging/publishing, release tags and external releases require explicit
   owner approval. No such action is authorized or performed in this session.
+
+### Milestone 8 candidate and hosted verification
+
+- Clean offline lockfile installation passed with scripts disabled, followed by a
+  fresh successful `npm run check` (148 runtime tests plus declaration checks).
+- Committed implementation `ff4ac8f63fc4976aa074ee333c81f77f3dac578a` passed all
+  **14 Quality jobs** in [PR run 40248270222](https://github.com/ghazy001/configpilot/actions/runs/40248270222).
+  This includes every OS/runtime matrix entry and Node 20.0.0. All twelve
+  development jobs also exercised installed TypeScript consumers through `check`.
+- [PR #2](https://github.com/ghazy001/configpilot/pull/2) was merged through the
+  protected workflow. GitHub reported it merged before an agent merge action;
+  the agent fetched and fast-forwarded without bypassing protections.
+- Merged main commit **692f2d35311ab8c4047b9ea851ea03197460f7bc** passed all
+  **14 Quality jobs** in [main run 40248382199](https://github.com/ghazy001/configpilot/actions/runs/40248382199).
+- [Preparation-only run 40248726097](https://github.com/ghazy001/configpilot/actions/runs/40248726097)
+  succeeded for that exact main commit; the optional owner-review job was skipped.
+  No approval was submitted. The archive/manifest artifact is **12619546879** and
+  expires after seven days. This artifact is not a public release.
+- Downloaded the actual hosted artifact without forwarding GitHub authentication
+  to storage. Verified its two-file ZIP, manifest commit/private flag, SHA-256/npm
+  integrity, all **19 regular archive members**, byte equality with reviewed source,
+  executable CLI and zero runtime dependencies. Offline installation in a separate
+  temporary consumer passed strict positive/negative NodeNext/Bundler compilation,
+  emitted ESM execution, CLI help/version, clean/mismatch exits and synthetic-secret
+  non-disclosure. Temporary consumer files were removed.
+- Hosted archive SHA-256:
+  `9acc06a13a44ac99a5bc395bba011358eb7f2a94b2c6e6e91db6989742a3ebbe`.
+- Local committed candidate preparation also passed and produced 19 files after
+  an approved retry using a temporary npm cache. The initial sandboxed preparation
+  failed; no guard was weakened. Local candidate source commit was the implementation
+  commit above; final hosted evidence is bound to the merged commit.
+- The remaining Milestone 8 gate is authenticated npm account/2FA verification and
+  the owner-approved first-publication ownership path. The intended account remains
+  ghazi001; an E404 lookup cannot prove ownership of an unpublished name.
+- No npm staging/publication, release tag, GitHub release, npm login, credential
+  creation, trusted-publisher mutation or publishing permission was performed.
