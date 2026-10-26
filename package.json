@@ -17,8 +17,12 @@
     "node": ">=20"
   },
   "main": "./src/index.js",
+  "types": "./src/index.d.ts",
   "exports": {
-    ".": "./src/index.js"
+    ".": {
+      "types": "./src/index.d.ts",
+      "default": "./src/index.js"
+    }
   },
   "bin": {
     "configpilot": "./bin/configpilot.js"
@@ -26,6 +30,7 @@
   "files": [
     "bin/configpilot.js",
     "src/index.js",
+    "src/index.d.ts",
     "src/cli.js",
     "src/parser/dotenv-parser.js",
     "docs/PARSER.md",
@@ -43,11 +48,12 @@
   "scripts": {
     "test": "node --test",
     "test:coverage": "node --test --experimental-test-coverage",
+    "test:types": "node scripts/verify-types.js",
     "release:prepare": "node scripts/prepare-release.js",
     "lint": "eslint . --max-warnings 0",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "check": "npm run lint && npm test && npm run format:check",
+    "check": "npm run lint && npm test && npm run test:types && npm run format:check",
     "pack:dry-run": "npm pack --dry-run --ignore-scripts"
   },
   "keywords": [
@@ -60,6 +66,7 @@
   "devDependencies": {
     "@eslint/js": "10.0.1",
     "eslint": "10.13.0",
-    "prettier": "3.9.10"
+    "prettier": "3.9.10",
+    "typescript": "7.0.2"
   }
 }

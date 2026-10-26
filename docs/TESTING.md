@@ -15,7 +15,20 @@ npm run test:coverage
 npm run pack:dry-run
 ```
 
-`check` runs lint with zero warnings, all tests, and formatting verification.
+`check` runs lint with zero warnings, runtime tests, installed TypeScript consumer
+verification, and formatting verification. `npm run test:types` runs that consumer
+check separately with pinned TypeScript 7.0.2. It packs the real checkout, installs
+it offline in a temporary project, and compiles positive/negative fixtures from
+`type-tests/` with strict checking, exact optional properties, and library checking
+enabled. Both NodeNext and Bundler resolution must pass; `@ts-expect-error` checks
+reject invalid inputs, value fields, private imports, and unsafe report narrowing.
+Emitted ESM is executed, as is CommonJS dynamic import. Fixtures never ship in the
+archive. The compiler and its platform packages are development dependencies only.
+
+The minimum Node 20.0.0 job runs runtime tests without this development-tool check.
+Declaration verification runs in all twelve development matrix jobs and candidate
+preparation via `npm run check`. No compilation/build is needed to use ConfigPilot.
+
 `test:coverage` runs the same tests with Node's experimental coverage instrumentation.
 Coverage output includes test files and child processes; inspect the individual
 `src/` and `bin/` rows when evaluating product coverage. Coverage numbers can vary

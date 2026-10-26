@@ -30,6 +30,7 @@ const expectedFiles = [
   "package.json",
   "src/cli.js",
   "src/index.js",
+  "src/index.d.ts",
   "src/parser/dotenv-parser.js",
   "src/analyzer/config-analyzer.js",
   "src/diagnostics/issue-codes.js",
@@ -207,6 +208,11 @@ test("tarball excludes environment files and works in an offline consumer", (t) 
   );
   assert.equal(metadata.private, true);
   assert.equal(metadata.type, "module");
+  assert.equal(metadata.main, "./src/index.js");
+  assert.equal(metadata.types, "./src/index.d.ts");
+  assert.deepEqual(metadata.exports, {
+    ".": { types: "./src/index.d.ts", default: "./src/index.js" },
+  });
   assert.equal(metadata.engines.node, ">=20");
   assert.equal(Object.keys(metadata.dependencies ?? {}).length, 0);
   assert.equal(metadata.bin.configpilot, "./bin/configpilot.js");

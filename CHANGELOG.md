@@ -25,11 +25,16 @@ work, not an npm publication or GitHub release. The package version currently re
 - Stable required Quality gate, weekly npm/Actions dependency updates, restricted
   SHA-pinned Actions policy, private vulnerability reporting and owner-reviewed
   unpublished candidate preparation with commit/hash manifests. No publishing step.
+- Bundled TypeScript declarations for all public exports and report/diagnostic
+  types; report-state and issue-code narrowing; offline installed-consumer positive
+  and negative checks with NodeNext and Bundler resolution, emitted ESM execution,
+  and CommonJS dynamic-import verification. TypeScript is development-only.
 
 ### Compatibility and limits
 
 - Node.js 20+ runtime; ESM exports `parseDotenv`, `analyzeConfig`, and `ISSUE_CODES`.
-  CommonJS and TypeScript declarations are not currently provided.
+  Bundled declarations are verified with TypeScript 7.0.2. No synchronous CommonJS
+  entry point is provided; CommonJS consumers can use asynchronous dynamic import.
 - Empty values count as declarations. Missing and undocumented keys are warnings;
   they do not establish whether a deployment is broken. CLI warnings still exit 1.
 - Parser errors skip all differences; unavailable counts are `null`. Physical

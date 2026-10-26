@@ -21,7 +21,7 @@ Discovery remains unfinished and must inform later product decisions.
 | 5 — Testing           | Complete    | 139 tests; 100% local runtime line coverage; seeded invariants, isolated I/O faults, actual-checkout archive/offline installation checks; all 13 hosted runtime/platform jobs passed.                                          | Matrix samples supported runtime lines; Windows skips two POSIX-only tests. Coverage and tests do not replace real-project validation or release readiness.                                                       |
 | 6 — Documentation     | Complete    | Reworked README; contribution/security/conduct/changelog and troubleshooting guides; executable examples and scenario guide; verified local install paths, examples, packaged documentation and links.                         | Local and 13 hosted checks passed; no-install fresh-clone quick start verified. Registry ownership, declarations, release metadata and private reporting configuration remain readiness/CI work.                  |
 | 7 — CI/CD             | Complete    | Quality matrix and stable gate; weekly dependency updates; restricted SHA-pinned Actions; private reports/security fixes; owner-only candidate environment; private archive/manifest workflow and guard tests.                 | Hosted gate/matrix, candidate artifact/offline consumer, owner approval barrier and main protections verified. Publishing remains disabled; owner notification preferences and release readiness remain separate. |
-| 8 — Release readiness | Not Started | Private package guard, explicit runtime file allowlist, ESM exports/bin, license, and offline consumer installation/import/CLI verification passed.                                                                            | Verify ownership/name availability, TypeScript declarations, compatibility, final release archive and publishing authentication. This project is not release-ready.                                               |
+| 8 — Release readiness | In Progress | Bundled declarations and installed TypeScript consumer checks; metadata/ESM/bin review; 19-file archive checks; draft release notes and authentication plan; intended npm owner confirmed.                                     | Local checks pass. npm account ghazi001 is not authenticated; the unregistered name is not reserved or owned. Final candidate/hosted evidence follows below. Publication remains disabled.                        |
 | 9 — Publication       | Not Started | None.                                                                                                                                                                                                                          | Owner approval, release checklist, npm publication, public-install verification, and GitHub release. No publication, tag, or external release authorized.                                                         |
 
 ## Architectural decisions
@@ -556,3 +556,71 @@ Milestone 8: verify npm name availability/ownership, TypeScript declarations and
 consumer compatibility, final metadata/archive/release notes and publishing-security
 design. Discovery and real-project evaluation remain open. No npm publication,
 release tag or external release is authorized without explicit owner approval.
+
+## Milestone 8 session — 2026-10-26
+
+Status: **In Progress — technical readiness implemented; npm identity/ownership gate open**.
+Read `AGENTS.md` completely and inspected the clean protected main checkout at
+`5123cef2a7d67ac2229d28aaa0c7b2e41444b679`. Work is isolated on
+`codex/milestone-8-readiness` and will use required PR checks.
+
+Completed:
+
+- Added `src/index.d.ts` with public options, declaration/location types, frozen
+  literal issue codes, parser/analysis issue unions and schema-version-1 reports.
+  Narrowing `comparison` makes difference counts numeric or null; narrowing codes
+  distinguishes keys, source roles and related locations. No value field is exposed.
+- Added `types` metadata and a leading `types` export condition while preserving
+  the ESM runtime target, named exports, Node >=20 floor and executable CLI mapping.
+  Expanded the exact distribution list from 18 to 19 files for the declaration only.
+- Added `npm run test:types` to `check`, using pinned development-only TypeScript
+  7.0.2. The compiler uses platform-specific optional development packages; none
+  enter the runtime archive. A separate offline consumer compiles positive and
+  negative fixtures under strict NodeNext and Bundler resolution, checks library
+  declarations, executes emitted ESM and verifies CommonJS dynamic import.
+- Retained the ESM-only contract rather than introducing a second runtime build.
+  Synchronous require is not promised across Node 20+; CommonJS can import
+  asynchronously. Other TypeScript compiler versions are not claimed as verified.
+- Reviewed package metadata, MIT license, repository/homepage/issue links, CLI mode
+  100755 and private guard. Added draft v0.1.0 release notes and a readiness review;
+  updated README, contribution, CI/testing, troubleshooting and preparation guides.
+- Queried the explicit public npm registry: configpilot returned E404 on 2026-10-26.
+  Owner selected npm username **ghazi001**, distinct from GitHub **ghazy001**.
+  npm whoami returned ENEEDAUTH. No name reservation, eligibility, account access,
+  2FA status or package ownership has been established by those observations.
+- Reviewed current official npm trusted-publishing guidance: prefer future OIDC
+  with the exact repository/workflow/protected environment, after an initial package
+  exists. Current npm/Node requirements and the owner authentication/2FA boundary
+  are documented with primary links in RELEASING.md. No credentials were requested,
+  stored in the repository, or created. No registry mutation was performed.
+
+Executed local verification (macOS, Node v20.20.0, npm 10.8.2):
+
+- `npm run check`: passed; lint zero warnings/errors, **148 runtime tests passed**
+  with no failures/skips, installed TypeScript checks passed and formatting clean.
+- `npm run test:coverage`: passed, 148 tests. All shipped runtime modules have
+  **100% line/function coverage**; parser/analyzer have **100% branch coverage**.
+  File-reader platform coverage remains 96.77% locally; hosted Windows is separate.
+- Actual-checkout pack dry-run/full archive, exact 19-file list, synthetic-secret
+  exclusions, installed byte equality, packaged links, executable shim, public
+  import and CLI clean/mismatch behavior all passed in the package test.
+- TypeScript positive/negative checks and emitted execution passed against an
+  independently installed real tarball, with no path mappings into the checkout.
+- `npm audit --json` reported **zero known vulnerabilities** at review time for
+  the installed development graph. This is time-sensitive advisory evidence.
+- Renamed the verification script after the first run revealed Node's test-file
+  discovery treated a test-prefixed script as a runtime test. Reran the suite;
+  the minimum-runtime job remains independent of compiler installation.
+
+Outstanding and remaining risks:
+
+- Authenticate the intended npm account independently, verify account 2FA and the
+  ownership/first-publication path, and recheck name eligibility at approval time.
+  An unregistered public name cannot be claimed as owned before registration.
+- Record final committed candidate and hosted verification evidence below. Main
+  remains protected; no failed or pending mandatory check may be bypassed.
+- Milestone 0 product discovery and real-project validation remain unfinished.
+  Unit/security checks do not establish adoption or full dotenv compatibility.
+- Keep private true and publication disabled. Removing that guard, enabling a
+  publisher, staging/publishing, release tags and external releases require explicit
+  owner approval. No such action is authorized or performed in this session.

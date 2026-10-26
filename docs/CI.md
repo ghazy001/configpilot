@@ -10,7 +10,8 @@ and the platform matrix, and [RELEASING.md](RELEASING.md) for candidate review.
 manual dispatch, without path filters. Linux, Windows and macOS each run Node
 20.19.0, 22.13.0, 24.x and 26.x; Linux additionally tests the Node 20.0.0 minimum
 without incompatible development tooling. Normal jobs run clean installation,
-lint, tests, formatting and instrumented coverage. Tests inspect the actual archive,
+lint, runtime tests, installed TypeScript consumer checks, formatting and instrumented
+coverage. Tests inspect the actual archive,
 install it offline, and execute its public API and installed CLI.
 
 The final **Quality gate** always runs after the matrix and minimum-runtime jobs.
