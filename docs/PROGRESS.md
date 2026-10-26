@@ -912,3 +912,28 @@ Final local verification for stability implementation:
   refs/tags/v* updates/deletions are blocked, bypass actors empty, new creation
   remains available for separately approved releases. Existing tags were preserved;
   no tag/release was created and no destructive test was run.
+
+### Committed validation candidate and owner disclosure decision
+
+- Implementation committed locally as **83ba72694aa6a79fe9911bb1e305c6733ba1af5a**.
+  Clean committed preparation passed with the unchanged offline/scripts-disabled
+  helper. Candidate directory: /private/tmp/configpilot-stability-validation-83ba726.
+- Candidate SHA-256: **454b38deb525c5e28b8ceb141420d1bbf5dffa07c18f81749b3d9e67de0bc9cc**.
+  npm integrity: sha512-Vg9GeA9GRBGKZU33tJKdDLeWUHJ6JhWidggEVjbDCH+aPpd4Fnpx+8DhWRD+tHxiLAMh9Wb9Yj3juKryvFlKTw==.
+  Independently checked all 21 regular tar members, exact allowlist, byte equality
+  with source, executable/LF CLI and manifest commit/hash/integrity. Fresh offline
+  consumer passed imports, strict NodeNext/Bundler checks, emitted ESM/CJS dynamic
+  import, installed CLI help/version/0/1/2 statuses, new quote privacy regression,
+  INPUT_LIMIT_EXCEEDED and input integrity. Consumer files were removed afterward.
+- This is a **validation-only archive with existing version text 0.1.0**, not a new
+  release candidate authorized for publication. Its bytes differ from the public
+  archive and must never be published under that existing name/version. Final release
+  needs an unused version and fresh exact artifact approval after remaining gates.
+- Asked for a concrete disclosure decision only after the fix and validation archive
+  were reviewable. The owner explicitly selected **Keep private for coordinated
+  review**. Do not push this branch, create a public PR, upload it to a public artifact
+  or run public hosted CI. No public disclosure or publication permission is inferred.
+- Implementation/validation docs remain available locally for private owner review.
+  A private cross-platform CI/review route and real developer feedback remain open;
+  stable v1.0.0 is not declared complete. The follow-up commit records evidence only
+  and changes no shipped candidate bytes.

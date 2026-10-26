@@ -22,7 +22,7 @@ No npm publication/staging, new tag or external release is authorized by this do
 
 ## Required release gates
 
-- [x] Current-source local quality, installed archive/consumer, coverage and resource checks recorded.
+- [x] Current-source local quality, committed 21-file candidate/consumer, coverage and resource checks recorded.
 - [ ] Current-source full Linux/Windows/macOS and Node matrix passed; historical runs are not substitutes.
 - [x] Six public templates pinned and evaluated without executing upstream code.
 - [ ] 3–5 developer trials recorded; material feedback resolved and owner-reviewed.
@@ -54,8 +54,17 @@ extend its upstream security support; recommend maintained runtimes for producti
 ## Delivery and disclosure
 
 SECURITY.md requires vulnerability details/reproductions to stay out of public
-issues, PRs and CI logs. Keep this security patch local for owner review until
-coordinated disclosure/public delivery is approved. Do not publicly push a regression
+issues, PRs and CI logs. The owner explicitly selected **Keep private for coordinated review** after
+reviewable implementation and archive verification. Keep this patch local; do not
+push the branch, open a public PR or upload public artifacts. Do not publicly push a regression
 reproduction just to obtain hosted CI. Local test evidence is useful but cannot
 claim Windows/Linux verification of new code; run the matrix after the owner agrees
 to public delivery or provides an appropriate private review/CI route.
+
+## Local review material
+
+Implementation commit: 83ba72694aa6a79fe9911bb1e305c6733ba1af5a.
+Validation archive/manifest: /private/tmp/configpilot-stability-validation-83ba726.
+Archive SHA-256: 454b38deb525c5e28b8ceb141420d1bbf5dffa07c18f81749b3d9e67de0bc9cc.
+It retains the existing version text for local checks only and must not be published.
+The progress log records full verification and the owner's disclosure decision.
