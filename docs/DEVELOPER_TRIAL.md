@@ -1,23 +1,22 @@
-# ConfigPilot private developer trial
+# ConfigPilot developer trial
 
-Thank you for trying this unreleased package. Participation is voluntary. Share only
+Thank you for trying ConfigPilot v1.0.0. Participation is voluntary. Share only
 sanitized observations with the maintainer privately; never send real environment
 files, credentials, process-environment dumps or screenshots containing secrets.
-You may stop at any time. This trial does not authorize public redistribution.
+You may stop at any time. The released package is open source under the MIT license.
 
-The supplied archive is a private validation build, identified by its SHA-256 in
-candidate.json. Its version text is still 0.1.0, but its bytes differ from the public
-0.1.0 release. Install the supplied file, not `npm install configpilot`.
+Use published **configpilot@1.0.0** for new trials. The earlier supplied private
+0.1.0-text archive was a historical validation build; do not substitute it or the
+older public 0.1.0 release. No developer trial has yet been recorded.
 
 ## Setup
 
 Use a new disposable folder outside an application, with Node 20+ and npm. Record
-your Node version, OS and architecture. In that folder, install the supplied archive
-(replace the example path with its actual absolute path):
+your Node version, OS and architecture. In that folder, install the released package:
 
 ```sh
 npm init -y
-npm install --offline --ignore-scripts --no-audit --no-fund "/absolute/path/configpilot-0.1.0.tgz"
+npm install --save-dev configpilot@1.0.0
 ```
 
 Invoke `./node_modules/.bin/configpilot` on macOS/Linux, or
@@ -62,7 +61,7 @@ help; this is feedback about the tool, not a test of your ability.
 ## Feedback to return privately
 
 - Anonymous trial ID, date and consent to retain sanitized feedback.
-- Archive SHA-256, Node version, OS/architecture and workflow (frontend/service/CI).
+- Package version, Node version, OS/architecture and workflow (frontend/service/CI).
 - Time to first check and any installation problem.
 - Your interpretation of each task; any misleading diagnosis or recommendation.
 - JSON/exit integration outcome and any unexpected result.

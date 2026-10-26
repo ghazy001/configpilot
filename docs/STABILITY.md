@@ -2,26 +2,26 @@
 
 The owner approved v1.0.0 release on 2026-10-26 after accepting missing human
 feedback as a post-release uncertainty. Technical contracts are frozen for v1;
-final release verification and registry results are tracked in PROGRESS.md.
-Package metadata is 1.0.0; preparation is not evidence of completed publication.
+v1.0.0 publication and registry verification are complete. See
+[the immutable release receipt](releases/1.0.0.json) and PROGRESS.md.
 
 ## Audit backlog
 
-| Finding                                | Status              | Evidence / remaining gate                                                                                                                   |
-| -------------------------------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| CP-001 quote-boundary privacy          | Implemented locally | Quarantine ambiguous quotes; API/actual CLI/installed archive regressions and reference mutations                                           |
-| CP-002 resource amplification          | Implemented locally | 2048 records, 4096-unit labels, 131072-unit metadata; safe RangeError/CLI exit 2; isolated probes                                           |
-| CP-003 inaccurate release/support docs | Updated             | Historical public 0.1.0 receipt; current source explicitly unreleased; GitHub release remains absent                                        |
-| CP-004 independent parser corpus       | Implemented         | Pinned dotenv 18.0.9 comparisons; intentional differences; no full compatibility claim                                                      |
-| CP-005 API/schema policy               | Implemented         | Shipped schema, negative mutations, documented SemVer/schema and prose policy                                                               |
-| CP-006 compiler/runtime policy         | Verified            | TypeScript 5/7 and full private hosted Windows/Linux/macOS matrix passed at f3c9916; see PROGRESS.md                                        |
-| CP-007 real-world validation           | Partially complete  | Six pinned templates passed; Human feedback pending; accepted post-release follow-up                                                        |
-| CP-008 release process                 | Prepared            | Durable old-release evidence, offline candidate verifier, final checklist and active immutable-tag rules; final owner review still required |
-| CP-009 finding policy controls         | Deferred, optional  | Warnings already fail CLI; no redundant strict flag or implicit process.env merge                                                           |
-| CP-010 OIDC/provenance/prereleases     | Deferred, optional  | Existing workflow remains preparation-only; future setup needs separate review                                                              |
-| CP-011 advanced integrations           | Post-v1             | No unrelated feature expansion                                                                                                              |
-| CP-012 whitespace-prefix privacy       | Implemented locally | Unsupported whitespace before quoted values is rejected/quarantined; 2,835 cross-loader cases plus actual CLI/archive regressions           |
-| CP-013 candidate/source binding        | Implemented locally | Preparation and acceptance compare committed blobs directly; hidden index edits and rehashed changed archives fail                          |
+| Finding                                | Status             | Evidence / remaining gate                                                                                                         |
+| -------------------------------------- | ------------------ | --------------------------------------------------------------------------------------------------------------------------------- |
+| CP-001 quote-boundary privacy          | Released in v1.0.0 | Quarantine ambiguous quotes; API/actual CLI/installed archive regressions and reference mutations                                 |
+| CP-002 resource amplification          | Released in v1.0.0 | 2048 records, 4096-unit labels, 131072-unit metadata; safe RangeError/CLI exit 2; isolated probes                                 |
+| CP-003 inaccurate release/support docs | Updated            | Immutable 0.1.0 history retained; v1.0.0 npm/tag/GitHub release verified                                                          |
+| CP-004 independent parser corpus       | Implemented        | Pinned dotenv 18.0.9 comparisons; intentional differences; no full compatibility claim                                            |
+| CP-005 API/schema policy               | Implemented        | Shipped schema, negative mutations, documented SemVer/schema and prose policy                                                     |
+| CP-006 compiler/runtime policy         | Verified           | TypeScript 5/7 and full private hosted Windows/Linux/macOS matrix passed at f3c9916; see PROGRESS.md                              |
+| CP-007 real-world validation           | Partially complete | Six pinned templates passed; Human feedback pending; accepted post-release follow-up                                              |
+| CP-008 release process                 | Complete           | Owner-approved v1.0.0 completed with exact-archive verification and immutable tag; receipt retained                               |
+| CP-009 finding policy controls         | Deferred, optional | Warnings already fail CLI; no redundant strict flag or implicit process.env merge                                                 |
+| CP-010 OIDC/provenance/prereleases     | Deferred, optional | Existing workflow remains preparation-only; future setup needs separate review                                                    |
+| CP-011 advanced integrations           | Post-v1            | No unrelated feature expansion                                                                                                    |
+| CP-012 whitespace-prefix privacy       | Released in v1.0.0 | Unsupported whitespace before quoted values is rejected/quarantined; 2,835 cross-loader cases plus actual CLI/archive regressions |
+| CP-013 candidate/source binding        | Released in v1.0.0 | Preparation and acceptance compare committed blobs directly; hidden index edits and rehashed changed archives fail                |
 
 ## Required release gates
 
@@ -30,12 +30,12 @@ Package metadata is 1.0.0; preparation is not evidence of completed publication.
 - [x] Remaining private Linux ARM64 Node 20.19.0/22.13.0/26.12.1 quality, coverage and archive checks; Node 20.0.0 runtime/archive checks passed.
 - [x] Current-source hosted Windows/Linux/macOS matrix, minimum runtime and final quality gate passed privately at f3c9916 (run 40305989425).
 - [x] Six public templates pinned and evaluated without executing upstream code.
-- [ ] Post-release developer trials: **Pending — Requires Human Participation**. Owner will distribute the prepared private trial kit and return sanitized feedback.
+- [ ] Post-release developer trials: **Pending — Requires Human Participation**. Use the published v1.0.0 trial instructions; feedback remains uncollected.
 - [x] Maintainer security/API review of current implementation complete; no additional confirmed blockers found. See SECURITY_API_REVIEW.md; re-review any later changes.
 - [x] Current API/schema/CLI and support policy frozen for the owner-approved v1.0.0 scope.
 - [x] Owner selected unused version 1.0.0; final archive verification is tracked in PROGRESS.md.
 - [x] Explicit owner approval to release v1.0.0; no later version is authorized.
-- [ ] After approved publication, public installation and byte-integrity verification recorded.
+- [x] v1.0.0 public installation, registry byte equality, tag and GitHub release verified.
 
 ## Decisions and tradeoffs
 
@@ -66,9 +66,9 @@ vulnerability reports still follow SECURITY.md. No real configuration or credent
 are included in source, regression fixtures or release artifacts. The private trial
 kit is historical; external feedback remains uncollected and will follow release.
 
-## Local review material
+## Historical private review material
 
-Current implementation: **6e827ae7af1cfa01c008084133dff531351adcc5**.
+Pre-release implementation: **6e827ae7af1cfa01c008084133dff531351adcc5**.
 Replacement validation directory: /private/tmp/configpilot-stability-validation-6e827ae.
 SHA-256: **8cdcc32c6d8c33bd48d7cef05e042884f94601f90b20a7c94a5bdc97b98c8483**.
 Offline acceptance receipts passed for macOS ARM64 Node 20.0.0/20.20.0/24.22.1
