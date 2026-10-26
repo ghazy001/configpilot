@@ -1,15 +1,15 @@
 # Release readiness
 
-Reviewed 2026-10-26. **v1.0.0 published and verified.** The exact release source
-66b4ad2 passed hosted CI; registry bytes, ordinary local/global installs and public
+Reviewed 2026-10-26. **v1.1.0 published and verified.** The exact release source
+4aaa83f passed hosted CI; registry bytes, ordinary local/global installs and public
 API/CLI behavior were verified. npm latest, the immutable tag and GitHub release
-identify 1.0.0. See [the release receipt](releases/1.0.0.json).
+identify 1.1.0. See [the release receipt](releases/1.1.0.json).
 External feedback is explicitly accepted post-release work, not a completed claim.
 The old 0.1.0 validation archives are historical and must never be published.
 
 ## Published 0.1.0 evidence
 
-The npm registry exposes configpilot@0.1.0 with latest pointing to 0.1.0 and maintainer
+At its initial publication, configpilot@0.1.0 was latest with maintainer
 **ghazi001** (GitHub owner **ghazy001**). The public archive matches reviewed source
 be996e1297b21e245ab44e1ac4368b15b0e9bdf7 byte-for-byte. Its exact 19 files,
 SHA-256/integrity and fresh unauthenticated registry-consumer results are recorded in

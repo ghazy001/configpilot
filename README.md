@@ -10,7 +10,8 @@ Use the CLI for local checks and pipelines, or the dependency-free JavaScript AP
 for your own tooling. It finds missing and undocumented keys, duplicate assignments,
 and syntax outside its [documented dotenv subset](docs/PARSER.md).
 
-**v1.0.0** provides a stable API and CLI contract, bounded input handling, and
+**v1.1.0** adds polished terminal diagnostics and display controls to the stable
+API and CLI contract, with bounded input handling and
 verified Windows, Linux and macOS compatibility. External developer feedback has
 not yet been collected; usability validation will continue after release.
 
@@ -21,19 +22,19 @@ Runtime: **Node.js 20+**, ES modules. License: [MIT](LICENSE).
 For the CLI:
 
 ```sh
-npm install --global configpilot@1.0.0
+npm install --global configpilot
 configpilot --help
 ```
 
 For a project's development scripts:
 
 ```sh
-npm install --save-dev configpilot@1.0.0
+npm install --save-dev configpilot
 ```
 
 For an application importing the JavaScript API at runtime, use
-`npm install configpilot@1.0.0` instead. The version suffix pins this release;
-omit it to install the latest version. No extra installation flags are required.
+`npm install configpilot` instead. These commands install the latest release.
+To pin v1.1.0 explicitly, append `@1.1.0` to the package name. No extra installation flags are required.
 ConfigPilot has no runtime dependencies or install lifecycle scripts.
 
 Add `"config:check": "configpilot check"` to your npm scripts, then run
@@ -109,7 +110,7 @@ For a project's development dependency or library consumer, build an archive in
 the checkout with `npm pack --ignore-scripts`. Then, from the consumer project:
 
 ```sh
-npm install --save-dev "/absolute/path/to/configpilot/configpilot-1.0.0.tgz"
+npm install --save-dev "/absolute/path/to/configpilot/configpilot-1.1.0.tgz"
 ```
 
 Replace the archive path with your actual path, using native Windows paths on

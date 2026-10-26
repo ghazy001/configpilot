@@ -30,7 +30,7 @@ v1.0.0 publication and registry verification are complete. See
 - [x] Remaining private Linux ARM64 Node 20.19.0/22.13.0/26.12.1 quality, coverage and archive checks; Node 20.0.0 runtime/archive checks passed.
 - [x] Current-source hosted Windows/Linux/macOS matrix, minimum runtime and final quality gate passed privately at f3c9916 (run 40305989425).
 - [x] Six public templates pinned and evaluated without executing upstream code.
-- [ ] Post-release developer trials: **Pending — Requires Human Participation**. Use the published v1.0.0 trial instructions; feedback remains uncollected.
+- [ ] Post-release developer trials: **Pending — Requires Human Participation**. Use the published v1.1.0 trial instructions; feedback remains uncollected.
 - [x] Maintainer security/API review of current implementation complete; no additional confirmed blockers found. See SECURITY_API_REVIEW.md; re-review any later changes.
 - [x] Current API/schema/CLI and support policy frozen for the owner-approved v1.0.0 scope.
 - [x] Owner selected unused version 1.0.0; final archive verification is tracked in PROGRESS.md.
