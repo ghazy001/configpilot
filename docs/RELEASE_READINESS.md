@@ -26,6 +26,13 @@ executed verification. The source adds bounded records/metadata, quote quarantin
 JSON Schema and TypeScript 5.0.4/7.0.2 checks. It remains ESM-only, Node >=20, MIT,
 with zero runtime dependencies. The distribution now has 21 explicit files.
 
+Private validation now includes a Linux ARM64 container running Node 24.22.1:
+full quality/installed TypeScript checks, coverage/resources and offline acceptance
+of the exact macOS-prepared archive passed with networking disconnected. macOS
+Node 20/22/24/26 checks and minimum Node 20.0.0 runtime tests also passed. These
+are executed results for the private source, not evidence of Windows or every
+Linux matrix entry. The current archive identity is in [STABILITY.md](STABILITY.md).
+
 Before declaring stable v1:
 
 - Complete current-source lint, runtime/contract/type/coverage/resource/archive checks.

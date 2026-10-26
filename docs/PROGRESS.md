@@ -1024,3 +1024,50 @@ Local engineering changes are complete for this milestone. Prepare and verify th
 committed replacement archive next, then retain its identity below. Stable v1 still
 requires current-source native Linux/Windows checks, real developer trials and final
 security/compatibility/API/owner approval; the private-delivery decision is preserved.
+
+### Replacement archive and private Linux verification
+
+- Implementation committed as **6e827ae7af1cfa01c008084133dff531351adcc5**.
+  Prepared the clean tracked source with the strengthened helper and inspected
+  the exact **21-file** archive. Validation-only directory:
+  /private/tmp/configpilot-stability-validation-6e827ae.
+  SHA-256: **8cdcc32c6d8c33bd48d7cef05e042884f94601f90b20a7c94a5bdc97b98c8483**.
+  npm integrity: sha512-hhznssYYU9gdb+mV5uKbVpjXSvwWnpXn5hSj3kjFZ1VhHH2YrJ/GrIxwSV0gQPGg0tR5LdysY+XWWQTLz1aKww==.
+- Reusable `candidate:verify` passed against those exact bytes on macOS ARM64
+  **Node 20.0.0, 20.20.0 and 24.22.1**. Value-free receipts remain beside the
+  manifest/archive. They cover committed source identity, digest verification,
+  offline installation, byte equality, ESM/dynamic-CJS imports/schema, executable
+  shim, actual CLI help/version/0/1/2, privacy/resource failures and unchanged inputs.
+- A one-off expanded audit on Node 20.20.0 examined every BMP code-unit prefix
+  across three quoted styles: **196,608 cases**, **75** loader-recognized body
+  cases, **zero** fragments retained in parser metadata. References were default
+  and fast pinned dotenv plus util.parseEnv. This supplements the permanent 2,835
+  whitespace corpus; it is not exhaustive grammar/Unicode compatibility evidence.
+- Recovered a private Linux route by starting the installed Docker Desktop engine.
+  Downloaded the official Node **24.22.1-bookworm** image, pinned for execution as
+  **node@sha256:6449e19d8184d84062525b6a7524def03146c2cb04a7f08b076680d0e8e4240a**.
+  Used only a read-only local Git bundle and read-only candidate directory; the
+  owner's environment files, npm credentials and Docker socket were not mounted.
+  Disposable source/cache were kept in container temporary filesystems, running
+  as uid 501 with dropped capabilities, no-new-privileges and a read-only root.
+- Registry access downloaded locked development dependencies with lifecycle scripts
+  disabled (**87 packages**, npm **11.19.1**). Then disconnected container networking
+  and verified its networks were `{}` before and after executing checks.
+- **Linux ARM64 / Node 24.22.1:** full `npm run check` passed **165 runtime + 7
+  contract tests**, **zero failures/skips**, clean lint/format and both installed
+  TypeScript consumers. Coverage reran all 165 tests successfully; parser/analyzer
+  remained **100% lines/branches/functions**. Five resource probes passed, highest
+  peak RSS **165.16 MiB**, largest JSON **1,854,703 bytes**, below the documented budgets.
+- The **same macOS-prepared archive** passed offline Linux `candidate:verify`, with
+  matching source/hash/file bytes and installed shim/API/CLI behavior. Its receipt
+  is verification-linux-node24.json beside the archive. Source Git status remained
+  clean. Removed the task's container and temporary source Git bundle/tar afterward;
+  private candidate/receipts and value-free logs remain locally for review.
+- This closes one real Linux compatibility gap without public code/CI upload.
+  **Windows and remaining Linux matrix entries, consenting developer trials and
+  final owner review remain open.** No external person was contacted. No public PR,
+  push, tag, release or npm publication occurred. Version stays **0.1.0**; this changed
+  archive must never be published under that already-existing version.
+- The follow-up documentation records evidence only and changes no shipped archive
+  bytes. The older 83ba726 validation archive lacks CP-012 and is superseded for
+  current review; public 0.1.0 remains the distinct historical npm release.

@@ -13,7 +13,7 @@ No npm publication/staging, new tag or external release is authorized by this do
 | CP-003 inaccurate release/support docs | Updated             | Historical public 0.1.0 receipt; current source explicitly unreleased; GitHub release remains absent                                        |
 | CP-004 independent parser corpus       | Implemented         | Pinned dotenv 18.0.9 comparisons; intentional differences; no full compatibility claim                                                      |
 | CP-005 API/schema policy               | Implemented         | Shipped schema, negative mutations, documented SemVer/schema and prose policy                                                               |
-| CP-006 compiler/runtime policy         | Partially verified  | TypeScript 5.0.4/7.0.2 consumers; local Node 20/22/24/26 passed; new hosted OS matrix pending                                               |
+| CP-006 compiler/runtime policy         | Partially verified  | TypeScript 5/7; macOS Node 20/22/24/26 and private Linux ARM64 Node 24 passed; Windows/full matrix pending                                  |
 | CP-007 real-world validation           | Partially complete  | Six pinned templates passed; 3–5 real developer trials still pending                                                                        |
 | CP-008 release process                 | Prepared            | Durable old-release evidence, offline candidate verifier, final checklist and active immutable-tag rules; final owner review still required |
 | CP-009 finding policy controls         | Deferred, optional  | Warnings already fail CLI; no redundant strict flag or implicit process.env merge                                                           |
@@ -25,7 +25,8 @@ No npm publication/staging, new tag or external release is authorized by this do
 ## Required release gates
 
 - [x] Current-source local quality, committed 21-file candidate/consumer, coverage and resource checks recorded.
-- [ ] Current-source full Linux/Windows/macOS and Node matrix passed; historical runs are not substitutes.
+- [x] Private Linux ARM64 / Node 24 full checks, coverage, resources and exact-archive acceptance passed.
+- [ ] Current-source full Linux/Windows/macOS and Node matrix passed; Windows and remaining Linux matrix entries are outstanding.
 - [x] Six public templates pinned and evaluated without executing upstream code.
 - [ ] 3–5 developer trials recorded; material feedback resolved and owner-reviewed.
 - [ ] Security/compatibility review of final changes complete with no unresolved release blockers.
@@ -61,11 +62,20 @@ SECURITY.md requires vulnerability details/reproductions to stay out of public
 issues, PRs and CI logs. The owner explicitly selected **Keep private for coordinated review** after
 reviewable implementation and archive verification. Keep this patch local; do not
 push the branch, open a public PR or upload public artifacts. Do not publicly push a regression
-reproduction just to obtain hosted CI. Local test evidence is useful but cannot
-claim Windows/Linux verification of new code; run the matrix after the owner agrees
-to public delivery or provides an appropriate private review/CI route.
+reproduction just to obtain hosted CI. Local macOS and private Linux ARM64 evidence
+does not establish Windows or the complete matrix; finish remaining entries after
+the owner agrees to public delivery or provides an appropriate private review/CI route.
 
 ## Local review material
+
+Current implementation: **6e827ae7af1cfa01c008084133dff531351adcc5**.
+Replacement validation directory: /private/tmp/configpilot-stability-validation-6e827ae.
+SHA-256: **8cdcc32c6d8c33bd48d7cef05e042884f94601f90b20a7c94a5bdc97b98c8483**.
+Offline acceptance receipts passed for macOS ARM64 Node 20.0.0/20.20.0/24.22.1
+and Linux ARM64 Node 24.22.1, all for these exact 21-file bytes. Linux ran in a
+disposable nonroot container with networking disconnected. This is additional
+platform evidence, not completion of the full hosted matrix or human trials.
+Version text remains 0.1.0 for validation only; this archive must never be published.
 
 Initial implementation commit: 83ba72694aa6a79fe9911bb1e305c6733ba1af5a.
 Validation archive/manifest: /private/tmp/configpilot-stability-validation-83ba726.
