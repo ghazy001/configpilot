@@ -57,7 +57,7 @@ export interface ParseResult {
 /**
  * Parse the documented dotenv subset, retaining no assignment values.
  * @throws {TypeError} For invalid inputs or labels.
- * @throws {RangeError} Above 1,048,576 UTF-16 code units.
+ * @throws {RangeError} Above source, declaration or public-metadata budgets (see parser contract).
  */
 export declare function parseDotenv(
   source: string,
@@ -146,7 +146,7 @@ export type AnalysisReport = CompleteReport | SkippedReport;
  * Compare explicit dotenv strings synchronously, without I/O or retained values.
  * Syntax errors skip all differences. See the versioned report contract.
  * @throws {TypeError} For invalid inputs or labels.
- * @throws {RangeError} If either input exceeds the parser limit.
+ * @throws {RangeError} If either input exceeds source, declaration or public-metadata budgets.
  */
 export declare function analyzeConfig(
   input: AnalyzeConfigInput,

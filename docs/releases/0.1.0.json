@@ -1,0 +1,27 @@
+{
+  "name": "configpilot",
+  "version": "0.1.0",
+  "source": "be996e1297b21e245ab44e1ac4368b15b0e9bdf7",
+  "sha256": "48bfedea9fd2381f44cf8c3f0fb620fcd43fd32a89143260978d7755e6b4c330",
+  "npmIntegrity": "sha512-YsdQ61G9CiMhQdtpXgwxCDpjL71DAHgpTofpoMzqZmmTMRcbOYN4LkvNAfcFGCLcv4hNNGRDmEUo49MWiImz3A==",
+  "registry": "https://registry.npmjs.org/configpilot/0.1.0",
+  "maintainers": ["ghazi001"],
+  "tarball": "https://registry.npmjs.org/configpilot/-/configpilot-0.1.0.tgz",
+  "registryArchiveMatched": true,
+  "files": 19,
+  "verifiedOn": "2026-10-26",
+  "gitTag": "v0.1.0",
+  "tagObject": "393965e9307dbc366eb3c9dea6283ce7c12ab5cc",
+  "githubRelease": "Not created as of this verification",
+  "provenance": "No OIDC provenance attestation",
+  "consumerVerification": {
+    "unauthenticatedRegistryInstall": true,
+    "installedCliExits": [0, 1, 2],
+    "typescript": ["7.0.2 NodeNext", "7.0.2 Bundler"],
+    "commonJSDynamicImport": true
+  },
+  "limitations": [
+    "Historical published artifact; excludes current unreleased privacy/resource fixes",
+    "Synthetic checks and public-template sampling do not establish developer adoption"
+  ]
+}

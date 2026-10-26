@@ -2,7 +2,16 @@
 
 Last updated: 2026-10-26 (Africa/Tunis).
 
-## Session scope and inspection
+## Current target — stable v1.0.0
+
+Status: **Release preparation in progress**. The owner explicitly approved releasing
+**v1.0.0** on 2026-10-26 after accepting external developer feedback as post-release
+work. Current code passed the private hosted Windows/Linux/macOS matrix and a
+maintainer security/API review. Package metadata now targets 1.0.0. Publication is
+not yet claimed: final committed-source checks, exact archive and registry verification
+will be recorded below. Historical counts/receipts refer to their stated revisions.
+
+## Initial session scope and inspection
 
 Read `AGENTS.md` completely. The initial directory contained only `AGENTS.md`;
 there was no Git repository, implementation, package metadata, or test suite.
@@ -10,7 +19,7 @@ Started Milestone 1 as explicitly directed by the agent starting instruction.
 The initial discovery gap was closed during the release review below; real user
 feedback remains outstanding and must inform later product decisions.
 
-## Milestones
+## Milestones (historical first-release scope)
 
 | Milestone             | Status      | Completed                                                                                                                                                                                                                      | Outstanding work and remaining risks                                                                                                                                                                              |
 | --------------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -22,10 +31,10 @@ feedback remains outstanding and must inform later product decisions.
 | 5 — Testing           | Complete    | 139 tests; 100% local runtime line coverage; seeded invariants, isolated I/O faults, actual-checkout archive/offline installation checks; all 13 hosted runtime/platform jobs passed.                                          | Matrix samples supported runtime lines; Windows skips two POSIX-only tests. Coverage and tests do not replace real-project validation or release readiness.                                                       |
 | 6 — Documentation     | Complete    | Reworked README; contribution/security/conduct/changelog and troubleshooting guides; executable examples and scenario guide; verified local install paths, examples, packaged documentation and links.                         | Local and 13 hosted checks passed; no-install fresh-clone quick start verified. Registry ownership, declarations, release metadata and private reporting configuration remain readiness/CI work.                  |
 | 7 — CI/CD             | Complete    | Quality matrix and stable gate; weekly dependency updates; restricted SHA-pinned Actions; private reports/security fixes; owner-only candidate environment; private archive/manifest workflow and guard tests.                 | Hosted gate/matrix, candidate artifact/offline consumer, owner approval barrier and main protections verified. Publishing remains disabled; owner notification preferences and release readiness remain separate. |
-| 8 — Release readiness | In Progress | Bundled declarations and installed TypeScript consumer checks; metadata/ESM/bin review; 19-file archive checks; draft release notes and authentication plan; intended npm owner confirmed.                                     | Local/hosted checks and the 19-file candidate passed. Owner login as ghazi001 and 2FA confirmed. Actual package ownership awaits approved first publication; publication remains disabled.                        |
-| 9 — Publication       | In Progress | First-release identity, publisher and scope documented; authentication/name/main CI rechecked; fresh private candidate prepared; release notes and post-approval sequence ready for review.                                    | Explicit approval required for publication-guard changes, npm publication, tag and GitHub release. Actual ownership and registry installation remain unverified until publication.                                |
+| 8 — Release readiness | Complete    | Published 0.1.0 identity, ghazi001 ownership, exact 19-file archive and fresh unauthenticated consumer verified; durable receipt retained.                                                                                     | Current unreleased stability source has separate verification/release gates below; existing registry bytes never change.                                                                                          |
+| 9 — Publication       | In Progress | npm 0.1.0 and existing annotated tag verified against be996e1; installation instructions and archive integrity checked.                                                                                                        | GitHub release remains absent; npm page UI not independently verified; real developer feedback is outstanding. No further release action is authorized here.                                                      |
 
-## Architectural decisions
+## Architectural decisions (historical; current stability work recorded below)
 
 - Milestones 1–3 established the repository, parser, and pure comparison engine.
   Milestone 4 adds the working CLI, safe file reads, and reporters. Public parser
@@ -551,7 +560,7 @@ Verification (macOS Node 20.20.0/npm 10.8.2 and actual GitHub workflows):
 - The final verification record is delivered via a feature branch/PR. Main protection
   remains enabled throughout; merge requires the same complete Quality gate.
 
-## Next task
+## Next task (historical after Milestone 7)
 
 Milestone 8: verify npm name availability/ownership, TypeScript declarations and
 consumer compatibility, final metadata/archive/release notes and publishing-security
@@ -801,3 +810,370 @@ Pre-PR release verification (macOS, Node v20.20.0, npm 10.8.2):
 
 - Fresh npm advisory audit reported zero known vulnerabilities for the current
   development graph at release preparation time. This is time-sensitive evidence.
+
+## Stable v1 audit and implementation — 2026-10-26
+
+Status: **In Progress**. The owner approved necessary stability work after the
+read-only audit of clean main be996e1. Read AGENTS.md completely and isolated work on
+codex/stable-readiness. Version remains 0.1.0; no publication/staging, new tag,
+external release or public security disclosure is part of this local work.
+
+The audit confirmed cross-loader quote ambiguity could expose credential-body
+fragments as duplicate key names, excessive report growth for dense 1 MiB inputs,
+and contradictory release/support docs. Its executed baseline was 149 tests and
+100% core coverage, demonstrating that coverage alone missed the privacy defect.
+
+Completed implementation:
+
+- Keep existing unambiguous single-line syntax; quarantine later plausible quote
+  boundaries and overlapping malformed blocks. New parser/API/actual CLI privacy
+  regressions cover all quote styles, line endings and paired backslash runs.
+- Enforce per-input 2048 declaration/invalid-line records, 4096-code-unit public
+  labels and 131072-code-unit emitted metadata. Fixed RangeError or CLI
+  INPUT_LIMIT_EXCEEDED/exit 2 returns no partial report. Blank/comment/quarantined
+  body lines do not consume records. Document the compatibility effects.
+- Export JSON Schema 2020-12 through configpilot/schema.json; validate complete,
+  skipped and operational envelopes and reject unsafe structural mutations.
+  Preserve the three named runtime exports, six analysis codes and schema 1.
+- Add pinned development-only dotenv 18.0.9, Ajv 8.20.0 and a TypeScript 5.0.4 alias.
+  Runtime dependencies remain empty. Test 99 conventional reference cases,
+  intentional grammar differences and quote/backslash mutations.
+- Verify installed TypeScript 5.0.4 and 7.0.2 under strict NodeNext/Bundler with empty
+  type roots, negative fixtures and emitted ESM/CJS dynamic import. Correct the
+  default-export negative test: TS5 synthetic-default imports can compile, so assert
+  namespace shape and exact runtime exports instead of relying on that compiler rule.
+- Add a fail-closed 90% parser/analyzer line/branch coverage floor and isolated
+  resource probes, including Linux/Node 24 CI wiring. Preserve minimum-runtime
+  tests without development dependencies. The archive now contains 21 exact files.
+- Correct current release/security status and retain immutable published 0.1.0
+  identity in docs/releases/0.1.0.json. That historical 19-file archive and existing
+  tag correspond to be996e1; it does not contain current fixes. No GitHub release
+  was present at read-only verification. Never publish changed bytes as 0.1.0.
+- Run six pinned public-template evaluations, now reproducible through the manual
+  scripts/evaluate-public-templates.js and value-free corpus manifest. Cal.com,
+  Immich, Supabase, Outline, Twenty and Novu passed, with 174/6/71/87/7/8 keys.
+  Reference key agreement, deterministic API, actual CLI, unchanged hashes,
+  synthetic missing/extra and duplicate checks passed for every source. Upstream
+  code was never installed/executed; public inputs were deleted after checks.
+- Add STABILITY.md with audit IDs, mandatory gates and optional deferred features;
+  VALIDATION.md provides a consented developer-trial protocol without collecting
+  real configurations. Apply and read back immutable v* tag protection under the approved release-hardening scope.
+
+Decisions and remaining gates:
+
+- Prefer conservative suppression over exposing possible credential fragments;
+  dense inputs fail explicitly rather than yielding misleading truncated reports.
+  These compatibility effects and the new operational code are documented before
+  any release. No redundant strict flag, process.env merge, full dotenv loader,
+  automatic rewriting, dual CJS build or advanced integrations were introduced.
+- Published 0.1.0 remains unchanged. New code requires a reviewed unused version
+  and exact artifact approval. No standing publication permission is inferred.
+- Actual developer feedback is still absent. Complete 3–5 trials and resolve
+  material findings before declaring stable v1.0.0.
+- Current-source hosted Windows/Linux/macOS CI is pending; historical green CI does
+  not verify these changes. SECURITY.md prohibits vulnerability details/reproductions
+  in public PRs/logs. Keep the security patch local pending coordinated public
+  delivery approval or an appropriate private review/CI route. No public message
+  or vulnerability report is sent on the owner's behalf.
+
+Verification is recorded below as final checks complete; do not infer hosted or
+real-user success from local tests or public-template sampling.
+
+Final local verification for stability implementation:
+
+- Clean offline lockfile installation with scripts disabled passed. `npm run check`
+  on Node 20.20.0 passed: **161 runtime tests + 6 independent contract tests**, zero
+  failures/skips, lint zero warnings/errors, both installed compiler checks and
+  formatting clean. The six-project manual evaluation passed separately.
+- `npm run test:coverage` passed: parser/analyzer **100% lines/branches/functions**;
+  every shipped runtime module has 100% lines/functions. Reader remains 96.77%
+  branches locally. The new 90% line/branch gate fails on missing/malformed metrics.
+- Downloaded isolated official macOS ARM64 Node 20.0.0, 22.13.0, 24.22.1 and 26.12.1
+  binaries and verified their archives against official SHA-256 manifests. Node
+  20.0.0 passed all 161 runtime tests. Full check, coverage and five resource probes
+  passed on 22.13.0/24.22.1/26.12.1. After adding the last mutation test, the expanded
+  six-contract suite separately passed on each of those three runtimes.
+- Initial cross-version coverage enforcement failed because newer Node prints a
+  directory tree instead of flat paths. Replaced text scraping with structured
+  test:coverage events and a compact reporter, kept a human TAP reporter, added
+  rejection/reporting tests and reran successfully on every tested version.
+- Resource probes stayed below 5 MiB JSON/256 MiB RSS. Highest measured per-process
+  RSS: Node 22.13.0 **110.23 MiB**, Node 24.22.1 **165.84 MiB**, Node 26.12.1
+  **179.45 MiB**; largest probe output **1,854,703 bytes**. Dense 1 MiB declarations
+  now fail safely. These are isolated local measurements, not all-platform guarantees.
+- Actual checkout archive/offline installation tests passed: exactly **21 files**,
+  executable shim, installed byte equality, schema resolution, parser privacy fix,
+  safe resource errors, API imports, documentation links and synthetic-secret
+  exclusion. Standalone dry-run also passed (31,453 packed / 106,392 unpacked bytes
+  at that check); final candidate hashes are recorded after committed preparation.
+- npm 10 advisory audit failed through a retired quick endpoint with the alias
+  dependency graph. Retried using isolated npm **11.21.1**; it succeeded with
+  **zero known vulnerabilities**. No global npm change or runtime dependency added.
+- SECURITY.md, release receipts, version metadata and docs were reviewed together.
+  No configuration contents were uploaded, and the analyzer/CLI made no network
+  requests or project-code execution during analysis. Real public examples were downloaded with GET only; only identity,
+  digests and counts were logged. All configuration fixtures are synthetic.
+- Hosted CI for this new branch and real developer trials remain unverified and
+  are not replaced by the local runtime matrix. Public security delivery and a
+  new-version release still need appropriate owner coordination/approval.
+
+- Applied and read back active tag ruleset **25863373 / Immutable release tags**:
+  refs/tags/v* updates/deletions are blocked, bypass actors empty, new creation
+  remains available for separately approved releases. Existing tags were preserved;
+  no tag/release was created and no destructive test was run.
+
+### Committed validation candidate and owner disclosure decision
+
+- Implementation committed locally as **83ba72694aa6a79fe9911bb1e305c6733ba1af5a**.
+  Clean committed preparation passed with the unchanged offline/scripts-disabled
+  helper. Candidate directory: /private/tmp/configpilot-stability-validation-83ba726.
+- Candidate SHA-256: **454b38deb525c5e28b8ceb141420d1bbf5dffa07c18f81749b3d9e67de0bc9cc**.
+  npm integrity: sha512-Vg9GeA9GRBGKZU33tJKdDLeWUHJ6JhWidggEVjbDCH+aPpd4Fnpx+8DhWRD+tHxiLAMh9Wb9Yj3juKryvFlKTw==.
+  Independently checked all 21 regular tar members, exact allowlist, byte equality
+  with source, executable/LF CLI and manifest commit/hash/integrity. Fresh offline
+  consumer passed imports, strict NodeNext/Bundler checks, emitted ESM/CJS dynamic
+  import, installed CLI help/version/0/1/2 statuses, new quote privacy regression,
+  INPUT_LIMIT_EXCEEDED and input integrity. Consumer files were removed afterward.
+- This is a **validation-only archive with existing version text 0.1.0**, not a new
+  release candidate authorized for publication. Its bytes differ from the public
+  archive and must never be published under that existing name/version. Final release
+  needs an unused version and fresh exact artifact approval after remaining gates.
+- Asked for a concrete disclosure decision only after the fix and validation archive
+  were reviewable. The owner explicitly selected **Keep private for coordinated
+  review**. Do not push this branch, create a public PR, upload it to a public artifact
+  or run public hosted CI. No public disclosure or publication permission is inferred.
+- Implementation/validation docs remain available locally for private owner review.
+  A private cross-platform CI/review route and real developer feedback remain open;
+  stable v1.0.0 is not declared complete. The follow-up commit records evidence only
+  and changes no shipped candidate bytes.
+
+### 2026-10-26 — Continued stable-readiness work (private)
+
+The owner requested continued package improvement until it is mature enough for
+stable v1.0.0. The earlier keep-private decision remains in force. This is an
+additional stability milestone; version remains 0.1.0 and publication is deferred.
+
+Completed work:
+
+- **CP-012 / P0 / parser privacy:** synthetic differential probes found 33 initial
+  whitespace/quote combinations where dotenv recognized a credential body but the
+  parser retained body fragments as declarations/duplicate names, even when analysis
+  ultimately skipped comparison. Two focused regression tests failed before the fix.
+  Reject nonportable whitespace immediately before quoted values with the existing
+  INVALID_DECLARATION code and reuse conservative body quarantine. Single-line
+  occurrences are also rejected; unquoted opaque Unicode and supported spaces/tabs
+  keep their behavior. No values were real and no public report was sent.
+- Add API, both-role terminal/JSON CLI, unchanged-byte and installed archive tests.
+  Expand the independent corpus by 2,835 cases across all 21 ECMAScript whitespace
+  characters outside supported space/tab/CR/LF, three delimiters/endings, headers and
+  closing-line variations. Default/fast pinned dotenv each recognize 2,268 bodies;
+  the running Node util.parseEnv loader is an additional independent oracle. Every
+  recognized body must stay out of parser/analyzer metadata; reports validate against
+  the schema. Grammar compatibility is not expanded or overstated.
+- Add dependency-free `candidate:verify` for a reviewed local source/archive pair:
+  manifest/digests/committed bytes, offline scripts-disabled installation, exact
+  installed file list/byte equality, public imports/schema, platform shim and actual
+  clean/mismatch/skipped/operational CLI workflows. It emits a value-free identity/OS
+  receipt, suppresses native subprocess errors and removes disposable consumers/cache.
+  The archive/manifest and checkout are not modified. TypeScript/full matrix checks
+  remain separate; this command neither publishes nor authorizes publication.
+- **CP-013 / P1 / release correctness:** a synthetic local index with assume-unchanged
+  hid changed shipped bytes from git status, allowing preparation to claim an
+  inaccurate source commit. The new regression failed before the fix. Preparation
+  and acceptance now compare committed Git blobs directly. Wrong digests/commits,
+  unsafe manifest paths, changed allowlists, hidden source edits and rehashed changed
+  archive bytes are rejected before installed code execution. This is release
+  identity hardening; it is not an application runtime exploit or publishing bypass.
+- Wire offline acceptance before artifact upload in the preparation-only workflow;
+  include the value-free receipt. No workflow was dispatched or publicly uploaded.
+- Update parser/compatibility notes, changelog, testing, release, trial and stability
+  docs. Re-evaluate all six pinned public templates successfully after the fix.
+
+Verification and replacement candidate identity are recorded below after final
+checks. Current-source Linux/Windows execution and consenting human trials remain
+outstanding. Local Docker is installed but its daemon is unavailable; no Linux
+success is inferred. No person was contacted and no external review is fabricated.
+
+Final verification for this continued stability milestone:
+
+- Offline lockfile installation with lifecycle scripts disabled passed. Full
+  `npm run check` passed on local macOS ARM64 with Node **20.20.0, 22.13.0,
+  24.22.1 and 26.12.1**: **165 runtime tests + 7 contract tests**, zero failures
+  or skips, lint clean, TypeScript 5.0.4/7.0.2 installed consumers and formatting
+  passed. After the last source-binding change, reran the full checks on all four.
+- Minimum Node **20.0.0** passed the final **165** runtime tests, including private
+  acceptance and hidden-index source-binding regressions. Contract checks run only
+  on development-supported runtimes with their development dependencies installed.
+- Final `npm run test:coverage` passed on Node 20.20.0: parser and analyzer each
+  **100% lines/branches/functions**. All **165** tests passed. Coverage remains a
+  regression signal alongside assertions, not proof of complete grammar support.
+- Five isolated resource probes passed on Node 20.20.0 after the parser change:
+  largest report **1,854,703 bytes**, highest peak RSS **103.63 MiB**; all below
+  the 5 MiB/256 MiB budgets. No broader benchmark or all-platform claim is made.
+- Six pinned public templates reran successfully on the current parser: identical
+  hashes/key sets, reference agreement, clean CLI exit 0 and synthetic drift/duplicate
+  expectations. GET requests downloaded public examples only; no local code,
+  private input or reproduction was uploaded. Temporary public files were removed.
+- `git diff --check` passed. The package allowlist remains **21 files**, zero
+  runtime dependencies and ESM-only API; no package version, tag or release changed.
+  The new verifier/scripts/tests do not ship in the npm archive. Workflow changes
+  are local only and retain read-only permissions with no publication command.
+
+Local engineering changes are complete for this milestone. Prepare and verify the
+committed replacement archive next, then retain its identity below. Stable v1 still
+requires current-source native Linux/Windows checks, real developer trials and final
+security/compatibility/API/owner approval; the private-delivery decision is preserved.
+
+### Replacement archive and private Linux verification
+
+- Implementation committed as **6e827ae7af1cfa01c008084133dff531351adcc5**.
+  Prepared the clean tracked source with the strengthened helper and inspected
+  the exact **21-file** archive. Validation-only directory:
+  /private/tmp/configpilot-stability-validation-6e827ae.
+  SHA-256: **8cdcc32c6d8c33bd48d7cef05e042884f94601f90b20a7c94a5bdc97b98c8483**.
+  npm integrity: sha512-hhznssYYU9gdb+mV5uKbVpjXSvwWnpXn5hSj3kjFZ1VhHH2YrJ/GrIxwSV0gQPGg0tR5LdysY+XWWQTLz1aKww==.
+- Reusable `candidate:verify` passed against those exact bytes on macOS ARM64
+  **Node 20.0.0, 20.20.0 and 24.22.1**. Value-free receipts remain beside the
+  manifest/archive. They cover committed source identity, digest verification,
+  offline installation, byte equality, ESM/dynamic-CJS imports/schema, executable
+  shim, actual CLI help/version/0/1/2, privacy/resource failures and unchanged inputs.
+- A one-off expanded audit on Node 20.20.0 examined every BMP code-unit prefix
+  across three quoted styles: **196,608 cases**, **75** loader-recognized body
+  cases, **zero** fragments retained in parser metadata. References were default
+  and fast pinned dotenv plus util.parseEnv. This supplements the permanent 2,835
+  whitespace corpus; it is not exhaustive grammar/Unicode compatibility evidence.
+- Recovered a private Linux route by starting the installed Docker Desktop engine.
+  Downloaded the official Node **24.22.1-bookworm** image, pinned for execution as
+  **node@sha256:6449e19d8184d84062525b6a7524def03146c2cb04a7f08b076680d0e8e4240a**.
+  Used only a read-only local Git bundle and read-only candidate directory; the
+  owner's environment files, npm credentials and Docker socket were not mounted.
+  Disposable source/cache were kept in container temporary filesystems, running
+  as uid 501 with dropped capabilities, no-new-privileges and a read-only root.
+- Registry access downloaded locked development dependencies with lifecycle scripts
+  disabled (**87 packages**, npm **11.19.1**). Then disconnected container networking
+  and verified its networks were `{}` before and after executing checks.
+- **Linux ARM64 / Node 24.22.1:** full `npm run check` passed **165 runtime + 7
+  contract tests**, **zero failures/skips**, clean lint/format and both installed
+  TypeScript consumers. Coverage reran all 165 tests successfully; parser/analyzer
+  remained **100% lines/branches/functions**. Five resource probes passed, highest
+  peak RSS **165.16 MiB**, largest JSON **1,854,703 bytes**, below the documented budgets.
+- The **same macOS-prepared archive** passed offline Linux `candidate:verify`, with
+  matching source/hash/file bytes and installed shim/API/CLI behavior. Its receipt
+  is verification-linux-node24.json beside the archive. Source Git status remained
+  clean. Removed the task's container and temporary source Git bundle/tar afterward;
+  private candidate/receipts and value-free logs remain locally for review.
+- This closes one real Linux compatibility gap without public code/CI upload.
+  **Windows and remaining Linux matrix entries, consenting developer trials and
+  final owner review remain open.** No external person was contacted. No public PR,
+  push, tag, release or npm publication occurred. Version stays **0.1.0**; this changed
+  archive must never be published under that already-existing version.
+- The follow-up documentation records evidence only and changes no shipped archive
+  bytes. The older 83ba726 validation archive lacks CP-012 and is superseded for
+  current review; public 0.1.0 remains the distinct historical npm release.
+
+### Remaining private Linux runtime matrix — 2026-10-26
+
+Status: local Linux runtime matrix **Complete**; stable release validation remains
+**In Progress**. No source behavior or shipped bytes changed in this session.
+
+- Reused the pinned official Node 24 Linux ARM64 image recorded above. Downloaded
+  official Linux ARM64 Node **20.0.0, 20.19.0, 22.13.0 and 26.12.1** archives and
+  verified each against its official SHA-256 listing before extraction.
+- Created a disposable nonroot container from a read-only source Git bundle and
+  read-only candidate mount. Installed 87 locked development packages with scripts
+  disabled, then disconnected networking. Networks were `{}` throughout testing
+  and at final inspection; no private source, reports or credentials were uploaded.
+- Full `npm run check` passed on **20.19.0, 22.13.0 and 26.12.1**: each ran
+  **165 runtime + 7 contract tests**, zero failures/skips, lint and formatting,
+  installed TypeScript 5.0.4/7.0.2 NodeNext/Bundler positive/negative checks and
+  emitted ESM/CommonJS dynamic import checks.
+- `npm run test:coverage` passed separately on all three runtimes: **165 tests**
+  each, parser/analyzer **100% lines, branches and functions**. Minimum Node
+  **20.0.0** passed all **165 runtime tests**, zero failures/skips; modern
+  development tools were not run under that unsupported development runtime.
+- The same 21-file archive from implementation commit **6e827ae** passed offline
+  `candidate:verify` on all four added runtimes. Source/hash/installed bytes matched;
+  imports, schema, npm shim, CLI exits, privacy/resource failures and unchanged
+  input checks passed. Receipts remain in the candidate directory as
+  `verification-linux-<version>.json`; quality/coverage logs are local under
+  `/private/tmp/configpilot-linux-{check,coverage}-<version>.log`.
+- The private source checkout stayed clean. Removed only this task's container
+  and temporary Git bundle after retaining receipts. Earlier Linux Node 24 resource
+  results remain applicable; no new performance measurement is claimed.
+- Read-only Parallels inventory returned no registered VMs. Thus no local Windows
+  run is available or claimed. Linux/macOS evidence is ARM64 and does not establish
+  hosted x64 results. Windows/remaining hosted-platform evidence, 3–5 consented
+  developer trials, final security/API review and exact-release owner approval
+  remain open. No external participant was contacted.
+- No push, public CI, release, tag, npm publication or version change occurred.
+  The unchanged validation archive still says 0.1.0 and must never be published
+  under that already-existing version.
+
+### Hosted compatibility, security/API review and trial kit — 2026-10-26
+
+Status: hosted compatibility **Complete**; maintainer security/API review **Complete**
+for the current implementation; external feedback **Pending — Requires Human Participation**.
+
+- Owner authorized GitHub-hosted windows-latest testing and will distribute the trial
+  package after participants consent. The latest instruction explicitly withholds
+  v1.0.0 publication, release tags and public releases until separate approval.
+- Created and verified private owner repository `ghazy001/configpilot-private-validation`,
+  then pushed only reviewed revision **f3c99164f9a3479d90908a00353a545d92451475** to
+  its main branch. Public upstream was not pushed; no public PR/release was created.
+- Private Quality run **40305989425** passed all **12 OS/runtime jobs**, the minimum
+  Node **20.0.0** runtime job and final **Quality gate**. Windows used Node
+  **20.19.0 / 22.13.0 / 24.22.1 / 26.12.1**; Ubuntu/macOS 24.x resolved to
+  **24.21.0**. Other development matrix versions matched their requested versions.
+- Each Windows runtime ran **165 tests: 163 passed, 2 documented POSIX-only skips,
+  zero failures**. Skips were permission behavior and FIFO/device checks. Each ran
+  **7 contract tests**, zero failures/skips, lint/format, installed TypeScript
+  5.0.4/7.0.2 checks and installed package/shim tests. Coverage independently passed
+  with parser/analyzer **100% lines/branches/functions** on all four Windows jobs.
+  Do not report those Windows runs as zero-skip runs.
+- Hosted Ubuntu Node 24.21.0 resource probes all passed: max RSS **168.61 MiB**,
+  largest JSON **1,854,703 bytes**. Downloaded/inspected the private log archive
+  `/private/tmp/configpilot-private-matrix-40305989425.zip`; job metadata is retained
+  locally. Matrix results apply to the reviewed source, not a future version bump.
+- Completed a direct maintainer review of runtime modules, types/schema, diagnostic
+  contracts and preparation/verification controls; no additional confirmed blocker
+  found. Scope, evidence, residual boundaries and proposed freeze are documented in
+  `docs/SECURITY_API_REVIEW.md`. This is not an independent security certification.
+- Fresh macOS Node20.20 quality check passed **165 runtime + 7 contract tests**, no
+  failures/skips, lint/type/format. npm **11.21.1** advisory audit succeeded with
+  **zero known vulnerabilities** across the locked graph. Exact 21-file candidate
+  acceptance passed again; published-version text and shipped bytes remain unchanged.
+- Prepared `docs/DEVELOPER_TRIAL.md`, a structured feedback form, installation
+  instructions and three synthetic frontend/service/CI scenarios. The local kit is
+  `/private/tmp/configpilot-developer-trial-6e827ae.zip` (12 files), SHA-256
+  **105ebed69087395ce50df5e251a392c4eeb277b0b35145adbe8e12a5b86369b7**.
+  Zip integrity/contents passed inspection; all three scenario expectations passed
+  actual CLI checks. The kit includes the unchanged reviewed candidate and per-file
+  checksums, not real configuration. These automated checks are not human trials.
+- Added an optional manual Windows runbook. Its commands are documented, not falsely
+  claimed executed; hosted CI provides the actual Windows evidence above.
+- Remaining: owner-arranged human trials and feedback resolution, final API freeze,
+  approved unused version and final archive, then explicit publication/disclosure
+  approval. No participant was contacted, no trial outcome invented, no package
+  version changed and no package/tag/release published.
+- Final documentation formatting and `git diff --check` passed. The local commit
+  attempt was not executed: automatic approval review could not complete because
+  its usage limit was reached, not because it determined the action unsafe.
+  The seven documentation files remain saved and uncommitted; no approval bypass
+  was attempted. The owner reiterated that engineering should continue toward a
+  mature v1.0.0 and publication will be a later joint decision.
+
+### Owner-approved v1.0.0 preparation — 2026-10-26
+
+- Owner explicitly requested: “okay let's realse the new version v1.0.0”. This
+  authorizes the v1.0.0 release/public delivery after verification; prior hold on
+  publication is superseded for this version. No future publication is authorized.
+- External developer feedback remains **Pending — Requires Human Participation**,
+  accepted as a post-release activity, not a fabricated completed requirement.
+- Prepared version 1.0.0 in package/lock metadata, stable API/CLI documentation,
+  migration notes and support policy. Simplified normal installation commands:
+  global CLI, project development dependency, or ordinary runtime dependency.
+  `--ignore-scripts`, `--no-audit`, `--no-fund` remain optional test controls, not
+  package requirements. The package has no install scripts or runtime dependencies.
+- Existing npm authentication identifies ghazi001 and registry metadata lists that
+  maintainer; 1.0.0 was absent at preflight. Final verification/publication receipts
+  follow. No successful publication is inferred from authorization or metadata edits.

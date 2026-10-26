@@ -11,7 +11,7 @@ manual dispatch, without path filters. Linux, Windows and macOS each run Node
 20.19.0, 22.13.0, 24.x and 26.x; Linux additionally tests the Node 20.0.0 minimum
 without incompatible development tooling. Normal jobs run clean installation,
 lint, runtime tests, installed TypeScript consumer checks, formatting and instrumented
-coverage. Tests inspect the actual archive,
+coverage. Linux/Node 24 additionally enforces isolated resource budgets. Tests inspect the actual archive,
 install it offline, and execute its public API and installed CLI.
 
 The final **Quality gate** always runs after the matrix and minimum-runtime jobs.
@@ -88,3 +88,8 @@ Branch protection should be changed through an owner-reviewed maintenance decisi
 not temporarily disabled to push around a failing check. Use a feature branch and
 pull request after protection is enabled. Candidate workflow verification uses the
 preparation-only mode; agents must not approve owner-review jobs on the owner's behalf.
+
+Release tags have a separate active ruleset, **25863373 / Immutable release tags**,
+blocking updates and deletions for refs/tags/v* with no bypass actors. The policy was
+read back after application during stability work. New tag creation still requires
+explicit owner release authorization; the protection does not constitute that approval.

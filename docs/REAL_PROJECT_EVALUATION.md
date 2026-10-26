@@ -64,3 +64,40 @@ runtime/platform matrix is separate evidence. Keep tests deterministic and offli
 these upstream downloads are a manual release review, not a network dependency
 of package tests or analysis. Wider sampling and real maintainer feedback remain
 necessary before making broad compatibility or product-adoption claims.
+
+## Stability expansion — 2026-10-26
+
+The current source was evaluated against six public templates with
+`node scripts/evaluate-public-templates.js`. This manual command needs development
+dependencies and network access; it is never invoked by the runtime or offline CI.
+The [corpus manifest](public-template-corpus.json) pins every repository, source SHA,
+path and content SHA-256. No raw template or upstream source is committed.
+
+| Project  | Path                                | Bytes | Unique keys | Findings | CLI self-check |
+| -------- | ----------------------------------- | ----: | ----------: | -------: | -------------: |
+| Cal.com  | .env.example                        | 18061 |         174 |        0 |              0 |
+| Immich   | docker/example.env                  |   979 |           6 |        0 |              0 |
+| Supabase | docker/.env.example                 | 12296 |          71 |        0 |              0 |
+| Outline  | .env.sample                         | 13438 |          87 |        0 |              0 |
+| Twenty   | packages/twenty-server/.env.example |  6537 |           7 |        0 |              0 |
+| Novu     | apps/human-dashboard/.env.example   |  1885 |           8 |        0 |              0 |
+
+Every accepted key set matched pinned dotenv 18.0.9. Repeated API reports matched;
+the actual CLI ran from a disposable directory; public input digests remained
+unchanged. Each synthetic key-set reconstruction was clean; removing one key and
+adding one yielded exactly one missing/undocumented warning, and adding one duplicate
+yielded exactly one duplicate warning. Synthetic values stayed out of reports.
+Downloads and temporary public input copies were deleted; upstream code was never
+installed or executed. Only counts, identities and digests were logged.
+
+The initially guessed Novu apps/api/.env.example path returned 404. Repository tree
+inspection found the dashboard example above; the failed lookup is not counted as
+passing. Empty/different/commented optional keys and loader layering remain outside
+these checks. Six samples are compatibility evidence, not adoption evidence,
+endorsement, deployment-health validation or full dotenv compatibility. See the
+[developer trial protocol](VALIDATION.md) for the remaining feedback gate.
+
+Rechecked all six pinned sources on 2026-10-26 after the whitespace-recovery fix:
+same 174/6/71/87/7/8 keys, zero findings, reference-key agreement, CLI exit 0,
+unchanged bytes, deterministic reports and synthetic drift/duplicate assertions.
+This rerun does not replace the outstanding human developer trials.

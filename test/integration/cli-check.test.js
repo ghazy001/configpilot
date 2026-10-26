@@ -158,6 +158,43 @@ test("malformed and multiline input produce exit 1 and skipped analysis in both 
   }
 });
 
+test("nonportable whitespace cannot expose quoted bodies through the actual CLI", (t) => {
+  const marker = "SYNTHETIC_CLI_WHITESPACE_BODY";
+  const cwd = fixture(t);
+  for (const whitespace of ["\v", "\u00a0", "\ufeff"]) {
+    for (const quote of ['"', "'", "`"]) {
+      const source = [
+        `KEY=${whitespace}${quote}first`,
+        `${marker}=x`,
+        `${marker}=y`,
+        quote,
+        "AFTER=x",
+      ].join("\r\n");
+      for (const role of ["template", "environment"]) {
+        const template = role === "template" ? source : "AFTER=x";
+        const environment = role === "environment" ? source : "AFTER=x";
+        writeFileSync(join(cwd, ".env.example"), template);
+        writeFileSync(join(cwd, ".env"), environment);
+        for (const flags of [[], ["--json"]]) {
+          const result = run(cwd, ["check", ...flags]);
+          assert.equal(result.status, 1);
+          assert.equal(result.stderr, "");
+          assert.ok(!result.stdout.includes(marker));
+          if (flags.length) {
+            const report = JSON.parse(result.stdout);
+            assert.equal(report.comparison, "skipped");
+            assert.equal(report.summary.warnings, 0);
+            assert.equal(report.issues[0].code, "INVALID_DECLARATION");
+            assert.equal(report.issues[0].source, role);
+          } else assert.match(result.stdout, /Comparison: skipped/);
+        }
+        assert.equal(readFileSync(join(cwd, ".env.example"), "utf8"), template);
+        assert.equal(readFileSync(join(cwd, ".env"), "utf8"), environment);
+      }
+    }
+  }
+});
+
 test("configuration and project instructions are never executed and source bytes stay unchanged", (t) => {
   const cwd = fixture(t);
   const marker = join(cwd, "unexpected-execution");
@@ -323,4 +360,44 @@ test("a closed output pipe does not produce a stack trace", async (t) => {
   const [status] = await closed;
   assert.equal(status, 0);
   assert.equal(stderr, "");
+});
+
+test("ambiguous quoted credentials never appear in actual CLI output", (t) => {
+  for (const quote of ["'", '"', "`"]) {
+    for (const ending of ["\n", "\r\n", "\r"]) {
+      const environment = [
+        `KEY=${quote}prefix\\\\${quote}`,
+        "SYNTHETIC_CREDENTIAL_FRAGMENT=x",
+        "SYNTHETIC_CREDENTIAL_FRAGMENT=y",
+        quote,
+        "AFTER=x",
+      ].join(ending);
+      const cwd = fixture(t, "AFTER=", environment);
+      for (const flags of [[], ["--json"]]) {
+        const result = run(cwd, ["check", ...flags]);
+        assert.equal(result.status, 1);
+        assert.equal(result.stderr, "");
+        assert.ok(!result.stdout.includes("SYNTHETIC_CREDENTIAL_FRAGMENT"));
+        if (flags.length)
+          assert.equal(JSON.parse(result.stdout).comparison, "skipped");
+      }
+    }
+  }
+});
+
+test("dense input produces a controlled limit error without a partial report", (t) => {
+  const cwd = fixture(t, "A=", "A=SYNTHETIC_LIMIT_SECRET\n".repeat(2049));
+  for (const flags of [[], ["--json"]]) {
+    const result = run(cwd, ["check", ...flags]);
+    assert.equal(result.status, 2);
+    assert.ok(
+      !(result.stdout + result.stderr).includes("SYNTHETIC_LIMIT_SECRET"),
+    );
+    if (flags.length) {
+      assert.equal(result.stderr, "");
+      const report = JSON.parse(result.stdout);
+      assert.equal(report.error.code, "INPUT_LIMIT_EXCEEDED");
+      assert.ok(!report.summary);
+    } else assert.match(result.stderr, /INPUT_LIMIT_EXCEEDED/);
+  }
 });

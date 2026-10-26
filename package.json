@@ -1,6 +1,6 @@
 {
   "name": "configpilot",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
     "access": "public",
@@ -26,7 +26,8 @@
     ".": {
       "types": "./src/index.d.ts",
       "default": "./src/index.js"
-    }
+    },
+    "./schema.json": "./schemas/report.schema.json"
   },
   "bin": {
     "configpilot": "./bin/configpilot.js"
@@ -47,18 +48,23 @@
     "CHANGELOG.md",
     "src/reporters/json.js",
     "src/reporters/terminal.js",
-    "src/utils/read-config-file.js"
+    "src/utils/read-config-file.js",
+    "src/utils/input-limits.js",
+    "schemas/report.schema.json"
   ],
   "scripts": {
     "test": "node --test",
-    "test:coverage": "node --test --experimental-test-coverage",
+    "test:coverage": "node scripts/verify-coverage.js",
     "test:types": "node scripts/verify-types.js",
     "release:prepare": "node scripts/prepare-release.js",
+    "candidate:verify": "node scripts/verify-candidate.js",
     "lint": "eslint . --max-warnings 0",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "check": "npm run lint && npm test && npm run test:types && npm run format:check",
-    "pack:dry-run": "npm pack --dry-run --ignore-scripts"
+    "check": "npm run lint && npm test && npm run test:contracts && npm run test:types && npm run format:check",
+    "pack:dry-run": "npm pack --dry-run --ignore-scripts",
+    "test:contracts": "node --test scripts/verify-contracts.js",
+    "test:resources": "node scripts/measure-resources.js"
   },
   "keywords": [
     "dotenv",
@@ -69,8 +75,11 @@
   ],
   "devDependencies": {
     "@eslint/js": "10.0.1",
+    "ajv": "8.20.0",
+    "dotenv": "18.0.9",
     "eslint": "10.13.0",
     "prettier": "3.9.10",
-    "typescript": "7.0.2"
+    "typescript": "7.0.2",
+    "typescript-minimum": "npm:typescript@5.0.4"
   }
 }

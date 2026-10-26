@@ -37,6 +37,8 @@ const expectedFiles = [
   "src/reporters/json.js",
   "src/reporters/terminal.js",
   "src/utils/read-config-file.js",
+  "src/utils/input-limits.js",
+  "schemas/report.schema.json",
 ].sort();
 
 function execute(script, args, cwd, env = {}, expectedStatus = 0) {
@@ -94,6 +96,7 @@ test("tarball excludes environment files and works in an offline consumer", (t) 
     "src/utils/.env",
     "bin/.env.local",
     "unintended.txt",
+    "schemas/.env",
   ]) {
     writeFileSync(join(staging, file), sentinel);
   }
@@ -217,6 +220,7 @@ test("tarball excludes environment files and works in an offline consumer", (t) 
   assert.equal(metadata.types, "./src/index.d.ts");
   assert.deepEqual(metadata.exports, {
     ".": { types: "./src/index.d.ts", default: "./src/index.js" },
+    "./schema.json": "./schemas/report.schema.json",
   });
   assert.equal(metadata.engines.node, ">=20");
   assert.equal(Object.keys(metadata.dependencies ?? {}).length, 0);
@@ -244,6 +248,10 @@ test("tarball excludes environment files and works in an offline consumer", (t) 
     smoke,
     `import assert from "node:assert/strict";
 import { analyzeConfig, parseDotenv, ISSUE_CODES } from "configpilot";
+import {createRequire} from "node:module";
+import {readFileSync} from "node:fs";
+const schema=JSON.parse(readFileSync(createRequire(import.meta.url).resolve("configpilot/schema.json"),"utf8"));
+assert.ok(schema.$defs.complete);
 const result = parseDotenv("TOKEN=SYNTHETIC_CONSUMER_SECRET\\nTOKEN=other", { file: ".env" });
 assert.deepEqual(result.declarations.map(({ key }) => key), ["TOKEN", "TOKEN"]);
 assert.equal(result.issues[0].code, "DUPLICATE_KEY");
@@ -259,6 +267,17 @@ assert.deepEqual(report.issues.map(({ code }) => code), [ISSUE_CODES.MISSING_KEY
 assert.equal(report.summary.sharedKeys, 1);
 assert.equal(report.summary.warnings, 2);
 assert.ok(!JSON.stringify(report).includes("SYNTHETIC_CONSUMER_SECRET"));
+const credential = ['KEY="prefix' + String.fromCharCode(92).repeat(2) + '"',
+  'SYNTHETIC_INSTALLED_FRAGMENT=x', 'SYNTHETIC_INSTALLED_FRAGMENT=y', '"'].join("\\n");
+const hardened = analyzeConfig({template: "KEY=", environment: credential});
+assert.equal(hardened.comparison, "skipped");
+assert.ok(!JSON.stringify(hardened).includes("SYNTHETIC_INSTALLED_FRAGMENT"));
+const whitespaceCredential = 'KEY=\\u00a0"first\\nSYNTHETIC_INSTALLED_WHITESPACE=x\\nSYNTHETIC_INSTALLED_WHITESPACE=y\\n"\\nAFTER=x';
+const quarantined = analyzeConfig({template: "AFTER=", environment: whitespaceCredential});
+assert.equal(quarantined.comparison, "skipped");
+assert.equal(quarantined.issues[0].code, "INVALID_DECLARATION");
+assert.ok(!JSON.stringify(quarantined).includes("SYNTHETIC_INSTALLED_WHITESPACE"));
+assert.throws(() => parseDotenv("A=x\\n".repeat(2049)), RangeError);
 `,
   );
   assert.equal(execute(smoke, [], consumer), "");
@@ -304,4 +323,11 @@ assert.ok(!JSON.stringify(report).includes("SYNTHETIC_CONSUMER_SECRET"));
   const output = execute(installedCli, ["check", "--json"], consumer, {}, 1);
   assert.equal(JSON.parse(output).summary.warnings, 2);
   assert.ok(!output.includes("SYNTHETIC_INSTALLED_SECRET"));
+  writeFileSync(
+    join(consumer, ".env"),
+    "PORT=SYNTHETIC_LIMIT_SECRET\n".repeat(2049),
+  );
+  const limited = execute(installedCli, ["check", "--json"], consumer, {}, 2);
+  assert.equal(JSON.parse(limited).error.code, "INPUT_LIMIT_EXCEEDED");
+  assert.ok(!limited.includes("SYNTHETIC_LIMIT_SECRET"));
 });

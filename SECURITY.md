@@ -21,11 +21,16 @@ does not currently promise a response deadline, bounty, or dedicated security te
 
 ## Supported code
 
-There are no published releases from this project yet. The current development
-line on `main` is the review target; package metadata `0.1.0` is not a released
-version or a promise of long-term support. A version support policy must accompany
-the first approved release. Runtime compatibility is Node.js 20+ and ESM, with
-tested combinations documented in the repository's
+Security reports are accepted for v1.0.0 and current main. Upgrade from 0.1.0
+for the privacy and resource-handling fixes described in the changelog. The newest
+stable minor line receives security fixes; older lines may require upgrading.
+Compatibility/security changes are recorded rather than replacing a published
+archive. We do not promise a response deadline or long-term pre-1.0 support.
+
+Runtime compatibility remains Node.js 20+ and ESM. For production, use a maintained
+Node release; Node 20 is upstream EOL. The project keeps its compatibility floor
+until an explicitly reviewed decision changes it. See the
+[official schedule](https://nodejs.org/en/about/previous-releases) and repository
 [testing guide](https://github.com/ghazy001/configpilot/blob/main/docs/TESTING.md).
 
 ## Data handling
@@ -45,7 +50,9 @@ ConfigPilot is designed to analyze declarations without retaining assignment val
   JSON preserves the original label after parsing.
 - Inputs are bounded: the CLI permits 1 MiB per regular UTF-8 file; the parser API
   permits 1,048,576 UTF-16 code units per source. Unsupported quoted multiline
-  blocks are quarantined, and parser errors suppress key-set differences.
+  blocks and ambiguous quote boundaries are conservatively quarantined, and parser
+  errors suppress key-set differences. Record and aggregate metadata budgets prevent
+  unusually dense inputs from generating excessive reports.
 
 See the [CLI](docs/CLI.md), [parser](docs/PARSER.md), and [report](docs/REPORT.md)
 contracts for exact behavior and error handling. Regression tests exercise synthetic
@@ -81,7 +88,8 @@ send the credential to this project as evidence.
 The runtime has no dependencies. Development dependencies are lockfile-pinned.
 An exact package allowlist and archive/consumer tests prevent unintended files from
 being silently shipped; environment files, tests, and source-checkout examples are
-excluded. The package stays `private` pending readiness review and explicit owner
-approval. No release tag, npm publication, or external release is authorized by
-this security policy. Registry name ownership and publishing credentials still
-require verification before release.
+excluded. The package has explicit public-registry metadata. Candidate preparation
+never publishes. Publication, new tags and external releases always need explicit
+owner approval for an exact new version/artifact. A published name/version must never
+be reused for changed bytes. Manual owner-controlled 2FA publication is supported;
+trusted publishing/provenance requires a separate reviewed setup.

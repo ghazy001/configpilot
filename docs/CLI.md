@@ -1,8 +1,8 @@
 # ConfigPilot CLI
 
 Requires Node.js 20+. From the checkout, run `node bin/configpilot.js`; a local
-installation also provides the `configpilot` executable. This project has not
-published to npm yet. No command changes configuration files or executes their
+installation also provides the `configpilot` executable. Version 1.0.0 defines the
+stable CLI contract. No command changes configuration files or executes their
 contents, project scripts, or project-provided configuration modules.
 
 ```sh
@@ -146,3 +146,12 @@ Append `--json` for the same findings in report schema 1. No files are modified.
 See [troubleshooting](TROUBLESHOOTING.md) for installation, operational failures,
 parser recovery, and CI questions. Source-checkout scenarios and a runnable library
 example are in the [examples guide](https://github.com/ghazy001/configpilot/blob/main/examples/README.md).
+
+## Resource limits
+
+The [parser budgets](PARSER.md#resource-budgets) also apply to CLI input: 2,048
+recognized declarations/invalid lines, 4,096-code-unit labels and 131,072-code-unit
+aggregate key/label metadata per input. Exceeding them returns exit 2 with
+`INPUT_LIMIT_EXCEEDED`, no partial report, and no source/native error text. The JSON
+form follows the operational envelope above. These limits prevent dense small files
+from generating excessive logs or allocations; they do not validate assignment values.
