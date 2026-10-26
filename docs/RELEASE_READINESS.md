@@ -10,8 +10,12 @@ readiness record, not permission to publish, stage, tag or create an external re
 - Explicit public-registry query for `configpilot` returned **E404**: no public
   package record was available at review time. This does not reserve the name,
   prove registration eligibility or establish ownership.
-- `npm whoami --registry=https://registry.npmjs.org` returned **ENEEDAUTH**.
-  Authenticated npm identity, 2FA status and package ownership remain unverified.
+- The owner's terminal output confirms successful browser login and
+  `npm whoami --registry=https://registry.npmjs.org` returning **ghazi001**.
+  The owner explicitly confirmed **2FA enabled** on 2026-10-26. This supersedes
+  the earlier ENEEDAUTH result. The owner also rechecked the name and received E404.
+  These are owner-supplied confirmations, not an agent audit of account settings;
+  actual package ownership remains unverified until an approved first publication.
 - Name `configpilot`, version `0.1.0`, MIT license and verified GitHub repository,
   homepage and issue links remain unchanged. No owner identity/email was invented.
 - ESM entry `src/index.js`; `types` and the first export condition point to
@@ -41,8 +45,8 @@ immutable commit/workflow evidence are recorded in [PROGRESS.md](PROGRESS.md).
 
 ## Remaining owner and release gates
 
-1. Authenticate the intended npm account independently and verify 2FA. Do not
-   provide credentials to an agent. Recheck name eligibility immediately before
+1. Account authentication and owner-confirmed 2FA are recorded above. Recheck the
+   account, 2FA and name eligibility immediately before
    any approved first publication; choose another name only by owner decision.
 2. Confirm the final artifact and draft [release notes](RELEASE_NOTES_v0.1.0.md).
    Resolve the unfinished product-discovery/real-project validation risks recorded
@@ -56,5 +60,8 @@ immutable commit/workflow evidence are recorded in [PROGRESS.md](PROGRESS.md).
 5. Obtain separate authorization for tags, npm publication and GitHub release;
    verify public installation and update release documentation afterward.
 
-Milestone 8 must not be called fully complete while authenticated account access
-and the ownership path remain unresolved. Registry availability is time-sensitive.
+All executable pre-publication checks and owner account confirmations are complete.
+The roadmap's package-ownership task remains open until the name is registered
+through a separately approved first publication; logging in does not establish
+ownership. This confirmation does not authorize publication. Registry availability
+and authentication are time-sensitive.

@@ -21,7 +21,7 @@ Discovery remains unfinished and must inform later product decisions.
 | 5 — Testing           | Complete    | 139 tests; 100% local runtime line coverage; seeded invariants, isolated I/O faults, actual-checkout archive/offline installation checks; all 13 hosted runtime/platform jobs passed.                                          | Matrix samples supported runtime lines; Windows skips two POSIX-only tests. Coverage and tests do not replace real-project validation or release readiness.                                                       |
 | 6 — Documentation     | Complete    | Reworked README; contribution/security/conduct/changelog and troubleshooting guides; executable examples and scenario guide; verified local install paths, examples, packaged documentation and links.                         | Local and 13 hosted checks passed; no-install fresh-clone quick start verified. Registry ownership, declarations, release metadata and private reporting configuration remain readiness/CI work.                  |
 | 7 — CI/CD             | Complete    | Quality matrix and stable gate; weekly dependency updates; restricted SHA-pinned Actions; private reports/security fixes; owner-only candidate environment; private archive/manifest workflow and guard tests.                 | Hosted gate/matrix, candidate artifact/offline consumer, owner approval barrier and main protections verified. Publishing remains disabled; owner notification preferences and release readiness remain separate. |
-| 8 — Release readiness | In Progress | Bundled declarations and installed TypeScript consumer checks; metadata/ESM/bin review; 19-file archive checks; draft release notes and authentication plan; intended npm owner confirmed.                                     | Local checks, all 14 PR/main jobs and the downloaded 19-file candidate passed. npm account ghazi001 is not authenticated; name ownership remains unverified. Publication remains disabled.                        |
+| 8 — Release readiness | In Progress | Bundled declarations and installed TypeScript consumer checks; metadata/ESM/bin review; 19-file archive checks; draft release notes and authentication plan; intended npm owner confirmed.                                     | Local/hosted checks and the 19-file candidate passed. Owner login as ghazi001 and 2FA confirmed. Actual package ownership awaits approved first publication; publication remains disabled.                        |
 | 9 — Publication       | Not Started | None.                                                                                                                                                                                                                          | Owner approval, release checklist, npm publication, public-install verification, and GitHub release. No publication, tag, or external release authorized.                                                         |
 
 ## Architectural decisions
@@ -559,7 +559,7 @@ release tag or external release is authorized without explicit owner approval.
 
 ## Milestone 8 session — 2026-10-26
 
-Status: **In Progress — technical readiness implemented; npm identity/ownership gate open**.
+Status: **In Progress — pre-publication checks complete; package ownership pending first publication**.
 Read `AGENTS.md` completely and inspected the clean protected main checkout at
 `5123cef2a7d67ac2229d28aaa0c7b2e41444b679`. Work is isolated on
 `codex/milestone-8-readiness` and will use required PR checks.
@@ -614,9 +614,9 @@ Executed local verification (macOS, Node v20.20.0, npm 10.8.2):
 
 Outstanding and remaining risks:
 
-- Authenticate the intended npm account independently, verify account 2FA and the
-  ownership/first-publication path, and recheck name eligibility at approval time.
-  An unregistered public name cannot be claimed as owned before registration.
+- Owner authentication and 2FA confirmations are recorded below. Recheck account
+  access, 2FA and name eligibility at publication time. Actual package ownership
+  cannot be claimed before the first registration/publication.
 - Technical candidate and hosted verification are complete as recorded below. Main
   remains protected; no failed or pending mandatory check may be bypassed.
 - Milestone 0 product discovery and real-project validation remain unfinished.
@@ -655,8 +655,29 @@ Outstanding and remaining risks:
   an approved retry using a temporary npm cache. The initial sandboxed preparation
   failed; no guard was weakened. Local candidate source commit was the implementation
   commit above; final hosted evidence is bound to the merged commit.
-- The remaining Milestone 8 gate is authenticated npm account/2FA verification and
-  the owner-approved first-publication ownership path. The intended account remains
-  ghazi001; an E404 lookup cannot prove ownership of an unpublished name.
+- At candidate-verification time, account/2FA confirmation was still outstanding;
+  the subsequent owner confirmation is recorded below. An E404 lookup cannot prove
+  ownership of an unpublished name, which remains pending first publication.
 - No npm staging/publication, release tag, GitHub release, npm login, credential
   creation, trusted-publisher mutation or publishing permission was performed.
+
+### npm account confirmation — 2026-10-26
+
+- The owner performed browser login independently and supplied terminal output
+  showing successful login and `npm whoami` returning **ghazi001** on the explicit
+  public registry. This supersedes the earlier ENEEDAUTH observation.
+- The owner explicitly confirmed **2FA enabled**. This is owner-reported account
+  evidence; the agent did not inspect credentials, recovery codes or account settings.
+- The owner's repeated public lookup returned **E404** for configpilot. The account
+  and security checks are complete; an unpublished name is still not reserved or owned.
+- Updated README, readiness review and release guide to reflect this evidence.
+  The roadmap's literal ownership task remains open until a separately approved
+  first publication establishes the package. Milestone 8 therefore remains In
+  Progress solely for that ownership confirmation; all pre-publication checks pass.
+- This confirmation is not publication approval. Private metadata and publishing
+  safeguards remain unchanged. No tag, package publication or external release.
+- `npm run check` passed for this documentation update: 148 runtime tests with
+  no failures/skips, installed NodeNext/Bundler positive/negative type checks and
+  emitted consumer execution, lint and formatting. Archive/offline installation
+  checks passed as part of the runtime suite; `git diff --check` passed. Hosted
+  Quality checks remain mandatory before merging this update.

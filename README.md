@@ -11,8 +11,8 @@ for your own tooling. It finds missing and undocumented keys, duplicate assignme
 and syntax outside its [documented dotenv subset](docs/PARSER.md).
 
 **Pre-release:** the checkout identifies itself as `0.1.0`, but this project has
-not published an npm package or release. The intended npm owner is `ghazi001`;
-authenticated account access and package ownership are not yet verified.
+not published an npm package or release. npm account `ghazi001` is authenticated
+and the owner confirmed 2FA; package ownership awaits an approved first publication.
 Use this repository or a locally built archive; registry installation is not yet
 documented. Runtime: **Node.js 20+**, ES modules. License: [MIT](LICENSE).
 
