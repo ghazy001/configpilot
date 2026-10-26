@@ -1,13 +1,22 @@
 /** Internal development/release guards, excluded from the npm package. */
 export function candidateFiles(metadata) {
+  const publishing = metadata?.publishConfig;
+  const publicCandidate =
+    metadata?.private === undefined &&
+    typeof metadata?.version === "string" &&
+    /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/.test(metadata.version) &&
+    publishing?.registry === "https://registry.npmjs.org/" &&
+    publishing.access === "public" &&
+    publishing.tag === "latest" &&
+    Object.keys(publishing).length === 3;
   if (
     metadata?.name !== "configpilot" ||
-    metadata.private !== true ||
+    (metadata.private !== true && !publicCandidate) ||
     !Array.isArray(metadata.files) ||
     metadata.files.length === 0
   )
     throw new Error(
-      "Candidate preparation requires the private ConfigPilot package and an explicit file allowlist.",
+      "Candidate preparation requires private or explicit public-registry ConfigPilot metadata and a file allowlist.",
     );
   const files = [...metadata.files, "package.json", "README.md", "LICENSE"];
   for (const file of files) {

@@ -123,8 +123,9 @@ Do not claim competitor or runtime compatibility without reproducible evidence.
 
 ## Release boundary
 
-The `0.1.0` metadata is unreleased and the package remains `private`. Do not run
-`npm publish`, remove the private guard, create release tags, or create external
-releases without explicit repository-owner approval. See
+Do not run `npm publish`, change publication metadata, create release tags or create
+external releases without explicit repository-owner approval. The owner approved
+the initial configpilot@0.1.0 release on 2026-10-26; that is not standing approval
+for future versions. Candidate preparation itself never publishes. See
 [release readiness](docs/RELEASE_READINESS.md) for verified evidence and outstanding
 account/ownership gates. No contribution requires production credentials or npm tokens.

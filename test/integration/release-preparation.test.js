@@ -95,7 +95,7 @@ test("release CI preflight fails safely before network access when metadata or t
   }
 });
 
-test("release rehearsal binds an offline private archive to a clean commit and rejects unsafe inputs", (t) => {
+test("release rehearsal binds offline archives to clean commits and rejects unsafe inputs", (t) => {
   const npm = process.env.npm_execpath;
   assert.ok(npm, "Run through npm test.");
   const directory = mkdtempSync(join(tmpdir(), "configpilot candidate é "));
@@ -225,5 +225,30 @@ test("release rehearsal binds an offline private archive to a clean commit and r
   const nonprivate = join(directory, "nonprivate");
   prepare(nonprivate, 1);
   assert.equal(existsSync(nonprivate), false);
+
+  const publishConfig = {
+    registry: "https://registry.npmjs.org/",
+    access: "public",
+    tag: "latest",
+  };
+  const publicMetadata = { ...metadata, publishConfig };
+  delete publicMetadata.private;
+  writeFileSync(join(repo, "package.json"), JSON.stringify(publicMetadata));
+  git(["add", "."]);
+  git(["commit", "-m", "Synthetic approved publication metadata"]);
+  const publicDestination = join(directory, "public-candidate");
+  prepare(publicDestination, 0);
+  const publicManifest = JSON.parse(
+    readFileSync(join(publicDestination, "candidate.json"), "utf8"),
+  );
+  assert.equal(publicManifest.private, false);
+  assert.deepEqual(publicManifest.publishConfig, publishConfig);
+  assert.equal(publicManifest.commit, git(["rev-parse", "HEAD"]));
+  assert.equal(
+    publicManifest.sha256,
+    createHash("sha256")
+      .update(readFileSync(join(publicDestination, publicManifest.archive)))
+      .digest("hex"),
+  );
   assert.equal(readFileSync(join(repo, ".env"), "utf8"), secret);
 });

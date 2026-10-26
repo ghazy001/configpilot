@@ -750,3 +750,54 @@ Final local verification for the release review:
 - `git diff --check` passed. This session changes release-review documentation only;
   product code, package metadata, preparation guards, dependency graph and workflows
   remain unchanged. Required hosted CI must pass before merge.
+
+## Approved v0.1.0 release execution — 2026-10-26
+
+Status: **In Progress — owner approved; final archive/registry verification pending**.
+The owner explicitly answered “yes go ahead” to the concrete request covering
+reviewed private-guard removal, configpilot@0.1.0 publication as ghazi001, v0.1.0
+Git tag and GitHub release. This authorizes this first release only; no additional
+publication permission is inferred for future versions or different names.
+
+Implementation prepared on codex/release-0-1-0 from clean main 922bf7b:
+
+- Removed private true and added explicit npm registry, public access and latest
+  dist-tag metadata. The exact 19-file allowlist, runtime exports/API and Node >=20
+  floor are unchanged; no runtime dependency or lifecycle hook was added.
+- Updated candidate guards to accept historical private candidates or stable
+  numeric versions with exactly the explicit public registry/access/latest options.
+  Wrong destinations, restricted access, other tags, prereleases, unknown options
+  and ambiguous private false metadata fail closed. Preparation never publishes.
+- Manifests now report actual private status and, for public candidates, explicit
+  publication options. Clean/tracked/regular source checks, offline scripts-disabled
+  packing, exact file lists, hash binding and no-overwrite safeguards remain.
+- Added rejection tests for public metadata and an integration test that prepares
+  a public candidate and verifies its commit, publication fields and archive hash.
+  The package integration test now asserts the approved publication metadata.
+- Finalized the 2026-10-26 release notes/changelog and npm installation instructions;
+  updated release/readiness/contribution policies without claiming registry checks
+  have already passed. The initial publication uses interactive owner 2FA, with no
+  GitHub OIDC provenance claim. Workflows retain their read-only preparation role.
+
+Verification results, final immutable source/archive identity and actual registry/
+release outcomes will be recorded after execution. Milestones 8 and 9 remain In
+Progress until actual ownership and public installation have been verified. No
+publication, tag or GitHub release has occurred at this preparation stage.
+
+Pre-PR release verification (macOS, Node v20.20.0, npm 10.8.2):
+
+- `npm run check` passed: **149 tests**, zero failures/skips; installed strict
+  TypeScript positive/negative checks and emitted ESM/CommonJS import passed;
+  lint zero warnings/errors and all formatting clean.
+- `npm run test:coverage` passed: 149 tests; all shipped runtime modules have 100%
+  line/function coverage, parser/analyzer 100% branch coverage, and release guards
+  100% line/branch/function coverage. Local file-reader branch coverage is 96.77%.
+- Actual-checkout dry-run/full archive, synthetic secret exclusion, exact 19 files,
+  executable shim, installed byte equality, public imports and CLI exits passed.
+- Existing private-candidate tests remain; the new public candidate carries exact
+  explicit publication fields and a matching clean commit/archive hash.
+- The approved release PR and merged main commit must both pass required Quality
+  CI before the final publishable archive is built and npm publication begins.
+
+- Fresh npm advisory audit reported zero known vulnerabilities for the current
+  development graph at release preparation time. This is time-sensitive evidence.

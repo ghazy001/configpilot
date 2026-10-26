@@ -1,7 +1,9 @@
 # v0.1.0 release readiness
 
-Review date: **2026-10-26**. The package is **unreleased and private**. This is a
-readiness record, not permission to publish, stage, tag or create an external release.
+Review date: **2026-10-26**. The owner explicitly approved the initial release on
+this date, including reviewed guard removal, npm publication, tag and GitHub release.
+Execution remains In Progress until the registry and public consumer checks pass.
+This is not standing approval for later releases.
 
 ## Identity and metadata
 
@@ -22,7 +24,8 @@ readiness record, not permission to publish, stage, tag or create an external re
   `src/index.d.ts`; default export target retains the existing ESM runtime entry.
   The CLI mapping and executable shebang remain unchanged.
 - Node.js `>=20`, no runtime dependencies, no lifecycle scripts, exact file
-  allowlist, `private: true`. No synchronous CommonJS entry point is promised.
+  allowlist and explicit public-registry/access/latest metadata. No synchronous
+  CommonJS entry point is promised.
 
 ## Technical verification
 
@@ -52,21 +55,21 @@ immutable commit/workflow evidence are recorded in [PROGRESS.md](PROGRESS.md).
    [Discovery](DISCOVERY.md) and [three public-template evaluations](REAL_PROJECT_EVALUATION.md)
    are recorded. Real maintainer feedback and broader compatibility sampling remain
    open; do not claim ecosystem-wide compatibility or established adoption.
-3. Obtain explicit approval for a narrowly scoped change to the private guard and
-   first publication/authentication plan. Existing preparation guards require private
-   metadata, so any publisher/guard change must be reviewed and verified together.
+3. Owner approval was received on 2026-10-26 for the first-release scope. Metadata
+   and preparation guards are updated together through a protected PR, retaining
+   exact file checks and commit/hash binding. No automatic publisher is added.
 4. After the package exists, verify actual npm ownership and configure a future
    least-privilege trusted publisher as described in [RELEASING.md](RELEASING.md).
    First-publication permission and later trusted-publisher permission are distinct.
-5. Obtain separate authorization for tags, npm publication and GitHub release;
-   verify public installation and update release documentation afterward.
+5. The owner authorized the v0.1.0 tag, npm publication and GitHub release. Verify
+   public installation and record actual release outcomes afterward.
 
 All executable pre-publication checks and owner account confirmations are complete.
 The roadmap's package-ownership task remains open until the name is registered
 through a separately approved first publication; logging in does not establish
-ownership. This confirmation does not authorize publication. Registry availability
-and authentication are time-sensitive.
+ownership. Registry availability and authentication are time-sensitive; the owner
+approval is limited to the recorded v0.1.0 scope.
 
-The concrete proposed publication scope and ordered checks are in the
-[first-release approval plan](RELEASE_PLAN_v0.1.0.md). That plan is pending approval;
-it does not enable publication or change private metadata.
+The approved publication scope and ordered checks are in the
+[first-release plan](RELEASE_PLAN_v0.1.0.md). Publication is manual and separate from
+the unchanged preparation-only workflow.

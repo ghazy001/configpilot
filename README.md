@@ -10,11 +10,28 @@ Use the CLI for local checks and pipelines, or the dependency-free JavaScript AP
 for your own tooling. It finds missing and undocumented keys, duplicate assignments,
 and syntax outside its [documented dotenv subset](docs/PARSER.md).
 
-**Pre-release:** the checkout identifies itself as `0.1.0`, but this project has
-not published an npm package or release. npm account `ghazi001` is authenticated
-and the owner confirmed 2FA; package ownership awaits an approved first publication.
-Use this repository or a locally built archive; registry installation is not yet
-documented. Runtime: **Node.js 20+**, ES modules. License: [MIT](LICENSE).
+Runtime: **Node.js 20+**, ES modules. License: [MIT](LICENSE).
+
+## Install
+
+For the CLI:
+
+```sh
+npm install --global configpilot@0.1.0 --ignore-scripts --no-audit --no-fund
+configpilot --help
+```
+
+For a project's npm scripts or JavaScript API:
+
+```sh
+npm install --save-dev configpilot@0.1.0 --ignore-scripts --no-audit --no-fund
+```
+
+Add `"config:check": "configpilot check"` to your npm scripts, then run
+`npm run config:check` from the project containing `.env.example` and `.env`.
+The [npm package](https://www.npmjs.com/package/configpilot) and
+[release notes](https://github.com/ghazy001/configpilot/releases/tag/v0.1.0)
+identify the distribution. Source-checkout and archive alternatives are below.
 
 ## Try it in one minute
 
@@ -114,7 +131,7 @@ and file handling, or [troubleshooting](docs/TROUBLESHOOTING.md) for a specific 
 
 ## Use the JavaScript API
 
-Save this as an `.mjs` file in a consumer project with the local package installed,
+Save this as an `.mjs` file in a consumer project with the package installed,
 or in this checkout, then run it with Node.js:
 
 ```js
@@ -207,10 +224,10 @@ for commands, coverage interpretation, matrix details, and intentional platform 
 
 - [Contributing](https://github.com/ghazy001/configpilot/blob/main/CONTRIBUTING.md): setup, focused changes, safe bug reports, and review expectations.
 - [Code of conduct](https://github.com/ghazy001/configpilot/blob/main/CODE_OF_CONDUCT.md): respectful project participation.
-- [Changelog](CHANGELOG.md): implemented, unreleased changes.
+- [Changelog](CHANGELOG.md): release history and upcoming changes.
 - [Repository safeguards](https://github.com/ghazy001/configpilot/blob/main/docs/CI.md) and [candidate preparation](https://github.com/ghazy001/configpilot/blob/main/docs/RELEASING.md): required CI, dependency updates, and owner review before future publishing capability.
 - [Progress](https://github.com/ghazy001/configpilot/blob/main/docs/PROGRESS.md) and [project specification](https://github.com/ghazy001/configpilot/blob/main/AGENTS.md): completed work, decisions, and outstanding milestones.
 - [Issues](https://github.com/ghazy001/configpilot/issues): reproducible bugs and focused feature proposals; follow the security policy for vulnerabilities.
 
-The package stays `private` until release readiness and explicit owner approval.
-Publication, release tags, and external releases remain gated.
+Publication, release tags and external releases require explicit owner approval.
+The preparation workflow inspects candidates and never publishes automatically.

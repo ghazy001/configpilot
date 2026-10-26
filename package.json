@@ -1,7 +1,11 @@
 {
   "name": "configpilot",
   "version": "0.1.0",
-  "private": true,
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public",
+    "tag": "latest"
+  },
   "description": "Explainable environment-configuration diagnostics for developers and CI.",
   "license": "MIT",
   "repository": {

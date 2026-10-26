@@ -1,10 +1,13 @@
 # Changelog
 
-Implemented changes are recorded here. Entries under Unreleased are development
-work, not an npm publication or GitHub release. The package version currently reads
-`0.1.0`; no release date or tag has been assigned.
+Release history for ConfigPilot. Verification evidence and release status are
+recorded in the repository's development progress log.
 
 ## Unreleased
+
+No additional changes recorded.
+
+## 0.1.0 — 2026-10-26
 
 ### Added
 
@@ -20,7 +23,7 @@ work, not an npm publication or GitHub release. The package version currently re
 - Quick start and verified terminal example; CLI/parser/report/testing contracts;
   troubleshooting, contribution and security policies, code of conduct, runnable
   examples, and development progress tracking.
-- Exact package allowlist, private publication guard, MIT license, ESM metadata,
+- Exact package allowlist, explicit public-registry metadata, MIT license, ESM metadata,
   lint/format tooling, and cross-platform LF text policy.
 - Stable required Quality gate, weekly npm/Actions dependency updates, restricted
   SHA-pinned Actions policy, private vulnerability reporting and owner-reviewed
@@ -43,5 +46,5 @@ work, not an npm publication or GitHub release. The package version currently re
 - No assignment values or raw invalid source lines in reports. Names and file
   labels are public metadata. Full dotenv compatibility is not claimed.
 
-Future approved releases should add their actual version/date and document any
-breaking API, schema, or CLI changes explicitly, including before v1.0.
+Future releases must document breaking API, schema or CLI changes explicitly,
+including before v1.0. Publication always requires owner approval.
