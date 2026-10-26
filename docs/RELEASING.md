@@ -132,3 +132,7 @@ read back successfully. Its declarative configuration is in
 for separately approved releases. Existing tags were preserved; no deletion/retagging
 test was performed on a real release.
 Manual 2FA release with these checks is acceptable; no automatic publisher is required.
+
+The owner separately approved documentation patch v1.1.1 on 2026-10-26;
+[the plan](RELEASE_PLAN_v1.1.1.md) and [receipt](releases/1.1.1.json) retain its scope
+and completed verification. This does not authorize later publications.
