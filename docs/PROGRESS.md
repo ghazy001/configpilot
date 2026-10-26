@@ -2,14 +2,25 @@
 
 Last updated: 2026-10-26 (Africa/Tunis).
 
-## Current target — stable v1.0.0
+## Current release — v1.1.0
 
-Status: **Complete — v1.0.0 published and verified**. npm latest points to 1.0.0;
-registry bytes match the reviewed archive from source 66b4ad2. The immutable v1.0.0
-tag and GitHub release exist. See [the release receipt](releases/1.0.0.json) and
-execution record below. External developer feedback is still uncollected and was
-explicitly accepted as post-release work. No future release is authorized by this
-record. Historical counts/receipts refer to their stated revisions.
+Status: **Complete — v1.1.0 published and verified**. npm latest points to 1.1.0.
+Registry bytes, fresh installation and hosted compatibility checks passed; see
+[the release receipt](releases/1.1.0.json). Historical entries below refer to their
+stated revisions. Human developer feedback and manual font testing remain open.
+
+## Installation documentation correction — 2026-10-26
+
+Corrected stale v1.0.0 install commands after the v1.1.0 publication. README now
+uses ordinary latest-version commands for global, development and runtime installs,
+with an explicit v1.1.0 pinning example and current archive filename. Trial instructions
+pin v1.1.0 for reproducibility; troubleshooting and current release summaries agree
+with the verified release. Historical release notes and receipts retain their versions.
+The README embedded in immutable npm v1.1.0 still has the stale commands; updating
+that copy requires owner approval for a subsequent patch publication. No new version
+or publication is included in this correction. Verification: all three executable
+README/example integration tests passed; repository format check and diff whitespace
+check passed. Targeted search found no stale 1.0.0 install commands in current guides.
 
 ## Terminal experience v1.1.0 — 2026-10-26
 
