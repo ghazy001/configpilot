@@ -13,7 +13,7 @@ record. Historical counts/receipts refer to their stated revisions.
 
 ## Terminal experience v1.1.0 — 2026-10-26
 
-Status: **Release preparation in progress**. Owner approved publication of the
+Status: **Complete — v1.1.0 published and verified**. Owner approved publication of the
 completed redesign on 2026-10-26. Version 1.1.0 adds display flags; this entry
 records changes after the immutable v1.0.0 release. Branch: `codex/terminal-experience`.
 
@@ -53,6 +53,29 @@ records changes after the immutable v1.0.0 release. Branch: `codex/terminal-expe
   historical release CI is not evidence for this update. Human developer feedback
   remains Pending — Requires Human Participation. No publish, tag, release, or
   external messages were performed for this task.
+
+## v1.1.0 publication receipt — 2026-10-26
+
+Owner approved publication of the completed terminal redesign. PR #9 merged as
+`4aaa83f9451c985eb0c8fbeb8a3fc7cff90d8938`. Required Quality gates passed on both
+the PR and exact main commit, including Windows/Linux/macOS across Node 20/22/24/26
+and minimum runtime 20.0.0. Local quality verification passed all 172 tests,
+seven contract tests, TypeScript consumer checks, lint and formatting.
+
+Prepared the exact 21-file archive, verified offline consumer installation and
+contents, then published as npm ghazi001 with auth-and-writes 2FA and owner browser
+verification. npm initially returned processing/404 and later stale latest metadata;
+no duplicate publication was attempted. Registry latest now points to 1.1.0, and
+registry archive bytes match the reviewed SHA-256:
+`fc5ac7b409c8342f7af888ca4200644667d0fb5b24c7eb774891af3df35485b8`.
+Fresh unauthenticated ordinary local/global installation, installed CLI exits 0/1/2,
+strict TypeScript consumers, API imports and unchanged-input/privacy checks passed.
+
+Created immutable annotated tag v1.1.0 and GitHub release 424516883 after registry
+verification. [Durable release receipt](releases/1.1.0.json) records identities and
+CI URLs. Manual font/terminal testing and consenting developer feedback remain open;
+automated Windows validation is now complete for this update. This approval does
+not authorize another future release.
 
 ## Initial session scope and inspection
 
