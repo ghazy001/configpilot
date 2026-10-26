@@ -56,23 +56,36 @@ No build or dependency installation is needed to run the CLI. The supplied files
 contain synthetic values. The command exits **1** because it finds two warnings:
 
 ```text
-ConfigPilot — Configuration Analysis
+  > ConfigPilot
+  Environment Configuration Diagnostics
 
-WARNING DATABASE_URL [MISSING_KEY]
-        template "examples/reference.txt":1
-        Template variable has no declaration in the environment input. It may be supplied externally.
-        Action: Provide this key locally or through the deployment environment. Verify external provisioning before changing files.
+  Template  "examples/reference.txt"
+  Target    "examples/environment.txt"
 
-WARNING REDIS_URL [UNDOCUMENTED_KEY]
-        environment "examples/environment.txt":2
-        Environment variable is not documented in the reference template.
-        Action: Document this key in the reference template if intentional, or review whether it is still needed.
+  2 configuration issues found
 
-Comparison: complete
-Summary: 0 errors, 2 warnings, 0 info.
-Keys: 2 template, 2 environment; 1 shared, 1 missing, 1 undocumented.
-Review the reported configuration issues.
-No files were modified.
+  [!] WARNING  Missing variable
+  DATABASE_URL [MISSING_KEY]
+  Location: template "examples/reference.txt":1
+  Template variable has no declaration in the environment input. It may be
+  supplied externally.
+  Action: Provide this key locally or through the deployment environment. Verify
+  external provisioning before changing files.
+
+  [!] WARNING  Undocumented variable
+  REDIS_URL [UNDOCUMENTED_KEY]
+  Location: environment "examples/environment.txt":2
+  Environment variable is not documented in the reference template.
+  Action: Document this key in the reference template if intentional, or review
+  whether it is still needed.
+
+  Summary
+  0 errors, 2 warnings, 0 info.
+  Comparison: complete
+  Keys: 2 template, 2 environment; 1 shared, 1 missing, 1 undocumented.
+
+  Configuration needs attention.
+  No files were modified.
 ```
 
 A missing declaration may be provided by your deployment platform. Review the
@@ -136,8 +149,10 @@ Warnings intentionally make CI checks nonzero. In JSON mode, inspect both the ex
 status and the object: analysis has `comparison`, `issues`, and `summary`; operational
 failure has `error` and no partial report. Syntax errors set `comparison` to `skipped`
 and difference counts to `null`. Valid JSON alone does not mean a clean check.
-Output is plain text without ANSI colors and works with `NO_COLOR` and redirected
-streams. See [the CLI reference](docs/CLI.md) for arguments, streams, error codes,
+Interactive terminals use restrained colors and supported Unicode symbols. Redirected
+output defaults to plain ASCII. Use `--no-color` or nonempty `NO_COLOR` to disable
+ANSI styling. `--quiet` retains findings but makes clean checks silent; `--verbose`
+adds analysis-scope details without exposing values. These display options are available starting in v1.1.0. See [the CLI reference](docs/CLI.md) for arguments, streams, error codes,
 and file handling, or [troubleshooting](docs/TROUBLESHOOTING.md) for a specific failure.
 
 ## Use the JavaScript API

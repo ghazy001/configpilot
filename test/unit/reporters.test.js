@@ -10,7 +10,10 @@ test("terminal report explains mismatches, locations, actions, counts, and read-
     environment: "PORT=4000\nREDIS_URL=y",
   });
   const output = formatTerminal(report);
-  assert.match(output, /WARNING DATABASE_URL \[MISSING_KEY\]/);
+  assert.match(
+    output,
+    /WARNING {2}Missing variable\n {2}DATABASE_URL \[MISSING_KEY\]/,
+  );
   assert.match(output, /template "\.env\.example":1/);
   assert.match(output, /environment "\.env":2/);
   assert.match(output, /Action: Provide this key/);
@@ -32,8 +35,14 @@ test("clean, duplicate, and skipped results render without invented locations or
   const skipped = formatTerminal(
     analyzeConfig({ template: "invalid", environment: "A=x" }),
   );
-  assert.match(skipped, /ERROR\s+INVALID_DECLARATION/);
-  assert.match(skipped, /INFO\s+COMPARISON_SKIPPED/);
+  assert.match(
+    skipped,
+    /ERROR {2}Invalid declaration\n {2}INVALID_DECLARATION/,
+  );
+  assert.match(
+    skipped,
+    /INFO {2}Key comparison skipped\n {2}COMPARISON_SKIPPED/,
+  );
   assert.match(skipped, /Comparison: skipped/);
   assert.match(skipped, /1 error, 0 warnings, 1 info/);
   assert.match(skipped, /partial.*differences unavailable/);

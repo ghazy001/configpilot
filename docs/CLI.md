@@ -55,8 +55,8 @@ is introduced. See [the report contract](REPORT.md) for all analysis semantics.
 Analysis reports, including errors found **inside** a configuration file, use
 stdout. Help/version use stdout. Terminal usage/read failures use stderr and leave
 stdout empty. No progress chatter, prompts, or native exception stacks are emitted.
-Output is always plain text without ANSI colors, regardless of TTY, `NO_COLOR`,
-or `FORCE_COLOR`. Closed output pipes are handled without an uncaught stack trace.
+Terminal styling follows the display policy below. Closed output pipes are handled
+without an uncaught stack trace.
 
 ## JSON output
 
@@ -155,3 +155,192 @@ aggregate key/label metadata per input. Exceeding them returns exit 2 with
 `INPUT_LIMIT_EXCEEDED`, no partial report, and no source/native error text. The JSON
 form follows the operational envelope above. These limits prevent dense small files
 from generating excessive logs or allocations; they do not validate assignment values.
+
+## Terminal display (v1.1.0)
+
+Version 1.0.0 has the earlier plain layout. Version 1.1.0 keeps the public API,
+JSON schema, severities, codes, and exits unchanged. Human-readable layout is not a
+machine parsing contract; use `--json` for automation.
+
+| Option       | Behavior                                                                                                                                           |
+| ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--no-color` | Disable all ANSI styling, including bold and dim, even with FORCE_COLOR.                                                                           |
+| `--quiet`    | Omit branding, summary, and footer; retain every finding, location, and action. Clean checks produce no output. Operational errors remain visible. |
+| `--verbose`  | Add schema and analysis-scope information; never values, source excerpts, or native exceptions.                                                    |
+
+These boolean options belong to `check`; repeats and equals-value forms are invalid.
+`--quiet` and `--verbose` are mutually exclusive (exit 2). Display options are ignored
+by JSON rendering, including operational JSON errors; output remains byte-identical.
+Help and version remain concise plain text.
+
+Color precedence: `--no-color`, nonempty `NO_COLOR`, `TERM=dumb`, and
+`FORCE_COLOR=0` disable ANSI. Otherwise `FORCE_COLOR` set to an empty string, 1, 2,
+or 3 enables the restrained 16-color palette even when redirected. By default each
+output stream is colored only when that stream is a TTY. Other FORCE_COLOR values
+do not force color. GitHub Actions and other redirected CI output default to ASCII
+without ANSI unless explicitly forced.
+
+Unicode symbols require a TTY, a non-dumb terminal, and a UTF-8 locale, a terminal
+program indicator, or Windows Terminal's WT_SESSION. Other terminals use ASCII
+markers; severity words and stable issue codes remain visible in every mode.
+PowerShell outside Windows Terminal can therefore use the readable ASCII fallback.
+No font detection is attempted. Both streams wrap independently to their terminal
+width (4–100 columns; default 80), with stacked details and no box borders. Very
+narrow widths split long keys and paths; use JSON to obtain their exact spelling.
+CJK and emoji widths are estimated; unusual fonts may render them differently.
+Paths are quoted and control characters escaped. Operational failures deliberately
+omit raw paths and arguments because those may themselves contain sensitive data.
+
+### Reproduce the display
+
+The following examples use synthetic values and plain output. In the checkout,
+replace `configpilot` with `node /absolute/path/to/ConfigPilot/bin/configpilot.js`.
+Prepare `.env.example` containing `PORT=3000` and `.env` containing `PORT=4000`.
+
+### Successful check (exit 0)
+
+```sh
+configpilot check --no-color
+```
+
+```text
+  > ConfigPilot
+  Environment Configuration Diagnostics
+
+  Template  ".env.example"
+  Target    ".env"
+
+  [ok] No configuration issues found.
+  Syntax and declared keys match. Values and deployment configuration were not
+  validated.
+
+  Summary
+  0 errors, 0 warnings, 0 info.
+  Comparison: complete
+  Keys: 1 template, 1 environment; 1 shared, 0 missing, 0 undocumented.
+
+  No files were modified.
+```
+
+### Warnings (exit 1)
+
+Set `.env` to `OTHER=example`.
+
+```sh
+configpilot check --no-color
+```
+
+```text
+  > ConfigPilot
+  Environment Configuration Diagnostics
+
+  Template  ".env.example"
+  Target    ".env"
+
+  2 configuration issues found
+
+  [!] WARNING  Missing variable
+  PORT [MISSING_KEY]
+  Location: template ".env.example":1
+  Template variable has no declaration in the environment input. It may be
+  supplied externally.
+  Action: Provide this key locally or through the deployment environment. Verify
+  external provisioning before changing files.
+
+  [!] WARNING  Undocumented variable
+  OTHER [UNDOCUMENTED_KEY]
+  Location: environment ".env":1
+  Environment variable is not documented in the reference template.
+  Action: Document this key in the reference template if intentional, or review
+  whether it is still needed.
+
+  Summary
+  0 errors, 2 warnings, 0 info.
+  Comparison: complete
+  Keys: 1 template, 1 environment; 0 shared, 1 missing, 1 undocumented.
+
+  Configuration needs attention.
+  No files were modified.
+```
+
+### Syntax error and skipped comparison (exit 1)
+
+Set `.env` to `invalid`.
+
+```sh
+configpilot check --no-color
+```
+
+```text
+  > ConfigPilot
+  Environment Configuration Diagnostics
+
+  Template  ".env.example"
+  Target    ".env"
+
+  2 configuration issues found
+
+  [x] ERROR  Invalid declaration
+  INVALID_DECLARATION
+  Location: environment ".env":1
+  Declaration does not match the supported dotenv syntax.
+  Action: Use NAME=value with a portable variable name and complete single-line
+  quotes. Check the documented parser syntax.
+
+  [i] INFO  Key comparison skipped
+  COMPARISON_SKIPPED
+  Key comparison was skipped because at least one input could not be parsed
+  completely.
+  Action: Resolve syntax errors and unsupported constructs in both inputs, then
+  run the comparison again.
+
+  Summary
+  1 error, 0 warnings, 1 info.
+  Comparison: skipped
+  Keys: 1 template, 0 environment (partial); differences unavailable.
+
+  Configuration needs attention.
+  No files were modified.
+```
+
+### Missing file (exit 2, stderr)
+
+```sh
+configpilot check --env missing.env --no-color
+```
+
+```text
+  [x] ConfigPilot: FILE_NOT_FOUND (environment)
+
+  Selected input file was not found.
+  Action: Check the selected path and working directory, then rerun.
+
+  Example: configpilot check --template .env.example --env .env
+```
+
+### JSON success (exit 0)
+
+Set `.env` to `PORT=4000`.
+
+```sh
+configpilot check --json
+```
+
+```json
+{
+  "schemaVersion": 1,
+  "comparison": "complete",
+  "issues": [],
+  "summary": {
+    "errors": 0,
+    "warnings": 0,
+    "info": 0,
+    "total": 0,
+    "templateKeys": 1,
+    "environmentKeys": 1,
+    "sharedKeys": 1,
+    "missingKeys": 0,
+    "undocumentedKeys": 0
+  }
+}
+```

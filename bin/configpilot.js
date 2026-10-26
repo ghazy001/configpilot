@@ -5,13 +5,21 @@ import process from "node:process";
 import { URL } from "node:url";
 import { cliFailure, runCli } from "../src/cli.js";
 
+import { terminalOptions } from "../src/reporters/terminal.js";
+
 const args = process.argv.slice(2);
 let result;
 try {
   const { version } = JSON.parse(
     readFileSync(new URL("../package.json", import.meta.url), "utf8"),
   );
-  result = await runCli(args, { version });
+  result = await runCli(args, {
+    version,
+    display: {
+      stdout: terminalOptions(process.stdout, process.env),
+      stderr: terminalOptions(process.stderr, process.env),
+    },
+  });
 } catch {
   result = cliFailure(
     "INTERNAL_ERROR",
