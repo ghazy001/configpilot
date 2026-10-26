@@ -6,6 +6,61 @@ import { formatJson } from "../../src/reporters/json.js";
 
 const marker = "SYNTHETIC_CREDENTIAL_FRAGMENT";
 
+test("nonportable whitespace cannot hide a quoted credential body", () => {
+  for (const whitespace of ["\v", "\f", "\u00a0", "\u2028", "\ufeff"]) {
+    for (const quote of ["'", '"', "`"]) {
+      for (const ending of ["\n", "\r\n", "\r"]) {
+        for (const prefix of ["KEY=", "export KEY = \t"]) {
+          const source = [
+            `${prefix}${whitespace} \t${quote}first`,
+            `${marker}=x`,
+            `${marker}=y`,
+            quote,
+            "AFTER=x",
+          ].join(ending);
+          const parsed = parseDotenv(source);
+          assert.deepEqual(
+            parsed.declarations.map(({ key }) => key),
+            ["AFTER"],
+          );
+          assert.deepEqual(
+            parsed.issues.map(({ code }) => code),
+            ["INVALID_DECLARATION"],
+          );
+          const report = analyzeConfig({
+            template: "AFTER=",
+            environment: source,
+          });
+          assert.equal(report.comparison, "skipped");
+          assert.equal(report.summary.missingKeys, null);
+          assert.ok(!JSON.stringify({ parsed, report }).includes(marker));
+        }
+      }
+    }
+  }
+});
+
+test("nonportable whitespace before quoted values is rejected without widening the grammar", () => {
+  for (const whitespace of ["\v", "\f", "\u00a0", "\u2029", "\ufeff"]) {
+    for (const quote of ["'", '"', "`"]) {
+      const parsed = parseDotenv(
+        `KEY=${whitespace}${quote}value${quote}\nAFTER=x`,
+      );
+      assert.deepEqual(
+        parsed.declarations.map(({ key }) => key),
+        ["AFTER"],
+      );
+      assert.equal(parsed.issues[0].code, "INVALID_DECLARATION");
+    }
+    const parsed = parseDotenv(`KEY=${whitespace}opaque\nAFTER=x`);
+    assert.deepEqual(
+      parsed.declarations.map(({ key }) => key),
+      ["KEY", "AFTER"],
+    );
+    assert.deepEqual(parsed.issues, []);
+  }
+});
+
 test("ambiguous quote boundaries quarantine credential fragments in all public results", () => {
   for (const quote of ["'", '"', "`"]) {
     for (const ending of ["\n", "\r\n", "\r"]) {

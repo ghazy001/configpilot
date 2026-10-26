@@ -272,6 +272,11 @@ const credential = ['KEY="prefix' + String.fromCharCode(92).repeat(2) + '"',
 const hardened = analyzeConfig({template: "KEY=", environment: credential});
 assert.equal(hardened.comparison, "skipped");
 assert.ok(!JSON.stringify(hardened).includes("SYNTHETIC_INSTALLED_FRAGMENT"));
+const whitespaceCredential = 'KEY=\\u00a0"first\\nSYNTHETIC_INSTALLED_WHITESPACE=x\\nSYNTHETIC_INSTALLED_WHITESPACE=y\\n"\\nAFTER=x';
+const quarantined = analyzeConfig({template: "AFTER=", environment: whitespaceCredential});
+assert.equal(quarantined.comparison, "skipped");
+assert.equal(quarantined.issues[0].code, "INVALID_DECLARATION");
+assert.ok(!JSON.stringify(quarantined).includes("SYNTHETIC_INSTALLED_WHITESPACE"));
 assert.throws(() => parseDotenv("A=x\\n".repeat(2049)), RangeError);
 `,
   );

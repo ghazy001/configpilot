@@ -96,3 +96,8 @@ passing. Empty/different/commented optional keys and loader layering remain outs
 these checks. Six samples are compatibility evidence, not adoption evidence,
 endorsement, deployment-health validation or full dotenv compatibility. See the
 [developer trial protocol](VALIDATION.md) for the remaining feedback gate.
+
+Rechecked all six pinned sources on 2026-10-26 after the whitespace-recovery fix:
+same 174/6/71/87/7/8 keys, zero findings, reference-key agreement, CLI exit 0,
+unchanged bytes, deterministic reports and synthetic drift/duplicate assertions.
+This rerun does not replace the outstanding human developer trials.

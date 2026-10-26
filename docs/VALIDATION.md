@@ -10,6 +10,12 @@ Give them a reviewed source commit or local archive including the unreleased fix
 the README, and a short synthetic starter fixture. Do not ask for their real .env
 files, values, screenshots, process environment or private deployment credentials.
 
+For a consenting private technical reviewer with the source checkout and Git/npm,
+`npm run --silent candidate:verify -- /absolute/path/to/candidate` produces a
+value-free receipt for the exact supplied archive. Follow [TESTING.md](TESTING.md#private-candidate-acceptance)
+and retain the receipt privately. This automated rehearsal helps validate the
+installation path; it does not count as a human usability trial or full OS matrix.
+
 Ask each participant to:
 
 1. Install the exact supplied archive and run help/version, recording Node/OS/commit.

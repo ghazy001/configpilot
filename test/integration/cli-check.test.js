@@ -158,6 +158,43 @@ test("malformed and multiline input produce exit 1 and skipped analysis in both 
   }
 });
 
+test("nonportable whitespace cannot expose quoted bodies through the actual CLI", (t) => {
+  const marker = "SYNTHETIC_CLI_WHITESPACE_BODY";
+  const cwd = fixture(t);
+  for (const whitespace of ["\v", "\u00a0", "\ufeff"]) {
+    for (const quote of ['"', "'", "`"]) {
+      const source = [
+        `KEY=${whitespace}${quote}first`,
+        `${marker}=x`,
+        `${marker}=y`,
+        quote,
+        "AFTER=x",
+      ].join("\r\n");
+      for (const role of ["template", "environment"]) {
+        const template = role === "template" ? source : "AFTER=x";
+        const environment = role === "environment" ? source : "AFTER=x";
+        writeFileSync(join(cwd, ".env.example"), template);
+        writeFileSync(join(cwd, ".env"), environment);
+        for (const flags of [[], ["--json"]]) {
+          const result = run(cwd, ["check", ...flags]);
+          assert.equal(result.status, 1);
+          assert.equal(result.stderr, "");
+          assert.ok(!result.stdout.includes(marker));
+          if (flags.length) {
+            const report = JSON.parse(result.stdout);
+            assert.equal(report.comparison, "skipped");
+            assert.equal(report.summary.warnings, 0);
+            assert.equal(report.issues[0].code, "INVALID_DECLARATION");
+            assert.equal(report.issues[0].source, role);
+          } else assert.match(result.stdout, /Comparison: skipped/);
+        }
+        assert.equal(readFileSync(join(cwd, ".env.example"), "utf8"), template);
+        assert.equal(readFileSync(join(cwd, ".env"), "utf8"), environment);
+      }
+    }
+  }
+});
+
 test("configuration and project instructions are never executed and source bytes stay unchanged", (t) => {
   const cwd = fixture(t);
   const marker = join(cwd, "unexpected-execution");

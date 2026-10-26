@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import test from "node:test";
+import { parseEnv } from "node:util";
 import Ajv from "ajv/dist/2020.js";
 import dotenv from "dotenv";
 import { parseDotenv, analyzeConfig, ISSUE_CODES } from "../src/index.js";
@@ -205,4 +206,84 @@ test("deterministic malformed mutations never promote reference value bodies int
     }
   }
   assert.equal(protectedCases, 1728);
+});
+
+test("Unicode whitespace recovery protects bodies recognized by independent loaders", () => {
+  // All ECMAScript whitespace except the supported space/tab and physical CR/LF.
+  const whitespace = [
+    "\v",
+    "\f",
+    "\u00a0",
+    "\u1680",
+    ...Array.from({ length: 11 }, (_, index) =>
+      String.fromCodePoint(0x2000 + index),
+    ),
+    "\u2028",
+    "\u2029",
+    "\u202f",
+    "\u205f",
+    "\u3000",
+    "\ufeff",
+  ];
+  const protectedCases = { dotenv: 0, fast: 0, node: 0 };
+  const marker = "SYNTHETIC_WHITESPACE_BODY";
+  let cases = 0;
+  for (const space of whitespace) {
+    for (const quote of ['"', "'", "`"]) {
+      for (const ending of ["\n", "\r\n", "\r"]) {
+        for (const prefix of ["KEY=", "export KEY = ", "BAD-KEY="]) {
+          for (const closing of [
+            quote,
+            "\\" + quote,
+            "\\\\" + quote,
+            quote + " # comment",
+            quote + " trailing " + quote + "chain",
+          ]) {
+            const source = [
+              prefix + space + quote + "first",
+              marker + "=x",
+              marker + "=y",
+              closing,
+              "AFTER=x",
+            ].join(ending);
+            cases++;
+            const references = {
+              dotenv: dotenv.parse(source),
+              fast: dotenv.parse(source, { fast: true }),
+              node: parseEnv(source),
+            };
+            for (const [name, reference] of Object.entries(references)) {
+              if (
+                Object.values(reference).some((value) =>
+                  value.includes(marker),
+                ) &&
+                !Object.hasOwn(reference, marker)
+              ) {
+                protectedCases[name]++;
+                assert.ok(
+                  !JSON.stringify(parseDotenv(source)).includes(marker),
+                  `Parser privacy case ${cases} (${name})`,
+                );
+                const report = analyzeConfig({
+                  template: "AFTER=",
+                  environment: source,
+                });
+                assert.equal(validate(report), true, `Schema case ${cases}`);
+                assert.equal(report.comparison, "skipped");
+                assert.ok(
+                  !JSON.stringify(report).includes(marker),
+                  `Report privacy case ${cases} (${name})`,
+                );
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  assert.equal(cases, 2835);
+  assert.equal(protectedCases.dotenv, 2268);
+  assert.equal(protectedCases.fast, 2268);
+  // Node's loader belongs to the running runtime, rather than a pinned package.
+  assert.ok(protectedCases.node > 0);
 });

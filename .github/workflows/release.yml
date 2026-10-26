@@ -45,6 +45,8 @@ jobs:
       - run: npm run test:coverage
       - name: Inspect and pack an unpublished candidate
         run: npm run release:prepare -- "$RUNNER_TEMP/configpilot-candidate"
+      - name: Verify the exact archive in an offline consumer
+        run: npm run --silent candidate:verify -- "$RUNNER_TEMP/configpilot-candidate" > "$RUNNER_TEMP/configpilot-candidate/verification.json"
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         id: upload
         with:
@@ -52,6 +54,7 @@ jobs:
           path: |
             ${{ runner.temp }}/configpilot-candidate/*.tgz
             ${{ runner.temp }}/configpilot-candidate/candidate.json
+            ${{ runner.temp }}/configpilot-candidate/verification.json
           if-no-files-found: error
           retention-days: 7
           include-hidden-files: false

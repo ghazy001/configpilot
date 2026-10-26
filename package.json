@@ -57,6 +57,7 @@
     "test:coverage": "node scripts/verify-coverage.js",
     "test:types": "node scripts/verify-types.js",
     "release:prepare": "node scripts/prepare-release.js",
+    "candidate:verify": "node scripts/verify-candidate.js",
     "lint": "eslint . --max-warnings 0",
     "format": "prettier --write .",
     "format:check": "prettier --check .",

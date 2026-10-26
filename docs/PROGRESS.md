@@ -2,6 +2,16 @@
 
 Last updated: 2026-10-26 (Africa/Tunis).
 
+## Current target — stable v1.0.0
+
+Status: **In Progress**. Stability fixes and review tooling are local to
+`codex/stable-readiness`; the owner requested private coordinated review. Package
+version remains 0.1.0. The public archive predates these fixes; nothing new is
+authorized for publication. See [STABILITY.md](STABILITY.md) and the latest session
+record below for current evidence, compatibility effects and remaining platform,
+developer-feedback and owner-review gates. Earlier milestone counts and hosted
+runs below describe the historical first release, not the new private branch.
+
 ## Initial session scope and inspection
 
 Read `AGENTS.md` completely. The initial directory contained only `AGENTS.md`;
@@ -10,7 +20,7 @@ Started Milestone 1 as explicitly directed by the agent starting instruction.
 The initial discovery gap was closed during the release review below; real user
 feedback remains outstanding and must inform later product decisions.
 
-## Milestones
+## Milestones (historical first-release scope)
 
 | Milestone             | Status      | Completed                                                                                                                                                                                                                      | Outstanding work and remaining risks                                                                                                                                                                              |
 | --------------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -937,3 +947,80 @@ Final local verification for stability implementation:
   A private cross-platform CI/review route and real developer feedback remain open;
   stable v1.0.0 is not declared complete. The follow-up commit records evidence only
   and changes no shipped candidate bytes.
+
+### 2026-10-26 — Continued stable-readiness work (private)
+
+The owner requested continued package improvement until it is mature enough for
+stable v1.0.0. The earlier keep-private decision remains in force. This is an
+additional stability milestone; version remains 0.1.0 and publication is deferred.
+
+Completed work:
+
+- **CP-012 / P0 / parser privacy:** synthetic differential probes found 33 initial
+  whitespace/quote combinations where dotenv recognized a credential body but the
+  parser retained body fragments as declarations/duplicate names, even when analysis
+  ultimately skipped comparison. Two focused regression tests failed before the fix.
+  Reject nonportable whitespace immediately before quoted values with the existing
+  INVALID_DECLARATION code and reuse conservative body quarantine. Single-line
+  occurrences are also rejected; unquoted opaque Unicode and supported spaces/tabs
+  keep their behavior. No values were real and no public report was sent.
+- Add API, both-role terminal/JSON CLI, unchanged-byte and installed archive tests.
+  Expand the independent corpus by 2,835 cases across all 21 ECMAScript whitespace
+  characters outside supported space/tab/CR/LF, three delimiters/endings, headers and
+  closing-line variations. Default/fast pinned dotenv each recognize 2,268 bodies;
+  the running Node util.parseEnv loader is an additional independent oracle. Every
+  recognized body must stay out of parser/analyzer metadata; reports validate against
+  the schema. Grammar compatibility is not expanded or overstated.
+- Add dependency-free `candidate:verify` for a reviewed local source/archive pair:
+  manifest/digests/committed bytes, offline scripts-disabled installation, exact
+  installed file list/byte equality, public imports/schema, platform shim and actual
+  clean/mismatch/skipped/operational CLI workflows. It emits a value-free identity/OS
+  receipt, suppresses native subprocess errors and removes disposable consumers/cache.
+  The archive/manifest and checkout are not modified. TypeScript/full matrix checks
+  remain separate; this command neither publishes nor authorizes publication.
+- **CP-013 / P1 / release correctness:** a synthetic local index with assume-unchanged
+  hid changed shipped bytes from git status, allowing preparation to claim an
+  inaccurate source commit. The new regression failed before the fix. Preparation
+  and acceptance now compare committed Git blobs directly. Wrong digests/commits,
+  unsafe manifest paths, changed allowlists, hidden source edits and rehashed changed
+  archive bytes are rejected before installed code execution. This is release
+  identity hardening; it is not an application runtime exploit or publishing bypass.
+- Wire offline acceptance before artifact upload in the preparation-only workflow;
+  include the value-free receipt. No workflow was dispatched or publicly uploaded.
+- Update parser/compatibility notes, changelog, testing, release, trial and stability
+  docs. Re-evaluate all six pinned public templates successfully after the fix.
+
+Verification and replacement candidate identity are recorded below after final
+checks. Current-source Linux/Windows execution and consenting human trials remain
+outstanding. Local Docker is installed but its daemon is unavailable; no Linux
+success is inferred. No person was contacted and no external review is fabricated.
+
+Final verification for this continued stability milestone:
+
+- Offline lockfile installation with lifecycle scripts disabled passed. Full
+  `npm run check` passed on local macOS ARM64 with Node **20.20.0, 22.13.0,
+  24.22.1 and 26.12.1**: **165 runtime tests + 7 contract tests**, zero failures
+  or skips, lint clean, TypeScript 5.0.4/7.0.2 installed consumers and formatting
+  passed. After the last source-binding change, reran the full checks on all four.
+- Minimum Node **20.0.0** passed the final **165** runtime tests, including private
+  acceptance and hidden-index source-binding regressions. Contract checks run only
+  on development-supported runtimes with their development dependencies installed.
+- Final `npm run test:coverage` passed on Node 20.20.0: parser and analyzer each
+  **100% lines/branches/functions**. All **165** tests passed. Coverage remains a
+  regression signal alongside assertions, not proof of complete grammar support.
+- Five isolated resource probes passed on Node 20.20.0 after the parser change:
+  largest report **1,854,703 bytes**, highest peak RSS **103.63 MiB**; all below
+  the 5 MiB/256 MiB budgets. No broader benchmark or all-platform claim is made.
+- Six pinned public templates reran successfully on the current parser: identical
+  hashes/key sets, reference agreement, clean CLI exit 0 and synthetic drift/duplicate
+  expectations. GET requests downloaded public examples only; no local code,
+  private input or reproduction was uploaded. Temporary public files were removed.
+- `git diff --check` passed. The package allowlist remains **21 files**, zero
+  runtime dependencies and ESM-only API; no package version, tag or release changed.
+  The new verifier/scripts/tests do not ship in the npm archive. Workflow changes
+  are local only and retain read-only permissions with no publication command.
+
+Local engineering changes are complete for this milestone. Prepare and verify the
+committed replacement archive next, then retain its identity below. Stable v1 still
+requires current-source native Linux/Windows checks, real developer trials and final
+security/compatibility/API/owner approval; the private-delivery decision is preserved.

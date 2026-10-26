@@ -13,6 +13,9 @@ these changes require an owner-approved new version before registry distribution
 - Quarantine ambiguous quoted multiline boundaries before body fragments can become
   declaration names or duplicate findings. Conservative recovery can suppress later
   declarations; previously accepted ambiguous inputs may now report syntax errors.
+- Reject nonportable whitespace before quoted values and quarantine their bodies.
+  Previously accepted prefixes now report INVALID_DECLARATION; ordinary spaces/tabs
+  and unquoted opaque Unicode values preserve their behavior.
 - Bound each input to 2,048 declarations/invalid lines, labels to 4,096 UTF-16 code
   units, and emitted key/label metadata to 131,072 code units. Excess raises a safe
   RangeError or CLI INPUT_LIMIT_EXCEEDED (exit 2), without partial results.
@@ -25,6 +28,10 @@ these changes require an owner-approved new version before registry distribution
   runtime dependencies. Verify installed TypeScript 5.0.4 and 7.0.2 consumers.
 - Enforce 90% core line/branch coverage and add isolated resource-budget probes.
 - Correct release/support documentation and track remaining v1 validation gates.
+- Add offline candidate acceptance with archive/source identity, installed byte
+  equality and real API/CLI workflows for private cross-platform review.
+- Bind candidate source to committed blobs even when Git index flags hide edits
+  from status/diff; mismatched local source cannot produce a verified candidate.
 
 ## 0.1.0 — 2026-10-26
 

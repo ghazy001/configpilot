@@ -25,7 +25,9 @@ Future publications and external releases require their own explicit owner appro
 The workflow checks out the immutable triggering SHA and rejects other branches or
 forks. Its read-only API preflight requires the latest completed successful GitHub
 Actions Quality gate for that SHA. It repeats lint/tests/type checks/formatting and
-coverage before packing. Older successful attempts cannot override newer failures.
+coverage before packing. It then verifies that exact archive in a fresh offline
+consumer before upload; a failed acceptance check blocks the artifact step.
+Older successful attempts cannot override newer failures.
 
 The helper accepts either private metadata or a stable numeric version with no
 private field and exactly this publishConfig: registry https://registry.npmjs.org/,
@@ -34,20 +36,23 @@ publication options are rejected. A future prerelease channel needs deliberate
 review rather than silently using latest. Neither metadata mode authorizes publishing.
 
 Both modes require safe explicit file paths, regular tracked files, a clean checkout,
-and a new output directory outside it. Scripts-disabled offline dry-run and actual
+and a new output directory outside it. Every shipped file is compared directly with
+its committed blob; local Git index flags cannot hide changed bytes. Scripts-disabled offline dry-run and actual
 pack lists must exactly match the allowlist. Existing output directories are never
 overwritten or removed; failures remove only the directory created by that invocation.
 
-Artifacts contain the tgz and candidate.json: schema version, source commit,
+Artifacts contain the tgz, candidate.json and verification.json. The manifest contains schema version, source commit,
 name/version, actual private status, explicit publication options for public candidates,
 archive filename, SHA-256, npm integrity and exact file list. Inspect the entire
 archive and independently install/import/execute it. Hash matching binds the manifest
 to that archive; it is neither provenance nor approval to publish.
+The value-free verification receipt identifies the same source/digest and actual
+Node/OS/architecture; it does not replace the complete compatibility matrix or human review.
 
 Artifacts in this public repository are downloadable by signed-in GitHub users
 with repository read access. Private metadata does not make artifacts confidential.
 Only reviewed distributable source/docs may be included; never credentials or private
-configuration. The workflow uploads only the named archive and manifest, not the
+configuration. The workflow uploads only the named archive, manifest and verification receipt, not the
 workspace, environment files, logs, credentials or cache. See
 [GitHub artifact access](https://docs.github.com/en/actions/how-tos/manage-workflow-runs/download-workflow-artifacts).
 
@@ -72,6 +77,7 @@ From a clean checkout, with a new absolute directory outside it:
 ```sh
 npm run check
 npm run release:prepare -- "/absolute/path/outside/configpilot-candidate"
+npm run --silent candidate:verify -- "/absolute/path/outside/configpilot-candidate"
 ```
 
 This prepares the same archive/manifest without upload or publication. Ignored

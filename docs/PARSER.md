@@ -61,7 +61,9 @@ contract; **full Node.js or dotenv package compatibility is not claimed**.
 - Each declaration uses `KEY=value`. A lowercase `export` prefix followed by
   spaces or tabs is optional; `export=value` declares the key `export`.
 - Spaces and tabs may surround the declaration, key, equals sign, and value.
-  Other characters are not treated as horizontal whitespace.
+  Other characters are not treated as horizontal whitespace. Unicode or vertical
+  whitespace before an opening quote is rejected as `INVALID_DECLARATION`; its
+  quoted body is quarantined using the same recovery rules as malformed assignments.
 - Empty lines and lines starting with `#` after spaces/tabs are ignored.
   An initial UTF-8-decoded BOM (`U+FEFF`) is ignored only at the start of input.
 - LF, CRLF, and lone CR line endings are recognized, including mixed endings.
@@ -128,6 +130,14 @@ Unambiguous single-line trailing backslashes remain accepted. This deliberately
 conservative recovery can reject input previously accepted by 0.1.0; review the
 first syntax issue instead of interpreting suppressed keys as missing variables.
 
+The same recovery protects quoted values preceded by nonportable whitespace,
+including nonbreaking spaces, vertical tabs and noninitial BOMs. Some loaders trim
+these characters before recognizing quotes. ConfigPilot rejects that syntax rather
+than interpreting their credential-body lines as independent declarations. This
+also rejects previously accepted single-line quoted values with those prefixes;
+replace the prefix with ordinary spaces/tabs. Unquoted opaque Unicode values remain
+supported. Supported syntax and public issue codes do not expand.
+
 Independent development tests compare 99 conventional cases against pinned dotenv
 18.0.9 and exercise multiline/backslash mutations, including 5,376 malformed combinations
 with 1,728 reference-recognized credential-body cases. Dotted/hyphenated names, colon
@@ -135,6 +145,11 @@ assignments and non-ASCII horizontal whitespace remain intentional differences.
 Neither the reference comparison nor this safeguard establishes full compatibility
 with dotenv or Node's loader. Interpolation remains literal and physical multiline
 values remain unsupported.
+
+An additional 2,835 whitespace/recovery cases compare the default and fast parsers
+in that pinned package and the running Node.js `util.parseEnv` loader. Every body
+recognized as value content by any reference must stay out of parser/analyzer
+metadata. Loader agreement on this corpus does not establish full compatibility.
 
 ## Resource budgets
 

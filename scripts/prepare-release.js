@@ -57,6 +57,21 @@ try {
     },
   );
   if (tracked.status !== 0) throw new Error();
+  // Status/diff can hide edits behind local index flags. Bind every shipped byte
+  // to the claimed commit independently of assume-unchanged/skip-worktree.
+  for (const file of expected) {
+    const committed = spawnSync("git", ["show", `${commit}:${file}`], {
+      cwd: root,
+      timeout: 10_000,
+      maxBuffer: 16 * 1024 * 1024,
+    });
+    if (
+      committed.error ||
+      committed.status !== 0 ||
+      !committed.stdout.equals(readFileSync(join(root, file)))
+    )
+      throw new Error();
+  }
   const status = spawnSync(
     "git",
     ["status", "--porcelain", "--untracked-files=normal"],

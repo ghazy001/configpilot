@@ -15,7 +15,7 @@ npm run test:coverage
 npm run pack:dry-run
 ```
 
-`check` runs lint with zero warnings, runtime tests, installed TypeScript consumer
+`check` runs lint with zero warnings, runtime and independent contract tests, installed TypeScript consumer
 verification, and formatting verification. `npm run test:types` runs that consumer
 check separately with pinned TypeScript 5.0.4 and 7.0.2. It packs the real checkout, installs
 it offline in a temporary project, and compiles positive/negative fixtures from
@@ -137,6 +137,43 @@ the reference recognizes a body fragment as value content rather than a key.
 Every such case must keep that fragment out of both parser and analyzer metadata.
 These deterministic assertions complement actual CLI regressions and do not claim
 complete parser equivalence.
+
+The whitespace-recovery corpus adds 2,835 cases across 21 nonportable whitespace
+characters, three quote styles, all physical line endings, valid/malformed headers
+and closing-line variations. Both default and fast dotenv parsers recognize 2,268
+protected bodies; Node's built-in `util.parseEnv` provides an additional independent
+runtime oracle. Runtime-specific counts are not pinned. Each recognized body must
+stay out of parser/analyzer metadata and reports must validate against the schema.
+The actual executable checks both input roles, terminal/JSON, unchanged source bytes
+and exit 1 with skipped comparison. Installed archive imports repeat the regression.
+
+## Private candidate acceptance
+
+After committing changes and running `release:prepare`, use:
+
+```sh
+npm run --silent candidate:verify -- /absolute/path/to/candidate
+```
+
+The dependency-free maintainer script runs on Node 20+ with Git/npm and needs no
+network or development dependencies. It validates the supplied manifest, SHA-256 and
+npm SHA-512 integrity, matches shipped files to the claimed Git commit and current
+checkout, installs the exact archive offline with scripts disabled, compares every
+installed byte and checks the public ESM/CJS dynamic-import API, schema resolution,
+platform executable shim, help/version and CLI exits 0/1/2 using synthetic inputs.
+It checks privacy and resource regressions; input files remain unchanged. Disposable
+consumer/cache files are removed afterward; the supplied archive/manifest are read only.
+
+Success emits one JSON receipt identifying commit, artifact digest, runtime, OS and
+architecture. Failures emit a fixed stage name and exit 1 without dumping subprocess
+output or archive/configuration contents. Tests reject wrong digests, stale commits,
+unsafe paths, changed allowlists, dirty shipped source and rehashed-but-changed archive
+bytes before installed code executes. Both preparation and verification compare Git
+blobs directly, including when assume-unchanged hides edits from status/diff.
+This accepts a reviewed source/archive pair;
+it is not authentication of an untrusted sender and does not grant release approval.
+TypeScript/lint/contract/coverage checks still run separately. Full OS matrix checks
+are broader than this smoke test; record both without treating one as the other.
 
 Coverage enforcement reads structured test:coverage events through a custom reporter,
 not Node's version-specific flat/tree terminal tables. It fails when expected core

@@ -134,6 +134,15 @@ export function parseDotenv(source, options = {}) {
     }
 
     const start = assignment[0].length;
+    // Other loaders trim Unicode/vertical whitespace before looking for quotes.
+    // Do not mistake their multiline credential body for independent keys. This
+    // is still unsupported syntax: accept only spaces/tabs around quoted values.
+    if (/^[^\S\r\n]+['"`]/.test(line.slice(start))) {
+      consume();
+      issues.push(createIssue("INVALID_DECLARATION", location));
+      index = skipMalformedBlock(lines, index, start);
+      continue;
+    }
     const quote = line[start];
     if (QUOTES.has(quote)) {
       const end = closingQuote(line, start + 1, quote);

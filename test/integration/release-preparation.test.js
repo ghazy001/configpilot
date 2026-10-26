@@ -196,6 +196,16 @@ test("release rehearsal binds offline archives to clean commits and rejects unsa
     prepare(path, 1);
     assert.equal(existsSync(path), false);
   }
+  // A clean status alone cannot establish source identity: local index flags
+  // deliberately hide working-tree changes from normal status/diff commands.
+  git(["update-index", "--assume-unchanged", "entry.js"]);
+  writeFileSync(join(repo, "entry.js"), "// hidden source change\n");
+  assert.equal(git(["status", "--porcelain"]), "");
+  const hidden = join(directory, "hidden-change");
+  prepare(hidden, 1);
+  assert.equal(existsSync(hidden), false);
+  writeFileSync(join(repo, "entry.js"), "export const example = true;\n");
+  git(["update-index", "--no-assume-unchanged", "entry.js"]);
   writeFileSync(join(repo, "entry.js"), "// dirty change\n");
   const dirty = join(directory, "dirty");
   prepare(dirty, 1);
