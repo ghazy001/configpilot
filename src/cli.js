@@ -10,6 +10,8 @@ const HELP = `ConfigPilot — Explainable environment-configuration diagnostics
 
 Usage:
   configpilot check [--template PATH] [--env PATH] [--json]
+  configpilot scan [--path DIRECTORY] [--json]
+  configpilot init [--template] [--dry-run] [--yes]
   configpilot check --help
   configpilot --help
   configpilot --version
@@ -28,7 +30,8 @@ Path options also accept --template=PATH and --env=PATH.
 Paths are relative to the working directory. Only regular UTF-8 files up to
 1,048,576 bytes are accepted. Per input: at most 2,048 declarations/invalid lines,
 4,096-code-unit labels and 131,072 code units of key/label metadata.
-Files are never modified; values are never reported.
+Check never modifies files; values are never reported.
+Scan/init options: configpilot scan --help or configpilot init --help.
 
 Exit codes:
   0  No warnings/errors, or help/version completed.
@@ -155,8 +158,19 @@ export function parseArguments(args) {
 /** CLI orchestration; injectable reads keep unit tests independent of the disk. */
 export async function runCli(
   args,
-  { version, cwd = process.cwd(), readFile = readConfigFile, display = {} },
+  {
+    version,
+    cwd = process.cwd(),
+    readFile = readConfigFile,
+    display = {},
+    interactive = false,
+    confirm,
+  },
 ) {
+  if (["scan", "init"].includes(args[0])) {
+    const { runDiscoveryCli } = await import("./discovery/cli.js");
+    return runDiscoveryCli(args, { cwd, display, interactive, confirm });
+  }
   const jsonRequested = args[0] === "check" && args.includes("--json");
   const errorDisplay = {
     ...display.stderr,

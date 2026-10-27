@@ -1,11 +1,34 @@
 # Release readiness
 
-Reviewed 2026-10-26. **v1.1.1 published and verified.** The exact release source
-cf6b178 passed hosted CI; registry bytes, ordinary local/global installs and public
-API/CLI behavior were verified. npm latest, the immutable tag and GitHub release
-identify 1.1.1. See [the release receipt](releases/1.1.1.json).
-External feedback is explicitly accepted post-release work, not a completed claim.
-The old 0.1.0 validation archives are historical and must never be published.
+Reviewed 2026-10-27. **v1.2.0 preparation is in progress.** The owner authorized
+pushing, tagging and publishing the discovery/init workflow, terminal redesign and
+matching documentation. Publication follows the gates in
+[the release plan](RELEASE_PLAN_v1.2.0.md); no success is implied by this checklist.
+See [release notes](RELEASE_NOTES_v1.2.0.md) for the new workflow and limitations.
+
+The current package adds AST-based JavaScript/TypeScript discovery, exclusive
+placeholder-file creation and four additive public APIs. Existing check reports,
+JSON schema and exit codes remain compatible. It is ESM-only, Node >=20, MIT,
+with one direct runtime dependency (pinned Babel parser) and 32 allowlisted files.
+The archive includes discovery/API/CLI/security documentation and excludes fixtures,
+real environment files and terminal-capture tooling.
+
+Local runtime, contract, installed TypeScript, lint and formatting checks passed
+for the versioned source. Hosted Windows/Linux/macOS validation, exact-main candidate
+verification, npm browser authentication and registry installation remain release
+gates. [PROGRESS.md](PROGRESS.md) records actual results as each completes.
+The [feature audit](FEATURE_QUALITY_AUDIT.md) and
+[design review](CLI_DESIGN_REVIEW.md) retain the pre-release evidence and screenshots.
+External developer feedback remains **Pending — Requires Human Participation**;
+it must not be represented as completed testing.
+
+## Historical releases
+
+v1.1.1 was published and verified from cf6b178 with hosted CI and fresh local/global
+installs. Its immutable evidence is in [the receipt](releases/1.1.1.json).
+That evidence does not validate the new discovery implementation. Earlier private
+Windows/Linux/macOS CI and dependency-free archives in [STABILITY.md](STABILITY.md)
+refer to the earlier check-only package.
 
 ## Published 0.1.0 evidence
 
@@ -22,23 +45,10 @@ Owner login and 2FA were confirmed during the first publication. No credential o
 recovery code was collected. Initial local publication has no OIDC provenance.
 The published archive does not include the current privacy/resource fixes.
 
-## Technical evidence and future release checks
+## Mandatory release checks
 
-Use [STABILITY.md](STABILITY.md) and [PROGRESS.md](PROGRESS.md) for current work and
-executed verification. The source adds bounded records/metadata, quote quarantine,
-JSON Schema and TypeScript 5.0.4/7.0.2 checks. It remains ESM-only, Node >=20, MIT,
-with zero runtime dependencies. The distribution now has 21 explicit files.
-
-Private validation now includes a Linux ARM64 container running Node 24.22.1:
-full quality/installed TypeScript checks, coverage/resources and offline acceptance
-of the exact macOS-prepared archive passed with networking disconnected. macOS
-Node 20/22/24/26 checks and minimum Node 20.0.0 runtime tests also passed.
-Additional private Linux ARM64 checks passed on Node 20.19.0/22.13.0/26.12.1
-(quality, coverage and exact-archive acceptance) and 20.0.0 (runtime and archive).
-The complete hosted Windows/Linux/macOS matrix subsequently passed privately at
-f3c9916 in run 40305989425. The maintainer security/API review found no additional
-confirmed blocker. External feedback is **Pending — Requires Human Participation**.
-The current archive identity is in [STABILITY.md](STABILITY.md).
+Use [STABILITY.md](STABILITY.md) and [PROGRESS.md](PROGRESS.md) for executed
+verification. Historical archives must never be republished as the new release.
 
 For any subsequent release:
 

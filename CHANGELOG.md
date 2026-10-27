@@ -3,6 +3,32 @@
 Release history for ConfigPilot. Verification evidence and release status are
 recorded in the repository's development progress log.
 
+## 1.2.0 — 2026-10-27
+
+- Follow the CLI visual reference with three distinct severity cards, aligned status
+  badges/detail columns, shared header dividers and a highlighted Next Steps panel
+  across scan/init/check and operational errors. Stack the layout for narrow terminals.
+- Capture 13 real synthetic CLI PTY states for terminal-emulator screenshots and add
+  exact-count/alignment, monochrome, state and unchanged-JSON regression tests.
+- Deep-audit fixes: lexical process/import/alias/destructuring analysis, constant
+  template keys, wrapped defaults, UTF-8 budgets and explicit unsupported components.
+- Preserve selected template/local keys during initialization without copying values;
+  harden private filename roles, tracked-file ignore warnings and confirmation failure handling.
+- Premium scan/init/check presentation with source locations, concise groups, safe
+  previews, context-sensitive next steps and responsive 40–160-column coverage.
+- Correct sample-template onboarding and custom-file check guidance without changing
+  the established `.env.example` / `.env` check defaults.
+- Add adversarial workflow, seeded privacy, partial-write and resource regressions,
+  plus independent TypeScript AST comparisons across six pinned public repositories.
+
+- Add AST-based JS/TS/JSX/TSX source discovery with deterministic classifications,
+  selected configuration comparison, bounded workers and separate JSON reports.
+- Add consent-based initialization, pure placeholder generation and exclusive
+  root-level creation with Git-ignore warnings, no overwrite and restrictive modes.
+- Add scanSource, scanProject, generateEnvTemplate and explicit createEnvFile APIs
+  with TypeScript declarations. Existing check contracts remain unchanged.
+- Add pinned @babel/parser runtime dependency; parser/analyzer behavior is preserved.
+
 ## 1.1.1 — 2026-10-26
 
 - Correct current installation commands, archive examples, trial instructions and

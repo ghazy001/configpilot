@@ -51,8 +51,14 @@ test("default check works outside the checkout and reports a realistic mismatch"
   const result = run(cwd);
   assert.equal(result.status, 1);
   assert.equal(result.stderr, "");
-  assert.match(result.stdout, /DATABASE_URL \[MISSING_KEY\]/);
-  assert.match(result.stdout, /REDIS_URL \[UNDOCUMENTED_KEY\]/);
+  assert.match(
+    result.stdout,
+    /DATABASE_URL +\[ WARNING \]\n +Finding: +Missing variable \[MISSING_KEY\]/,
+  );
+  assert.match(
+    result.stdout,
+    /REDIS_URL +\[ WARNING \]\n +Finding: +Undocumented variable \[UNDOCUMENTED_KEY\]/,
+  );
   assert.match(result.stdout, /0 errors, 2 warnings, 0 info/);
   assert.match(result.stdout, /No files were modified/);
   assert.ok(!result.stdout.includes("SYNTHETIC_REDIS_SECRET"));

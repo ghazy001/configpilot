@@ -39,7 +39,7 @@ test("color is presentation only and all findings remain visible in quiet mode",
   const colored = formatTerminal(report, { color: true });
   assert.equal(stripVTControlCharacters(colored), plain);
   assert.ok(colored.includes("\u001b[31m"));
-  assert.ok(colored.includes("\u001b[34m"));
+  assert.ok(colored.includes("\u001b[94m"));
   const quiet = formatTerminal(report, { quiet: true });
   for (const issue of report.issues) assert.ok(quiet.includes(issue.code));
   assert.doesNotMatch(quiet, /Summary|ConfigPilot/);
@@ -67,7 +67,7 @@ test("stacked layout wraps long keys and Unicode paths without dropping grapheme
         0,
       );
       assert.ok(
-        cells <= Math.min(width, 100),
+        cells <= Math.min(width, 160),
         `${cells} cells exceed ${width}`,
       );
     }

@@ -1,6 +1,6 @@
 import { Buffer } from "node:buffer";
 import { constants } from "node:fs";
-import { open, stat } from "node:fs/promises";
+import { open, stat, lstat } from "node:fs/promises";
 import { TextDecoder } from "node:util";
 
 export const MAX_FILE_BYTES = 1_048_576;
@@ -24,24 +24,33 @@ function fileError(code) {
   return Object.assign(new Error(code), { code });
 }
 
-function checkFile(info) {
+function checkFile(info, maxBytes = MAX_FILE_BYTES) {
   if (!info.isFile()) throw fileError("NOT_REGULAR_FILE");
-  if (info.size > MAX_FILE_BYTES) throw fileError("FILE_TOO_LARGE");
+  if (info.size > maxBytes) throw fileError("FILE_TOO_LARGE");
 }
 
 /** Read only a selected regular UTF-8 file; never expose native error messages. */
-export async function readConfigFile(path) {
+export async function readConfigFile(
+  path,
+  { noFollow = false, maxBytes = MAX_FILE_BYTES } = {},
+) {
   try {
     // Reject devices/FIFOs before opening. Recheck the opened descriptor for races;
     // nonblocking opens also protect against a path being replaced by a FIFO.
-    checkFile(await stat(path));
+    const before = await (noFollow ? lstat(path) : stat(path));
+    checkFile(before, maxBytes);
     const file = await open(
       path,
-      constants.O_RDONLY | (constants.O_NONBLOCK ?? 0),
+      constants.O_RDONLY |
+        (constants.O_NONBLOCK ?? 0) |
+        (noFollow ? (constants.O_NOFOLLOW ?? 0) : 0),
     );
     try {
-      checkFile(await file.stat());
-      const buffer = Buffer.alloc(MAX_FILE_BYTES + 1);
+      const opened = await file.stat();
+      checkFile(opened, maxBytes);
+      if (noFollow && (opened.dev !== before.dev || opened.ino !== before.ino))
+        throw fileError("FILE_NOT_READABLE");
+      const buffer = Buffer.alloc(maxBytes + 1);
       let length = 0;
       while (length < buffer.length) {
         const { bytesRead } = await file.read(
@@ -53,7 +62,7 @@ export async function readConfigFile(path) {
         if (bytesRead === 0) break;
         length += bytesRead;
       }
-      if (length > MAX_FILE_BYTES) throw fileError("FILE_TOO_LARGE");
+      if (length > maxBytes) throw fileError("FILE_TOO_LARGE");
       try {
         return new TextDecoder("utf-8", { fatal: true }).decode(
           buffer.subarray(0, length),

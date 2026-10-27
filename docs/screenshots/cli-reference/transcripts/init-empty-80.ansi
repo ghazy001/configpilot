@@ -1,0 +1,35 @@
+  [1;36m◈ ConfigPilot[0m                                                         [90;40m[ INIT ][0m
+  [90mSafe environment initialization[0m
+
+  [90m──────────────────────────────────────────────────────────────────────────────[0m
+
+  [1mNo configurable names found[0m                                         [33;40m[ EXISTS ][0m
+
+  [90m╭───────────────────────╮[0m  [90m╭───────────────────────╮[0m  [90m╭──────────────────────╮[0m
+  [90m│[0m[1;37;40m           0           [0m[90m│[0m  [90m│[0m[1;33;40m           1           [0m[90m│[0m  [90m│[0m[1;37;40m          0           [0m[90m│[0m
+  [90m│[0m[90;40m        Errors         [0m[90m│[0m  [90m│[0m[90;40m       Warnings        [0m[90m│[0m  [90m│[0m[90;40m     Information      [0m[90m│[0m
+  [90m╰───────────────────────╯[0m  [90m╰───────────────────────╯[0m  [90m╰──────────────────────╯[0m
+
+  [1m0 placeholders / 0 potential secrets[0m
+  [90m0 names discovered in source; selected configuration keys are retained.[0m
+
+  [90m  Destination: [0m[36m".env"[0m
+  [90m  Protection:  [0m[33mAlready exists; preview only, never overwritten.[0m
+  [90m  Git status:  [0m[33mGit ignore status unavailable[0m
+  [90m  Safety:      [0m[33mPrivate configuration is not confirmed ignored by Git. Add[0m
+  [90m               [0m[33m.env, .env.local and .env.*.local to .gitignore as appropriate;[0m
+  [90m               [0m[33mConfigPilot does not edit it.[0m
+
+  [1mSafe configuration preview[0m                                    [90;40m[ PLACEHOLDERS ][0m
+
+  [90mNo configurable names were found. No file will be created.[0m
+
+  [1;36m╭────────────────────────────────────────────────────────────────────────────╮[0m
+  [1;36m│[0m[1;36;40m Next Steps                                                                 [0m[1;36m│[0m
+  [1;36m│[0m[40m                                                                            [0m[1;36m│[0m
+  [1;36m│[0m[40m Review source scope and unresolved lookups before creating configuration.  [0m[1;36m│[0m
+  [1;36m│[0m[40m                                                                            [0m[1;36m│[0m
+  [1;36m│[0m[1;36;44m › configpilot scan --verbose                                               [0m[1;36m│[0m
+  [1;36m╰────────────────────────────────────────────────────────────────────────────╯[0m
+
+  [90mNo configurable variables discovered. No file was created.[0m

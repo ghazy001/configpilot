@@ -1,0 +1,57 @@
+  [1;36m◈ ConfigPilot[0m                 [90;40m[ INIT ][0m
+  [90mSafe environment initialization[0m
+
+  [90m──────────────────────────────────────[0m
+
+  [1mConfiguration preview ready[0m
+  [90mStatus:[0m
+  [90m  [0m[94mDRY RUN[0m
+
+  [90m╭────────────────────────────────────╮[0m
+  [90m│[0m[1;37;40m                 0                  [0m[90m│[0m
+  [90m│[0m[90;40m               Errors               [0m[90m│[0m
+  [90m╰────────────────────────────────────╯[0m
+  [90m╭────────────────────────────────────╮[0m
+  [90m│[0m[1;37;40m                 0                  [0m[90m│[0m
+  [90m│[0m[90;40m              Warnings              [0m[90m│[0m
+  [90m╰────────────────────────────────────╯[0m
+  [90m╭────────────────────────────────────╮[0m
+  [90m│[0m[1;94;40m                 3                  [0m[90m│[0m
+  [90m│[0m[90;40m            Information             [0m[90m│[0m
+  [90m╰────────────────────────────────────╯[0m
+
+  [1m3 placeholders / 2 potential secrets[0m
+  [90m3 names discovered in source; selected[0m
+  [90mconfiguration keys are retained.[0m
+
+  [90mDestination:[0m
+  [90m  [0m[36m".env.example"[0m
+  [90mProtection:[0m
+  [90m  [0m[90mExclusive creation; existing files[0m
+  [90m  [0m[90mare never overwritten.[0m
+  [90mGit status:[0m
+  [90m  [0m[32mPublic template: safe placeholders[0m
+  [90m  [0m[32monly[0m
+
+  [1mSafe configuration preview[0m
+  [90mStatus:[0m
+  [90m  [0m[90mPLACEHOLDERS[0m
+
+  [1mDATABASE_URL=[0m
+  [1mOPENAI_API_KEY=[0m
+  [1mPORT=3000[0m
+
+  [90mEmpty values need review. Development[0m
+  [90mhints are not production defaults.[0m
+
+  [1;36m╭────────────────────────────────────╮[0m
+  [1;36m│[0m[1;36;40m Next Steps                         [0m[1;36m│[0m
+  [1;36m│[0m[40m                                    [0m[1;36m│[0m
+  [1;36m│[0m[40m Review the placeholders, then      [0m[1;36m│[0m
+  [1;36m│[0m[40m explicitly approve creation of a   [0m[1;36m│[0m
+  [1;36m│[0m[40m new file.                          [0m[1;36m│[0m
+  [1;36m│[0m[40m                                    [0m[1;36m│[0m
+  [1;36m│[0m[1;36;44m › configpilot init --template      [0m[1;36m│[0m
+  [1;36m╰────────────────────────────────────╯[0m
+
+  [90mDry run: no file was created.[0m

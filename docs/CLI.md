@@ -2,8 +2,8 @@
 
 Requires Node.js 20+. From the checkout, run `node bin/configpilot.js`; a local
 installation also provides the `configpilot` executable. Version 1.0.0 defines the
-stable CLI contract. No command changes configuration files or executes their
-contents, project scripts, or project-provided configuration modules.
+stable CLI contract. The check command never changes configuration files or executes their contents,
+project scripts, or project-provided configuration modules.
 
 ```sh
 configpilot check
@@ -156,11 +156,16 @@ aggregate key/label metadata per input. Exceeding them returns exit 2 with
 form follows the operational envelope above. These limits prevent dense small files
 from generating excessive logs or allocations; they do not validate assignment values.
 
-## Terminal display (v1.1.0)
+## Terminal display (v1.2.0)
 
 Version 1.0.0 has the earlier plain layout. Version 1.1.0 keeps the public API,
 JSON schema, severities, codes, and exits unchanged. Human-readable layout is not a
 machine parsing contract; use `--json` for automation.
+
+Version 1.2.0 adds the shared reference-led layout across scan/init/check:
+three Errors / Warnings / Information cards, aligned badges/detail fields, header
+dividers and a highlighted Next Steps panel.
+Quiet checks omit cards and panels and keep their established behavior.
 
 | Option       | Behavior                                                                                                                                           |
 | ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -185,7 +190,9 @@ program indicator, or Windows Terminal's WT_SESSION. Other terminals use ASCII
 markers; severity words and stable issue codes remain visible in every mode.
 PowerShell outside Windows Terminal can therefore use the readable ASCII fallback.
 No font detection is attempted. Both streams wrap independently to their terminal
-width (4–100 columns; default 80), with stacked details and no box borders. Very
+width (4–160 columns; default 80). Three side-by-side metric cards become stacked
+blocks below 54 available cells; frames become plain labels below 24 available cells.
+Status badges align right when space permits and stack when a long name needs it. Very
 narrow widths split long keys and paths; use JSON to obtain their exact spelling.
 CJK and emoji widths are estimated; unusual fonts may render them differently.
 Paths are quoted and control characters escaped. Operational failures deliberately
@@ -204,20 +211,39 @@ configpilot check --no-color
 ```
 
 ```text
-  > ConfigPilot
-  Environment Configuration Diagnostics
+  > ConfigPilot                                                        [ CHECK ]
+  Environment configuration diagnostics
 
-  Template  ".env.example"
-  Target    ".env"
+  ------------------------------------------------------------------------------
 
-  [ok] No configuration issues found.
+  [ok] No configuration issues found.                                  [ CLEAN ]
+
+  +-----------------------+  +-----------------------+  +----------------------+
+  |           0           |  |           0           |  |          0           |
+  |        Errors         |  |       Warnings        |  |     Information      |
+  +-----------------------+  +-----------------------+  +----------------------+
+
+    Template:    ".env.example"
+    Target:      ".env"
+
   Syntax and declared keys match. Values and deployment configuration were not
   validated.
+
+  ------------------------------------------------------------------------------
 
   Summary
   0 errors, 0 warnings, 0 info.
   Comparison: complete
   Keys: 1 template, 1 environment; 1 shared, 0 missing, 0 undocumented.
+
+  +----------------------------------------------------------------------------+
+  | Next Steps                                                                 |
+  |                                                                            |
+  | Keep your reference template current. Recheck after changing configuration |
+  | keys.                                                                      |
+  |                                                                            |
+  | > configpilot check                                                        |
+  +----------------------------------------------------------------------------+
 
   No files were modified.
 ```
@@ -231,33 +257,53 @@ configpilot check --no-color
 ```
 
 ```text
-  > ConfigPilot
-  Environment Configuration Diagnostics
+  > ConfigPilot                                                        [ CHECK ]
+  Environment configuration diagnostics
 
-  Template  ".env.example"
-  Target    ".env"
+  ------------------------------------------------------------------------------
 
-  2 configuration issues found
+  ! Analysis completed                                                [ REVIEW ]
 
-  [!] WARNING  Missing variable
-  PORT [MISSING_KEY]
-  Location: template ".env.example":1
-  Template variable has no declaration in the environment input. It may be
-  supplied externally.
-  Action: Provide this key locally or through the deployment environment. Verify
-  external provisioning before changing files.
+  +-----------------------+  +-----------------------+  +----------------------+
+  |           0           |  |           2           |  |          0           |
+  |        Errors         |  |       Warnings        |  |     Information      |
+  +-----------------------+  +-----------------------+  +----------------------+
 
-  [!] WARNING  Undocumented variable
-  OTHER [UNDOCUMENTED_KEY]
-  Location: environment ".env":1
-  Environment variable is not documented in the reference template.
-  Action: Document this key in the reference template if intentional, or review
-  whether it is still needed.
+    Template:    ".env.example"
+    Target:      ".env"
+
+  Configuration diagnostics                                           [ STATUS ]
+
+  [!] PORT                                                           [ WARNING ]
+    Finding:     Missing variable [MISSING_KEY]
+    Location:    template ".env.example":1
+    Message:     No local declaration was found. This key may be supplied
+                 externally.
+    Action:      Provide it locally or verify deployment provisioning before
+                 changing files.
+
+  [!] OTHER                                                          [ WARNING ]
+    Finding:     Undocumented variable [UNDOCUMENTED_KEY]
+    Location:    environment ".env":1
+    Message:     This local key is absent from the reference template; setup
+                 instructions may be incomplete.
+    Action:      Document it if intentional, or review whether it is still used.
+
+  ------------------------------------------------------------------------------
 
   Summary
   0 errors, 2 warnings, 0 info.
   Comparison: complete
   Keys: 1 template, 1 environment; 0 shared, 1 missing, 1 undocumented.
+
+  +----------------------------------------------------------------------------+
+  | Next Steps                                                                 |
+  |                                                                            |
+  | Review the locations and actions above. Rerun your selected check after    |
+  | making intentional changes.                                                |
+  |                                                                            |
+  | > configpilot check                                                        |
+  +----------------------------------------------------------------------------+
 
   Configuration needs attention.
   No files were modified.
@@ -272,32 +318,51 @@ configpilot check --no-color
 ```
 
 ```text
-  > ConfigPilot
-  Environment Configuration Diagnostics
+  > ConfigPilot                                                        [ CHECK ]
+  Environment configuration diagnostics
 
-  Template  ".env.example"
-  Target    ".env"
+  ------------------------------------------------------------------------------
 
-  2 configuration issues found
+  [x] Analysis completed                                              [ ERRORS ]
 
-  [x] ERROR  Invalid declaration
-  INVALID_DECLARATION
-  Location: environment ".env":1
-  Declaration does not match the supported dotenv syntax.
-  Action: Use NAME=value with a portable variable name and complete single-line
-  quotes. Check the documented parser syntax.
+  +-----------------------+  +-----------------------+  +----------------------+
+  |           1           |  |           0           |  |          1           |
+  |        Errors         |  |       Warnings        |  |     Information      |
+  +-----------------------+  +-----------------------+  +----------------------+
 
-  [i] INFO  Key comparison skipped
-  COMPARISON_SKIPPED
-  Key comparison was skipped because at least one input could not be parsed
-  completely.
-  Action: Resolve syntax errors and unsupported constructs in both inputs, then
-  run the comparison again.
+    Template:    ".env.example"
+    Target:      ".env"
+
+  Configuration diagnostics                                           [ STATUS ]
+
+  [x] Invalid declaration                                              [ ERROR ]
+    Finding:     [INVALID_DECLARATION]
+    Location:    environment ".env":1
+    Message:     This declaration does not match the supported dotenv syntax.
+    Action:      Use NAME=value with a portable name and complete single-line
+                 quotes.
+
+  [i] Key comparison skipped                                            [ INFO ]
+    Finding:     [COMPARISON_SKIPPED]
+    Message:     Key differences are unavailable until both inputs parse
+                 completely.
+    Action:      Resolve the syntax findings, then run check again.
+
+  ------------------------------------------------------------------------------
 
   Summary
   1 error, 0 warnings, 1 info.
   Comparison: skipped
   Keys: 1 template, 0 environment (partial); differences unavailable.
+
+  +----------------------------------------------------------------------------+
+  | Next Steps                                                                 |
+  |                                                                            |
+  | Review the locations and actions above. Rerun your selected check after    |
+  | making intentional changes.                                                |
+  |                                                                            |
+  | > configpilot check                                                        |
+  +----------------------------------------------------------------------------+
 
   Configuration needs attention.
   No files were modified.
@@ -310,12 +375,30 @@ configpilot check --env missing.env --no-color
 ```
 
 ```text
-  [x] ConfigPilot: FILE_NOT_FOUND (environment)
+  > ConfigPilot                                                        [ CHECK ]
+  Environment configuration assistance
 
-  Selected input file was not found.
-  Action: Check the selected path and working directory, then rerun.
+  ------------------------------------------------------------------------------
 
-  Example: configpilot check --template .env.example --env .env
+  Command could not complete                                           [ ERROR ]
+
+  +-----------------------+  +-----------------------+  +----------------------+
+  |           1           |  |           0           |  |          0           |
+  |        Errors         |  |       Warnings        |  |     Information      |
+  +-----------------------+  +-----------------------+  +----------------------+
+
+    Finding:     FILE_NOT_FOUND
+    Input:       environment
+    Message:     Selected input file was not found.
+    Action:      Check the selected path and working directory, then rerun.
+
+  +----------------------------------------------------------------------------+
+  | Next Steps                                                                 |
+  |                                                                            |
+  | Check the selected path and working directory. Example:                    |
+  |                                                                            |
+  | > configpilot check --template .env.example --env .env                     |
+  +----------------------------------------------------------------------------+
 ```
 
 ### JSON success (exit 0)
@@ -344,3 +427,10 @@ configpilot check --json
   }
 }
 ```
+
+## Discovery and initialization (v1.2.0)
+
+Version 1.2.0 adds `scan` and explicitly authorized `init` creation without
+changing check semantics, JSON or exits. See [the full workflow and API](SOURCE_DISCOVERY.md).
+The recommended onboarding sequence is scan, init --template, init, then check.
+Run `configpilot scan --help` and `configpilot init --help` for their command-specific options.

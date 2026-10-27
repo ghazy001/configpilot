@@ -1,6 +1,21 @@
 # ConfigPilot development progress
 
-Last updated: 2026-10-26 (Africa/Tunis).
+Last updated: 2026-10-27 (Africa/Tunis).
+
+## Current release preparation — v1.2.0
+
+Status: **In Progress — owner authorized push, tag and publication**.
+The new discovery/init workflow, premium terminal layout, APIs and documentation
+are staged for an additive minor release. See [the release plan](RELEASE_PLAN_v1.2.0.md).
+The published registry version remains 1.1.1 until verification and publication finish.
+
+Executed locally for the versioned source: `npm run check` passed 235 runtime tests,
+seven contract tests, installed TypeScript 5.0.4/7.0.2 consumers, lint and formatting.
+Runtime dependency audit returned zero vulnerabilities. Resource checks passed all
+five isolated budgets. Coverage reran all 235 tests successfully (98.79% aggregate
+lines; parser/analyzer each 100% lines and branches). `npm pack --dry-run` succeeded; archive inspection/hosted
+OS tests and final exact-main publication checks remain gates. Human trials remain
+**Pending — Requires Human Participation**.
 
 ## v1.1.1 documentation release — Complete
 
@@ -23,7 +38,7 @@ Created immutable v1.1.1 tag and GitHub release after verification. Exact identi
 and CI evidence are in [the receipt](releases/1.1.1.json). No future publication is
 authorized by this record. Human trials and manual font-specific checks remain open.
 
-## Current release — v1.1.1
+## Historical published release — v1.1.1
 
 Status: **Complete — v1.1.1 published and verified**. npm latest points to 1.1.1.
 Registry bytes, fresh installation and hosted compatibility checks passed; see
@@ -1314,3 +1329,260 @@ for the current implementation; external feedback **Pending — Requires Human P
 - Durable identity and actual verification results are in `docs/releases/1.0.0.json`.
   This completes the approved release. Human feedback stays pending as accepted
   post-release work; no user trials or independent audit are claimed.
+
+## Discovery / initialization feature (local, unreleased)
+
+Owner scope: implement all 15 feature milestones, no push/tag/release/publication.
+Package version remains 1.1.1. Existing release evidence above is historical.
+
+- [x] 1 Inspection/architecture: CLI, parser, analyzer, diagnostic/report contracts,
+      declarations, package safety and tests reviewed; architecture recorded in
+      DISCOVERY_ARCHITECTURE.md. No baseline tests rerun yet; prior results are historical.
+- [x] 2 AST scanner
+- [x] 3 Classification
+- [x] 4 Configuration selection/comparison
+- [x] 5 Safe initialization
+- [x] 6 Placeholders
+- [x] 7 File safety
+- [x] 8 CLI presentation/confirmation
+- [x] 9 Check onboarding
+- [x] 10 Public API/declarations
+- [x] 11 Security/performance review
+- [x] 12 Automated tests
+- [x] 13 Documentation
+- [x] 14 Public-project validation
+- [x] 15 Final local quality review (native Windows/Linux follow-up pending)
+
+### Feature verification (local)
+
+Milestones 2–14 implemented. Seven initial focused tests passed, then the expanded
+suite passed 184 tests and seven independent contract tests. Installed TypeScript
+5.0.4/7.0.2 NodeNext/Bundler positive/negative consumers passed. Pure and filesystem
+APIs preserve old exports. Parser dependency graph is pinned/locked; npm audit
+--omit=dev reported zero known advisories on 2026-10-26 (not proof of no vulnerabilities).
+New offline acceptance preseeds the pinned dependency graph from installed locked
+dependencies; package source/archive identity checks remain strict. Minimum-runtime
+CI now installs runtime dependencies before testing. No workflow was pushed/run.
+
+Public-source trials at five pinned repositories completed; exact files, measured
+runtime/RSS, generation/CLI results, zero-reference cases and corrected JS-JSX / TS
+decorator gaps are in SOURCE_DISCOVERY_VALIDATION.md and its JSON record. Node 20.0.0
+focused tests passed before the final corpus fixes; final reruns follow below.
+No real user feedback, new native Windows/Linux result, publication or push is claimed.
+
+### Final feature result — 2026-10-26
+
+All 15 milestones implemented and locally reviewed. Final npm run check passed:
+187 tests, seven independent contracts, installed TypeScript 5.0.4/7.0.2
+NodeNext/Bundler positive/negative cases, emitted ESM and CommonJS dynamic import,
+lint and format. Expanded offline package test exercises installed scanSource,
+scanProject worker, pure generation and explicit creation; no root-source mapping.
+Coverage verification passed all 187 tests: parser/analyzer 100% lines/branches;
+source extractor 100% lines / 97.83% branches; project scanning 93.20% lines;
+creation/generation 100% lines. Focused feature tests (14) passed on Node 20.0.0,
+22.13.0, 24.22.1 and 26.12.1 on macOS; final Windows-device output guards were
+subsequently covered by the complete macOS suite. Real PTY confirmation accepted
+and created only a synthetic temporary template. Final package dry-run has 29
+explicit files; no configuration files/test fixtures/private source included.
+
+The scanner's Node-20-compatible Babel 7.29.11 dependency is pinned; its three
+transitive support packages are locked. npm audit --omit=dev reports zero known
+advisories, not an independent security certification. Minimum runtime CI now
+installs runtime dependencies before tests. All new hosted CI remains unexecuted.
+
+Remaining limitations: direct static references only (no aliases/destructuring,
+Vue SFC/Nuxt runtimeConfig or complete framework/control-flow semantics); conservative
+file-wide process-shadow suppression; heuristic classification; fixed development
+placeholders do not establish production validity. Root-level exclusive creation
+prevents overwrite, including concurrent creators; portable Node APIs cannot protect
+against hostile concurrent ancestor replacement. Windows ACLs and font appearance
+need manual/native review. I/O failures may leave a partial newly created file.
+
+No version bump, npm publication, tag, GitHub release, Git push, or external messages
+were performed for this feature. Only public-source downloads and dependency/advisory
+metadata lookups used network access. Source/configuration contents were never sent.
+Recommended next step: review the local diff, then authorize hosted compatibility CI
+before considering a future minor release. Human feedback remains uncollected.
+
+Final review also corrected process-binding pattern handling: property keys and
+right-hand default expressions are not declarations, while named class expressions
+can bind process. The added regression brings the final suite to 187 passing tests.
+No unresolved failing automated checks remain. New native Windows/Linux CI and
+manual terminal/font checks remain pending, as stated above.
+
+Final focused reruns passed all 15 feature tests on Node 20.0.0, 22.13.0,
+24.22.1 and 26.12.1 (macOS), including the final binding and destination guards.
+Final format check and package dry-run passed; archive remains 29 allowlisted files.
+
+## Deep feature quality audit / premium CLI — Complete locally; release gates pending
+
+2026-10-26, local only. Re-read AGENTS and discovery architecture/progress; reviewed
+actual scanner, traversal, generator, creator, CLI, reporters and existing tests.
+FEATURE_QUALITY_AUDIT.md records confirmed defects, severities, reproductions and
+remedies. Four new scanner groups and three workflow/Git-ignore groups failed before
+fixes; targeted reruns pass with lexical bindings, immutable aliases/destructuring,
+constant template keys, wrapped fallbacks, key-preserving initialization, private-role
+warnings and tracked-aware Git ignore checks. No publication/push is authorized.
+
+### Deep quality audit — 2026-10-27, final verification underway
+
+Re-read full AGENTS/spec and inspected the actual new modules. Confirmed regressions
+in builtin imports, lexical scopes, aliases/destructuring, computed keys, TS-wrapped
+fallbacks, template/local onboarding consistency, ignore roles/status and confirmation
+failure paths. Added failing-before/fixed-after regressions, plus TS enum/namespace
+and parameter-default cases and platform-neutral reserved-name checks. No breaking
+changes to published check/API/schema contracts; no new dependency was introduced.
+
+21 initial targeted tests and the A–J actual CLI matrix passed. Four resource/partial
+write groups and 12 renderer/reporter tests passed; later output-failure tests passed
+as well. Six pinned public inventories cover 239 scanned files / 54 references, with
+no unmatched named references against an independent TypeScript compiler AST method.
+Re-downloaded all six archives; all 251 retained sources/components match byte-for-byte.
+Vue components correctly make one repository incomplete and block initialization.
+Current measurements and verdict are recorded in FEATURE_QUALITY_AUDIT.md.
+
+Docker client exists but no daemon is reachable; no Linux execution claimed. Native
+Windows/macOS-terminal/font checks remain distinct from simulated capability tests.
+The task still forbids Git pushes, tags, publication and deployment; none performed.
+
+### Deep quality audit — final local result, 2026-10-27
+
+FEATURE_QUALITY_AUDIT.md records Q01–Q20: confirmed product defects, validation-helper
+defects, UX findings and separately labeled hardening. Final follow-ups reproduce/fix
+sample-template onboarding, custom-output guidance and raw-mode-denied confirmation.
+Readline now uses ordinary line input, with setup/output errors, SIGINT, EOF and idle
+timeouts handled safely. Native PTY decline/accept/create/check and 0600 assertions
+passed in isolated synthetic directories. No real user configuration was modified.
+
+| Requested phase                 | Status / evidence                                                                                            |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| 1 Complete implementation audit | Complete locally; findings and architectural tradeoffs recorded                                              |
+| 2 Adversarial scanner tests     | Complete; real AST cases, scopes/aliases/destructuring and seeded mutations                                  |
+| 3 Framework compatibility       | Supported source patterns tested; Vue/Svelte/Astro explicitly incomplete; full framework support not claimed |
+| 4 Init security audit           | Complete locally; exclusive creation, permissions, ignore roles, confirmations and failure injection         |
+| 5 A–J complete workflow tests   | Complete; ten isolated actual CLI scenarios plus sample/custom-path regressions                              |
+| 6 Public repository validation  | Complete for six pinned source inventories; independent TS reference and source hash verification            |
+| 7 Security/performance tests    | Complete locally; enforced resource limits and measured single-run timings/RSS                               |
+| 8 Premium terminal redesign     | Complete; shared writer, restrained hierarchy, grouped source-first rows and next steps                      |
+| 9 Scan/init/check UX            | Complete; documented safe previews, concise diagnostics and meaningful guidance                              |
+| 10 Responsive terminals         | 40/60/80/120/160 columns tested; native Windows/Linux/manual font checks pending                             |
+| 11 Accessibility                | Labels/ASCII, NO_COLOR, TERM=dumb, non-TTY/CI and line prompts tested                                        |
+| 12 Automated quality gates      | Complete locally; unit, CLI, security, package, types, contracts and coverage                                |
+| 13 Fix and reverify             | Complete; failing-before regressions and full passing reruns                                                 |
+| 14 Documentation                | Complete; realistic examples, limits, current roadmap and historical-report clarification                    |
+| 15 Final verification           | Local checks pass; native Windows/Linux exact-revision results remain pending                                |
+| 16 Quality report               | Complete; NEEDS WORK for release, with explicit evidence and remaining gates                                 |
+
+Final npm run check passed **227 runtime tests**, **seven independent contracts**,
+installed TypeScript 5.0.4/7.0.2 NodeNext/Bundler positive/negative consumers, emitted
+ESM/CommonJS dynamic imports, lint and formatting. Coverage rerun passed all 227 tests:
+parser/analyzer 100% lines/branches, source extraction 100% lines/98.68% branches,
+bindings 99.60%/97.46%, traversal 93.07%/92.81%, discovery CLI 96.98%/91.07%; all
+three initialization modules have 100% line coverage (80–90% branches).
+Final focused suites passed **40 tests each** on Node 20.0.0, 22.13.0, 24.22.1 and
+26.12.1, on macOS. Actual installed archive/API/shim and privacy checks passed in npm test.
+
+Six public inventories yielded 239 supported files / 54 named references; no unmatched
+named records against the independent TypeScript method within its documented scope.
+All 251 retained source/component files match freshly downloaded pinned archives.
+One Vue inventory is intentionally incomplete, blocking init; five generate safe previews.
+Single-run measurements and commits are in feature-quality-repositories.json; they are
+not generalized benchmark or external-user feedback claims.
+
+Outstanding: native Windows/Linux testing, native terminal/font/ACL review, and external
+feedback (Pending — Requires Human Participation). Docker daemon is unavailable;
+Git pushes are prohibited, so no hosted CI was triggered. Package version stays 1.1.1.
+No npm publication, tags, GitHub release, deployment, staging of generated files or push.
+Next milestone: native compatibility review of this exact local feature revision.
+
+Final package dry-run passed: 32 allowlisted files, 62,146 packed / 209,061 unpacked
+bytes; no environment files, test fixtures or downloaded source inventories. Synthetic
+secret exclusion and exact installed content were also checked by the package test.
+Final documentation formatting and git diff whitespace checks passed. These local
+audit/progress records are excluded from the npm archive.
+
+## Reference-led CLI layout — Implemented; visual acceptance pending
+
+2026-10-27. Re-read AGENTS, current roadmap/progress and reporter/CLI/tests. Compared
+every significant layout difference with the owner's picture before implementation;
+the comparison and terminal-specific tradeoffs are in CLI_DESIGN_REVIEW.md.
+
+Implemented shared cell-aware rows, aligned detail columns, separators, three distinct
+Errors/Warnings/Information metric blocks and a cyan framed Next Steps panel with a
+separate command background. All scan/init/check surfaces, creation success and
+operational errors use the same components. Cards stack below 54 available cells;
+very small widths use plain labels. Long names/statuses retain content and stack
+when needed. Colors use ANSI 16-color foreground/background codes and existing
+NO_COLOR/non-TTY/TERM=dumb/quiet policies. JSON and analysis/creation contracts remain
+unchanged. No dependency or version change belongs to this visual task.
+
+Actual visual verification: 13 real CLI processes ran in isolated synthetic projects
+through POSIX PTYs. Captured byte streams were replayed unmodified in xterm.js 5.5.0
+installed outside the repository. Browser screenshots are saved in
+docs/screenshots/cli-reference with raw transcript hashes and screenshot hashes.
+Native Terminal automation and sandbox listeners were denied; the owner started a
+temporary localhost server serving only synthetic captures. All 13 screenshots were
+saved and the owner was told the server could be stopped. No native Terminal.app or
+Windows/Linux screenshot certification is claimed.
+
+The gallery covers scan/init/check at 80 and 40 columns, clean checks, warning checks,
+syntax plus informational skipped-comparison findings, operational missing-file errors,
+empty scan/init/check results and an explicitly authorized disposable template creation.
+The three principal images were shown inline for owner review. Visual acceptance is
+pending; implementing or testing a design does not constitute owner acceptance.
+
+Files changed for this refinement: src/reporters/{terminal,discovery}.js,
+src/discovery/cli.js, tests in reference-layout.test.js and reference-ui.test.js,
+related reporter/CLI assertions, README, CLI/source-discovery guides, CHANGELOG,
+CLI_DESIGN_REVIEW.md, this progress record and screenshots. Added a POSIX maintainer
+capture utility scripts/capture-cli-design.py; it uses only synthetic disposable
+projects and refuses an existing capture directory. It is not part of npm runtime.
+
+Initial targeted results: 20 renderer/CLI tests passed. Full npm run check subsequently
+passed **235 runtime tests**, **seven independent contracts**, lint, formatting and
+installed TypeScript 5.0.4/7.0.2 NodeNext/Bundler positive/negative consumers, emitted
+ESM and CommonJS dynamic imports. One existing layout-specific assertion was updated
+to preserve key/code association across the new aligned rows. The eight new tests
+verify exact metrics, independent badge edges and body columns, widths
+40/60/80/120/160, Unicode/text-presentation widths, monochrome structure, all important
+states, unchanged files and byte-identical check/scan/init JSON. Full existing privacy,
+resource, consent, no-overwrite and installed-package regressions passed.
+
+Coverage, final package contents and supported-Node spot-check results follow below.
+No publication, push, tag, release, deployment or real configuration changes performed.
+
+### Final reference-layout verification
+
+- npm run check: PASS — 235 tests, seven contracts, lint, installed TypeScript
+  consumers and formatting. CLI tests include exact check/scan/init JSON equality.
+- npm run test:coverage: PASS — all 235 tests; terminal reporter 100% lines /
+  98.96% branches, discovery reporter 97.25% / 92.23%. Existing core coverage gates pass.
+- Node 20.0.0, 22.13.0, 24.22.1 and 26.12.1: 20 focused layout/CLI tests passed
+  per runtime on macOS. These are runtime checks, not native OS certification.
+- npm pack --dry-run --ignore-scripts --json: PASS — 32 allowlisted files,
+  66,490 packed / 232,649 unpacked bytes. No environment files, screenshot assets,
+  captures or test fixtures are shipped. Actual installed-package/API/shim checks
+  also passed as part of npm test.
+- All 13 screenshots and original ANSI transcripts match their SHA-256 manifests;
+  scan/init/check and representative narrow/error/success states were visually inspected.
+- Final whitespace and documentation-format checks are recorded with the local logs
+  under /private/tmp/configpilot-reference-final-*.log and pack.json.
+
+Design status: **Ready for owner visual review — acceptance pending.** The screenshot
+gallery and comparison document make the implementation reviewable. Native Windows /
+Linux font/terminal appearance remains unverified and the earlier release gates remain.
+
+## v1.2.0 release — In Progress
+
+2026-10-27: owner explicitly authorized push, tag and publication of a new version with
+updated documentation, superseding the earlier local-only restriction. Selected 1.2.0
+as an additive minor; public registry preflight returned 404, while latest was 1.1.1.
+Current main is protected. The new release branch starts at the current main tree and
+preserves all feature/audit/design changes. No previous version/tag will be rewritten.
+
+Updated package/lock metadata, README installation and scan/init/check quick start,
+CLI/source syntax/API guides, security policy, changelog, trial instructions, release
+notes and preparation plan. Historical receipts and audit measurements are retained.
+Hosted compatibility and exact-archive gates remain mandatory. npm identity preflight
+returned 401; a browser login will be needed after the concrete candidate is verified.
+No publication, tag, push or external release has occurred in this release session yet.

@@ -1,3 +1,4 @@
+import { seedOfflineDependencies } from "./offline-dependencies.js";
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import {
@@ -51,6 +52,7 @@ try {
       root,
     ),
   );
+  seedOfflineDependencies(consumer);
   execute(
     npmCli,
     [

@@ -16,8 +16,22 @@ import process from "node:process";
 import test from "node:test";
 import { fileURLToPath, URL } from "node:url";
 
+import { seedOfflineDependencies } from "../../scripts/offline-dependencies.js";
+
 const root = fileURLToPath(new URL("../../", import.meta.url));
 const expectedFiles = [
+  "src/reporters/discovery.js",
+  "src/discovery/bindings.js",
+  "src/initialization/confirm.js",
+  "src/discovery/source.js",
+  "src/discovery/project.js",
+  "src/discovery/worker.js",
+  "src/discovery/cli.js",
+  "src/initialization/template.js",
+  "src/initialization/create.js",
+  "docs/DISCOVERY_ARCHITECTURE.md",
+  "docs/SOURCE_DISCOVERY.md",
+
   "LICENSE",
   "README.md",
   "bin/configpilot.js",
@@ -162,6 +176,7 @@ test("tarball excludes environment files and works in an offline consumer", (t) 
     join(consumer, "package.json"),
     JSON.stringify({ private: true, type: "module" }),
   );
+  seedOfflineDependencies(consumer);
   execute(
     npmCli,
     [
@@ -223,7 +238,7 @@ test("tarball excludes environment files and works in an offline consumer", (t) 
     "./schema.json": "./schemas/report.schema.json",
   });
   assert.equal(metadata.engines.node, ">=20");
-  assert.equal(Object.keys(metadata.dependencies ?? {}).length, 0);
+  assert.deepEqual(metadata.dependencies, { "@babel/parser": "7.29.11" });
   assert.equal(metadata.bin.configpilot, "./bin/configpilot.js");
   assert.ok(
     existsSync(
@@ -243,11 +258,16 @@ test("tarball excludes environment files and works in an offline consumer", (t) 
     execute(join(installed, metadata.bin.configpilot), ["--help"], consumer),
     /Usage:/,
   );
+  mkdirSync(join(consumer, "feature-source"));
+  writeFileSync(
+    join(consumer, "feature-source", "app.ts"),
+    'process.env.API_TOKEN || "SYNTHETIC_SOURCE_FALLBACK";',
+  );
   const smoke = join(consumer, "smoke.mjs");
   writeFileSync(
     smoke,
     `import assert from "node:assert/strict";
-import { analyzeConfig, parseDotenv, ISSUE_CODES } from "configpilot";
+import { analyzeConfig, parseDotenv, ISSUE_CODES, scanProject, scanSource, generateEnvTemplate, createEnvFile } from "configpilot";
 import {createRequire} from "node:module";
 import {readFileSync} from "node:fs";
 const schema=JSON.parse(readFileSync(createRequire(import.meta.url).resolve("configpilot/schema.json"),"utf8"));
@@ -278,6 +298,14 @@ assert.equal(quarantined.comparison, "skipped");
 assert.equal(quarantined.issues[0].code, "INVALID_DECLARATION");
 assert.ok(!JSON.stringify(quarantined).includes("SYNTHETIC_INSTALLED_WHITESPACE"));
 assert.throws(() => parseDotenv("A=x\\n".repeat(2049)), RangeError);
+const discovered = await scanProject({root:process.cwd(),path:"feature-source"});
+assert.equal(discovered.variables[0].name,"API_TOKEN");
+assert.equal(scanSource("process.env.PORT").references[0].name,"PORT");
+const generated = generateEnvTemplate(discovered);
+assert.ok(!generated.includes("SYNTHETIC_SOURCE_FALLBACK"));
+await createEnvFile({root:process.cwd(),output:".env.api-demo",content:generated,confirmed:true});
+assert.equal(readFileSync(".env.api-demo","utf8"),generated);
+
 `,
   );
   assert.equal(execute(smoke, [], consumer), "");

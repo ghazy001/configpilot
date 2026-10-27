@@ -1,12 +1,12 @@
 {
   "name": "configpilot",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
     "access": "public",
     "tag": "latest"
   },
-  "description": "Explainable environment-configuration diagnostics for developers and CI.",
+  "description": "Discover environment references, safely initialize configuration, and diagnose .env inconsistencies.",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -50,7 +50,18 @@
     "src/reporters/terminal.js",
     "src/utils/read-config-file.js",
     "src/utils/input-limits.js",
-    "schemas/report.schema.json"
+    "schemas/report.schema.json",
+    "src/discovery/source.js",
+    "src/discovery/project.js",
+    "src/discovery/worker.js",
+    "src/discovery/cli.js",
+    "src/initialization/template.js",
+    "src/initialization/create.js",
+    "docs/DISCOVERY_ARCHITECTURE.md",
+    "docs/SOURCE_DISCOVERY.md",
+    "src/discovery/bindings.js",
+    "src/initialization/confirm.js",
+    "src/reporters/discovery.js"
   ],
   "scripts": {
     "test": "node --test",
@@ -71,7 +82,10 @@
     "environment",
     "configuration",
     "cli",
-    "diagnostics"
+    "diagnostics",
+    "environment-variables",
+    "static-analysis",
+    "typescript"
   ],
   "devDependencies": {
     "@eslint/js": "10.0.1",
@@ -81,5 +95,8 @@
     "prettier": "3.9.10",
     "typescript": "7.0.2",
     "typescript-minimum": "npm:typescript@5.0.4"
+  },
+  "dependencies": {
+    "@babel/parser": "7.29.11"
   }
 }

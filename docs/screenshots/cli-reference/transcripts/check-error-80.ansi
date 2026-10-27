@@ -1,0 +1,48 @@
+  [1;36m◈ ConfigPilot[0m                                                        [90;40m[ CHECK ][0m
+  [90mEnvironment configuration diagnostics[0m
+
+  [90m──────────────────────────────────────────────────────────────────────────────[0m
+
+  [31m✖ Analysis completed[0m                                                [31;40m[ ERRORS ][0m
+
+  [90m╭───────────────────────╮[0m  [90m╭───────────────────────╮[0m  [90m╭──────────────────────╮[0m
+  [90m│[0m[1;31;40m           1           [0m[90m│[0m  [90m│[0m[1;37;40m           0           [0m[90m│[0m  [90m│[0m[1;94;40m          1           [0m[90m│[0m
+  [90m│[0m[90;40m        Errors         [0m[90m│[0m  [90m│[0m[90;40m       Warnings        [0m[90m│[0m  [90m│[0m[90;40m     Information      [0m[90m│[0m
+  [90m╰───────────────────────╯[0m  [90m╰───────────────────────╯[0m  [90m╰──────────────────────╯[0m
+
+  [90m  Template:    [0m[36m".env.example"[0m
+  [90m  Target:      [0m[36m"invalid.txt"[0m
+
+  [1mConfiguration diagnostics[0m                                           [90;40m[ STATUS ][0m
+
+  [1m✖ Invalid declaration[0m                                                [31;40m[ ERROR ][0m
+  [90m  Finding:     [0m[31m[INVALID_DECLARATION][0m
+  [90m  Location:    [0m[36menvironment "invalid.txt":1[0m
+  [90m  Message:     [0m[90mThis declaration does not match the supported dotenv syntax.[0m
+  [90m  Action:      [0m[90mUse NAME=value with a portable name and complete single-line[0m
+  [90m               [0m[90mquotes.[0m
+
+  [1mi Key comparison skipped[0m                                              [94;40m[ INFO ][0m
+  [90m  Finding:     [0m[94m[COMPARISON_SKIPPED][0m
+  [90m  Message:     [0m[90mKey differences are unavailable until both inputs parse[0m
+  [90m               [0m[90mcompletely.[0m
+  [90m  Action:      [0m[90mResolve the syntax findings, then run check again.[0m
+
+  [90m──────────────────────────────────────────────────────────────────────────────[0m
+
+  [1mSummary[0m
+  [90m1 error, 0 warnings, 1 info.[0m
+  [90mComparison: skipped[0m
+  Keys: 3 template, 0 environment (partial); differences unavailable.
+
+  [1;36m╭────────────────────────────────────────────────────────────────────────────╮[0m
+  [1;36m│[0m[1;36;40m Next Steps                                                                 [0m[1;36m│[0m
+  [1;36m│[0m[40m                                                                            [0m[1;36m│[0m
+  [1;36m│[0m[40m Review the locations and actions above. Rerun your selected check after    [0m[1;36m│[0m
+  [1;36m│[0m[40m making intentional changes.                                                [0m[1;36m│[0m
+  [1;36m│[0m[40m                                                                            [0m[1;36m│[0m
+  [1;36m│[0m[1;36;44m › configpilot check --help                                                 [0m[1;36m│[0m
+  [1;36m╰────────────────────────────────────────────────────────────────────────────╯[0m
+
+  [31mConfiguration needs attention.[0m
+  [90mNo files were modified.[0m

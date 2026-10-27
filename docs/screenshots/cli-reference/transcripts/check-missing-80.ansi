@@ -1,0 +1,24 @@
+  [1;36m◈ ConfigPilot[0m                                                        [90;40m[ CHECK ][0m
+  [90mEnvironment configuration assistance[0m
+
+  [90m──────────────────────────────────────────────────────────────────────────────[0m
+
+  [31mCommand could not complete[0m                                           [31;40m[ ERROR ][0m
+
+  [90m╭───────────────────────╮[0m  [90m╭───────────────────────╮[0m  [90m╭──────────────────────╮[0m
+  [90m│[0m[1;31;40m           1           [0m[90m│[0m  [90m│[0m[1;37;40m           0           [0m[90m│[0m  [90m│[0m[1;37;40m          0           [0m[90m│[0m
+  [90m│[0m[90;40m        Errors         [0m[90m│[0m  [90m│[0m[90;40m       Warnings        [0m[90m│[0m  [90m│[0m[90;40m     Information      [0m[90m│[0m
+  [90m╰───────────────────────╯[0m  [90m╰───────────────────────╯[0m  [90m╰──────────────────────╯[0m
+
+  [90m  Finding:     [0m[31mFILE_NOT_FOUND[0m
+  [90m  Input:       [0m[90mtemplate[0m
+  [90m  Message:     [0m[90mSelected input file was not found.[0m
+  [90m  Action:      [0m[90mCheck the selected path and working directory, then rerun.[0m
+
+  [1;36m╭────────────────────────────────────────────────────────────────────────────╮[0m
+  [1;36m│[0m[1;36;40m Next Steps                                                                 [0m[1;36m│[0m
+  [1;36m│[0m[40m                                                                            [0m[1;36m│[0m
+  [1;36m│[0m[40m Check the selected path and working directory. Example:                    [0m[1;36m│[0m
+  [1;36m│[0m[40m                                                                            [0m[1;36m│[0m
+  [1;36m│[0m[1;36;44m › configpilot check --template .env.example --env .env                     [0m[1;36m│[0m
+  [1;36m╰────────────────────────────────────────────────────────────────────────────╯[0m

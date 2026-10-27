@@ -136,3 +136,13 @@ Manual 2FA release with these checks is acceptable; no automatic publisher is re
 The owner separately approved documentation patch v1.1.1 on 2026-10-26;
 [the plan](RELEASE_PLAN_v1.1.1.md) and [receipt](releases/1.1.1.json) retain its scope
 and completed verification. This does not authorize later publications.
+
+## Authorized v1.2.0 delivery
+
+The owner explicitly authorized pushing, tagging and publishing v1.2.0 after the
+reference-led CLI review. Follow [RELEASE_PLAN_v1.2.0.md](RELEASE_PLAN_v1.2.0.md),
+with [RELEASE_NOTES_v1.2.0.md](RELEASE_NOTES_v1.2.0.md) as the release description.
+This adds discovery/init and a pinned Babel parser; old dependency-free package
+receipts remain historical. New hosted OS/Node results and exact archive identity
+are required. Owner browser authentication/2FA is still required by npm, and agents
+must never approve GitHub environment-review jobs on the owner's behalf.

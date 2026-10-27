@@ -1,0 +1,46 @@
+  [1;36m◈ ConfigPilot[0m                                                         [90;40m[ SCAN ][0m
+  [90mEnvironment discovery[0m
+
+  [90m──────────────────────────────────────────────────────────────────────────────[0m
+
+  [32m✓ Scan completed[0m                                                   [90;40m[ 3 FILES ][0m
+
+  [90m╭───────────────────────╮[0m  [90m╭───────────────────────╮[0m  [90m╭──────────────────────╮[0m
+  [90m│[0m[1;37;40m           0           [0m[90m│[0m  [90m│[0m[1;37;40m           0           [0m[90m│[0m  [90m│[0m[1;94;40m          5           [0m[90m│[0m
+  [90m│[0m[90;40m        Errors         [0m[90m│[0m  [90m│[0m[90;40m       Warnings        [0m[90m│[0m  [90m│[0m[90;40m     Information      [0m[90m│[0m
+  [90m╰───────────────────────╯[0m  [90m╰───────────────────────╯[0m  [90m╰──────────────────────╯[0m
+
+  [1m3 variables / 2 potential secrets / 1 with defaults[0m
+  [90m  Template:    [0m[36m".env.example"[0m
+  [90m  Local:       [0m[36m".env"[0m
+
+  [1mDiscovered variables[0m                                                [90;40m[ STATUS ][0m
+
+  [1m› DATABASE_URL[0m                                            [33;40m[ Potential secret ][0m
+  [90m  Source:      [0m[36m"src/database.ts":12[0m
+  [90m  Message:     [0m[90mPotential secret / No local declaration; may be external[0m
+  [90m  Action:      [0m[90mSupply real credentials privately; keep template values empty.[0m
+
+  [1m› OPENAI_API_KEY[0m                                          [33;40m[ Potential secret ][0m
+  [90m  Source:      [0m[36m"src/ai.ts":6[0m
+  [90m  Message:     [0m[90mPotential secret / No local declaration; may be external[0m
+  [90m  Action:      [0m[90mSupply real credentials privately; keep template values empty.[0m
+
+  [1m› PORT[0m                                                    [32;40m[ Default detected ][0m
+  [90m  Source:      [0m[36m"src/server.js":8[0m
+  [90m  Message:     [0m[90mStatic fallback observed[0m
+  [90m  Action:      [0m[90mReview the fallback in source before deciding whether to set[0m
+  [90m               [0m[90mthis key.[0m
+
+  [90m──────────────────────────────────────────────────────────────────────────────[0m
+
+  [1;36m╭────────────────────────────────────────────────────────────────────────────╮[0m
+  [1;36m│[0m[1;36;40m Next Steps                                                                 [0m[1;36m│[0m
+  [1;36m│[0m[40m                                                                            [0m[1;36m│[0m
+  [1;36m│[0m[40m Review configuration consistency. Values and runtime provisioning are not  [0m[1;36m│[0m
+  [1;36m│[0m[40m validated.                                                                 [0m[1;36m│[0m
+  [1;36m│[0m[40m                                                                            [0m[1;36m│[0m
+  [1;36m│[0m[1;36;44m › configpilot check                                                        [0m[1;36m│[0m
+  [1;36m╰────────────────────────────────────────────────────────────────────────────╯[0m
+
+  [90mStatic references are not proof of requiredness. No files were modified.[0m

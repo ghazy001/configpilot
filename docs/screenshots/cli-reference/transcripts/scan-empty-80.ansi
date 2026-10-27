@@ -1,0 +1,31 @@
+  [1;36m◈ ConfigPilot[0m                                                         [90;40m[ SCAN ][0m
+  [90mEnvironment discovery[0m
+
+  [90m──────────────────────────────────────────────────────────────────────────────[0m
+
+  [32m✓ Scan completed[0m                                                   [90;40m[ 0 FILES ][0m
+
+  [90m╭───────────────────────╮[0m  [90m╭───────────────────────╮[0m  [90m╭──────────────────────╮[0m
+  [90m│[0m[1;37;40m           0           [0m[90m│[0m  [90m│[0m[1;37;40m           0           [0m[90m│[0m  [90m│[0m[1;37;40m          0           [0m[90m│[0m
+  [90m│[0m[90;40m        Errors         [0m[90m│[0m  [90m│[0m[90;40m       Warnings        [0m[90m│[0m  [90m│[0m[90;40m     Information      [0m[90m│[0m
+  [90m╰───────────────────────╯[0m  [90m╰───────────────────────╯[0m  [90m╰──────────────────────╯[0m
+
+  [1m0 variables / 0 potential secrets / 0 with defaults[0m
+  [90m  Template:    [0m[36m".env.example"[0m
+  [90m  Local:       [0m[36m".env"[0m
+
+  [1mDiscovered variables[0m                                                [90;40m[ STATUS ][0m
+
+  [90mNo named environment-variable references found.[0m
+  [90m──────────────────────────────────────────────────────────────────────────────[0m
+
+  [1;36m╭────────────────────────────────────────────────────────────────────────────╮[0m
+  [1;36m│[0m[1;36;40m Next Steps                                                                 [0m[1;36m│[0m
+  [1;36m│[0m[40m                                                                            [0m[1;36m│[0m
+  [1;36m│[0m[40m Review configuration consistency. Values and runtime provisioning are not  [0m[1;36m│[0m
+  [1;36m│[0m[40m validated.                                                                 [0m[1;36m│[0m
+  [1;36m│[0m[40m                                                                            [0m[1;36m│[0m
+  [1;36m│[0m[1;36;44m › configpilot check                                                        [0m[1;36m│[0m
+  [1;36m╰────────────────────────────────────────────────────────────────────────────╯[0m
+
+  [90mStatic references are not proof of requiredness. No files were modified.[0m
