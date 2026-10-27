@@ -20,6 +20,19 @@ import { seedOfflineDependencies } from "../../scripts/offline-dependencies.js";
 
 const root = fileURLToPath(new URL("../../", import.meta.url));
 const expectedFiles = [
+  "src/project/rules.js",
+  "src/project/config.js",
+  "src/project/check.js",
+  "src/project/cli.js",
+  "src/initialization/updates.js",
+  "src/discovery/vue.js",
+  "src/reporters/github.js",
+  "src/reporters/project.js",
+  "docs/PROJECT_WORKFLOWS.md",
+  "schemas/discovery.schema.json",
+  "schemas/initialization.schema.json",
+  "schemas/project.schema.json",
+  "schemas/config.schema.json",
   "src/reporters/discovery.js",
   "src/discovery/bindings.js",
   "src/initialization/confirm.js",
@@ -236,9 +249,16 @@ test("tarball excludes environment files and works in an offline consumer", (t) 
   assert.deepEqual(metadata.exports, {
     ".": { types: "./src/index.d.ts", default: "./src/index.js" },
     "./schema.json": "./schemas/report.schema.json",
+    "./discovery.schema.json": "./schemas/discovery.schema.json",
+    "./initialization.schema.json": "./schemas/initialization.schema.json",
+    "./project.schema.json": "./schemas/project.schema.json",
+    "./config.schema.json": "./schemas/config.schema.json",
   });
   assert.equal(metadata.engines.node, ">=20");
-  assert.deepEqual(metadata.dependencies, { "@babel/parser": "7.29.11" });
+  assert.deepEqual(metadata.dependencies, {
+    "@babel/parser": "7.29.11",
+    "@vue/compiler-sfc": "3.5.44",
+  });
   assert.equal(metadata.bin.configpilot, "./bin/configpilot.js");
   assert.ok(
     existsSync(
@@ -263,15 +283,23 @@ test("tarball excludes environment files and works in an offline consumer", (t) 
     join(consumer, "feature-source", "app.ts"),
     'process.env.API_TOKEN || "SYNTHETIC_SOURCE_FALLBACK";',
   );
+  writeFileSync(
+    join(consumer, "feature-source", "Component.vue"),
+    "<script setup>process.env.PORT;</script>",
+  );
   const smoke = join(consumer, "smoke.mjs");
   writeFileSync(
     smoke,
     `import assert from "node:assert/strict";
-import { analyzeConfig, parseDotenv, ISSUE_CODES, scanProject, scanSource, generateEnvTemplate, createEnvFile } from "configpilot";
+import { analyzeConfig, parseDotenv, ISSUE_CODES, scanProject, scanSource, generateEnvTemplate, createEnvFile, analyzeConfigWithRules, previewTemplateUpdates } from "configpilot";
 import {createRequire} from "node:module";
 import {readFileSync} from "node:fs";
 const schema=JSON.parse(readFileSync(createRequire(import.meta.url).resolve("configpilot/schema.json"),"utf8"));
 assert.ok(schema.$defs.complete);
+for(const kind of ["discovery","initialization","project","config"]) {
+  const publishedSchema=JSON.parse(readFileSync(createRequire(import.meta.url).resolve("configpilot/"+kind+".schema.json"),"utf8"));
+  assert.equal(publishedSchema.$id,"urn:configpilot:"+kind+":1");
+}
 const result = parseDotenv("TOKEN=SYNTHETIC_CONSUMER_SECRET\\nTOKEN=other", { file: ".env" });
 assert.deepEqual(result.declarations.map(({ key }) => key), ["TOKEN", "TOKEN"]);
 assert.equal(result.issues[0].code, "DUPLICATE_KEY");
@@ -300,6 +328,10 @@ assert.ok(!JSON.stringify(quarantined).includes("SYNTHETIC_INSTALLED_WHITESPACE"
 assert.throws(() => parseDotenv("A=x\\n".repeat(2049)), RangeError);
 const discovered = await scanProject({root:process.cwd(),path:"feature-source"});
 assert.equal(discovered.variables[0].name,"API_TOKEN");
+assert.equal(discovered.complete,true);
+assert.equal(discovered.variables[1].name,"PORT");
+assert.deepEqual(previewTemplateUpdates(discovered).keys,["API_TOKEN","PORT"]);
+assert.equal(analyzeConfigWithRules({template:"TOKEN=",environment:"TOKEN="},{requiredKeys:["TOKEN"]}).failed,true);
 assert.equal(scanSource("process.env.PORT").references[0].name,"PORT");
 const generated = generateEnvTemplate(discovered);
 assert.ok(!generated.includes("SYNTHETIC_SOURCE_FALLBACK"));

@@ -2,6 +2,34 @@
 
 Last updated: 2026-10-27 (Africa/Tunis).
 
+## v1.3.0 release delivery — In Progress
+
+Owner explicitly authorized pushing, tagging and publishing the six completed
+improvements on 2026-10-27. Prepared minor version 1.3.0 and updated the shipped
+README, CLI/project guide and changelog. Protected native OS CI, exact main archive
+acceptance, owner-controlled npm verification and registry read-back remain gates.
+Earlier no-release statements describe the preceding development task.
+
+## Project workflows expansion — Complete locally (unreleased)
+
+Owner requested all six proposed improvements after v1.2.0. Read AGENTS.md fully,
+inspected source/tests/contracts and confirmed a clean starting tree. No version
+bump, push, tag or publication is authorized by this development task.
+
+Architecture and initial implementation cover explicit bounded JSON project rules,
+separate policy-check reports/required-value presence, read-only template previews,
+Vue script parsing, explicit workspace roots and annotation/schema contracts. The
+official Vue parser adds 13 installed packages; it loads only in Vue parser workers,
+not normal check/startup. Correct SFC boundaries justify this dependency over regex
+extraction. Template expressions and dual-script components retain explicit limits.
+
+Executed initial verification: nine integration scenario groups passed, including
+malformed config privacy, required placeholders/quote quarantine, template immutability,
+workspace isolation/creation/symlinks, Vue syntax/locations and annotation injection.
+A canonical-path alias mismatch in workspace reporting was reproduced and fixed.
+Lint initially found control-regex/import issues; fixes passed final verification.
+Complete verification is recorded below. See PROJECT_WORKFLOWS_ROADMAP.md and PROJECT_WORKFLOWS.md.
+
 ## Current release — v1.2.0 published and verified
 
 Status: **Complete — pushed, tagged and published on 2026-10-27**.
@@ -1658,3 +1686,35 @@ regression. Public GitHub release read-back and remote annotated tag/peeled comm
 matched the receipt. Registry README metadata contains ordinary latest installation
 commands, the v1.2.0 pinning guidance and the new workflow. No shipped files changed
 in the receipt branch.
+
+## Project workflows — final local acceptance, 2026-10-27
+
+Completed all six requested improvements and their documentation. `npm run check`
+passed **258 tests**, **nine contract/schema tests**, installed TypeScript 5.0.4/7.0.2
+consumers, emitted ESM/CJS dynamic import, lint and formatting. Sequential coverage
+passed all 258 tests, **98.96% aggregate lines**, parser/analyzer/policy evaluator
+100% lines and branches. Minimum Node **20.0.0** passed the complete 258-test suite;
+Node **22.13.0/24.22.1/26.12.1** each passed all 20 new workflow/display tests on macOS.
+All five isolated resource budgets passed and the runtime audit found zero known
+vulnerabilities. Six cached pinned public source-only projects completed scan/init
+preview without source mutation or execution. Vue/Vite templates remain explicitly
+unresolved; no template variable names were guessed.
+
+Adversarial tests caught and fixed a configured-input symlink race in the unreleased
+wrapper (failing-before regression retained), canonical root alias reporting, schema
+null handling, preview size/inventory limits, annotation priority and misleading UI
+states. One oversubscribed coverage run hit the unchanged safe parser timeout; the
+sequential rerun passed. Full evidence, real-project measurements and limitations:
+PROJECT_WORKFLOWS_VALIDATION.md and project-workflow-validation.json.
+
+Native Windows/Linux checks for this new revision remain unexecuted; local Docker
+was unavailable because its daemon was stopped. Published v1.2.0 CI remains historical.
+External human feedback is still Pending — Requires Human Participation.
+Version remains **1.2.0** with clearly labeled unreleased docs. No commit, push,
+new tag, release or publication was performed in this task.
+
+Final `npm pack --dry-run --ignore-scripts --json` passed with exactly **45**
+allowlisted files, **86,228 packed bytes / 313,411 unpacked bytes**. Independent
+path-set comparison matched package.json; no .env files, credentials, dependencies
+or test fixtures are included. Lockfile version/dependencies agree with package.json.
+Final formatting and `git diff --check` passed. No archive was published.

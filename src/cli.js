@@ -25,6 +25,10 @@ Options:
   --verbose        Include safe analysis-scope details.
   --help           Show this help message.
   --version        Show the package version (standalone).
+  --config FILE    Explicit non-executable JSON project policy.
+  --workspace NAME Select one configured workspace (requires --config).
+  --workspaces     Read-only check of all configured roots (requires --config).
+  --github         GitHub workflow annotations instead of text/JSON (check/scan).
 
 Path options also accept --template=PATH and --env=PATH.
 Paths are relative to the working directory. Only regular UTF-8 files up to
@@ -165,11 +169,39 @@ export async function runCli(
     display = {},
     interactive = false,
     confirm,
+    policyRules,
+    budget,
   },
 ) {
+  if (
+    args
+      .slice(1)
+      .some((a) =>
+        ["--config", "--workspace", "--workspaces", "--github"].includes(
+          a.split("=")[0],
+        ),
+      )
+  ) {
+    const { runProjectCli } = await import("./project/cli.js");
+    return runProjectCli(args, {
+      version,
+      cwd,
+      readFile,
+      display,
+      interactive,
+      confirm,
+    });
+  }
   if (["scan", "init"].includes(args[0])) {
     const { runDiscoveryCli } = await import("./discovery/cli.js");
-    return runDiscoveryCli(args, { cwd, display, interactive, confirm });
+    return runDiscoveryCli(args, {
+      cwd,
+      display,
+      interactive,
+      confirm,
+      policyRules,
+      budget,
+    });
   }
   const jsonRequested = args[0] === "check" && args.includes("--json");
   const errorDisplay = {
@@ -208,19 +240,36 @@ export async function runCli(
         );
       }
     }
-    const report = analyzeConfig({
+    const input = {
       ...inputs,
       templateFile: options.templatePath,
       environmentFile: options.environmentPath,
-    });
+    };
+    let report, view;
+    if (policyRules !== undefined) {
+      const { analyzeConfigWithRules } = await import("./project/check.js");
+      report = analyzeConfigWithRules(input, policyRules);
+      view = {
+        ...report.analysis,
+        issues: report.issues,
+        summary: { ...report.analysis.summary, ...report.summary },
+      };
+    } else report = view = analyzeConfig(input);
     return {
       exitCode:
-        report.summary.errors > 0 || report.summary.warnings > 0 ? 1 : 0,
+        report.kind === "policy-check"
+          ? report.failed
+            ? 1
+            : 0
+          : report.summary.errors > 0 || report.summary.warnings > 0
+            ? 1
+            : 0,
       stdout: options.json
         ? formatJson(report)
-        : formatTerminal(report, {
+        : formatTerminal(view, {
             ...display.stdout,
             ...options,
+            policyReport: report.kind === "policy-check",
             ...(options.noColor ? { color: false } : {}),
             templateFile: options.templatePath,
             environmentFile: options.environmentPath,

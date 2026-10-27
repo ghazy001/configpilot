@@ -1,8 +1,12 @@
 # Discover → configure → verify (v1.2.0)
 
+This guide records the v1.2.0 baseline. The v1.3.0 adds opt-in
+[project workflows](PROJECT_WORKFLOWS.md) and Vue script-block support; see that
+guide for current behavior and limitations.
+
 Install with `npm install --global configpilot` or add the tool to a project with
 `npm install --save-dev configpilot` and use `npx configpilot`. To pin this release,
-append `@1.2.0` to the package name. Requires Node.js 20+ and npm; no account or
+append `@1.3.0` to the package name. Requires Node.js 20+ and npm; no account or
 network access is needed while scanning/checking/initializing a local project.
 No scanned code, compiler configuration, hooks or project scripts are loaded.
 For a source checkout, run `npm ci --ignore-scripts`, then invoke

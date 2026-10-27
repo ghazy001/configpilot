@@ -170,11 +170,14 @@ export interface DiscoveryIssue {
     | "SOURCE_UNDOCUMENTED_KEY"
     | "SOURCE_MISSING_LOCAL_KEY"
     | "SOURCE_OPTIONAL_REFERENCE"
-    | "SOURCE_POTENTIAL_SECRET";
-  severity: "info" | "warning";
+    | "SOURCE_POTENTIAL_SECRET"
+    | "REQUIRED_KEY"
+    | "EMPTY_REQUIRED_KEY";
+  severity: "info" | "warning" | "error";
   message: string;
   location?: SourceLocation;
   name?: string;
+  recommendation?: string;
 }
 export interface DiscoveredVariable {
   name: string;
@@ -189,6 +192,7 @@ export interface DiscoveredVariable {
   potentiallyRequired: boolean;
   inTemplate: boolean | null;
   inEnvironment: boolean | null;
+  configurationRole?: "optional" | "external" | "required" | "unspecified";
 }
 export interface DiscoveryReport {
   schemaVersion: 1;
@@ -198,6 +202,7 @@ export interface DiscoveryReport {
   bytesScanned: number;
   variables: DiscoveredVariable[];
   issues: DiscoveryIssue[];
+  policy?: { failOn: "warning" | "error" | "never"; failed: boolean };
   configuration: {
     detected: string[];
     template: string | null;
@@ -215,6 +220,7 @@ export declare function scanProject(options?: {
   path?: string;
   template?: string;
   environment?: string;
+  rules?: ProjectRules;
 }): Promise<DiscoveryReport>;
 /** Pure generation. Requires complete discovery; never copies source defaults. */
 export declare function generateEnvTemplate(
@@ -228,3 +234,60 @@ export declare function createEnvFile(options: {
   content: string;
   confirmed: true;
 }): Promise<{ created: true; output: string }>;
+
+/** Explicit local policy only. Never reads process.env or executes configuration. */
+export interface ProjectRules {
+  optionalKeys?: string[];
+  externalKeys?: string[];
+  requiredKeys?: string[];
+  /** Slash-separated paths with * within segments and ** as a whole segment. */
+  ignore?: string[];
+  severity?: Partial<Record<PolicyCode, Severity | "off">>;
+  failOn?: "warning" | "error" | "never";
+}
+export type PolicyCode =
+  | "MISSING_KEY"
+  | "UNDOCUMENTED_KEY"
+  | "DUPLICATE_KEY"
+  | "SOURCE_UNDOCUMENTED_KEY"
+  | "SOURCE_MISSING_LOCAL_KEY"
+  | "SOURCE_DYNAMIC_REFERENCE"
+  | "SOURCE_OPTIONAL_REFERENCE"
+  | "SOURCE_POTENTIAL_SECRET"
+  | "REQUIRED_KEY"
+  | "EMPTY_REQUIRED_KEY";
+export interface PolicyIssue {
+  code: IssueCode | PolicyCode;
+  severity: Severity;
+  source: InputSource | "comparison";
+  key?: string;
+  location?: SourceLocation;
+  relatedLocation?: SourceLocation;
+  message: string;
+  recommendation: string;
+}
+export interface PolicyCheckReport {
+  schemaVersion: 1;
+  kind: "policy-check";
+  /** Original unmodified check contract, before project rules. */
+  analysis: AnalysisReport;
+  issues: PolicyIssue[];
+  summary: { errors: number; warnings: number; info: number; total: number };
+  failed: boolean;
+}
+export declare function analyzeConfigWithRules(
+  input: AnalyzeConfigInput,
+  rules?: ProjectRules,
+): PolicyCheckReport;
+export interface TemplateUpdateReport {
+  schemaVersion: 1;
+  kind: "template-diff";
+  template: string | null;
+  keys: string[];
+  /** Safe empty assignments only. No existing lines or source defaults. */
+  content: string;
+}
+export declare function previewTemplateUpdates(
+  report: DiscoveryReport,
+  options?: { requiredKeys?: string[]; templateKeys?: string[] },
+): TemplateUpdateReport;

@@ -7,7 +7,9 @@ const location = (value) => `${quoted(value.file)}:${value.line}`;
 const missing = (variable) =>
   !variable.frameworkProvided &&
   (variable.inTemplate === false ||
-    (variable.inEnvironment === false && variable.potentiallyRequired));
+    (!["optional", "external"].includes(variable.configurationRole) &&
+      variable.inEnvironment === false &&
+      variable.potentiallyRequired));
 export function discoveryNextStep(report) {
   if (!report.complete)
     return [
@@ -56,6 +58,10 @@ function variableAction(variable) {
       : "Supply real credentials privately; keep template values empty.";
   if (variable.inTemplate === false)
     return "Document this key in the selected template if intentional.";
+  if (variable.configurationRole === "external")
+    return "Project rules mark this key externally supplied. Verify provisioning privately.";
+  if (variable.configurationRole === "optional")
+    return "Project rules mark this local key optional.";
   if (variable.inEnvironment === false && variable.potentiallyRequired)
     return "Add locally or verify deployment provisioning.";
   if (variable.frameworkProvided)
@@ -124,7 +130,12 @@ export function formatDiscovery(report, options = {}) {
     if (variable.frameworkProvided) badges.push("Framework-provided");
     if (variable.inTemplate === false && !variable.frameworkProvided)
       badges.push("Not documented");
-    if (variable.inEnvironment === false && variable.potentiallyRequired)
+    if (
+      missing(variable) &&
+      !["optional", "external"].includes(variable.configurationRole) &&
+      variable.inEnvironment === false &&
+      variable.potentiallyRequired
+    )
       badges.push("No local declaration; may be external");
     if (variable.hasStaticFallback) badges.push("Static fallback observed");
     if (!badges.length) badges.push("Requiredness unknown");
@@ -167,7 +178,13 @@ export function formatDiscovery(report, options = {}) {
       `${report.variables.length - visible.length} more names; use --verbose or --json for the full list.`,
       "muted",
     );
-  const allNotes = report.issues.filter((i) => options.verbose || !i.name);
+  const allNotes = report.issues.filter(
+    (i) =>
+      options.verbose ||
+      !i.name ||
+      i.severity !== "info" ||
+      ["REQUIRED_KEY", "EMPTY_REQUIRED_KEY"].includes(i.code),
+  );
   const notes = options.verbose ? allNotes : allNotes.slice(0, 20);
   if (notes.length) {
     line(options.verbose ? "Diagnostic details" : "Scan notes", "key");
@@ -354,7 +371,14 @@ export function formatInitializationSuccess(
     line(warning, "warning");
     line();
   }
-  panel(initializationSteps({ output, publicTemplate, hasTemplate }));
+  panel(
+    options.project
+      ? {
+          body: "Keep using the same --config and --workspace selections for subsequent commands. Review placeholders privately; no external provisioning was checked.",
+          commands: ["configpilot check --help"],
+        }
+      : initializationSteps({ output, publicTemplate, hasTemplate }),
+  );
   line();
   line(
     "Check validates syntax and declared keys, not values or deployment readiness.",

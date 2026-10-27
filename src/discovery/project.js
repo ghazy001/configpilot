@@ -2,10 +2,17 @@ import { URL } from "node:url";
 import { setTimeout, clearTimeout } from "node:timers";
 import { TextEncoder } from "node:util";
 import { lstat, realpath, opendir } from "node:fs/promises";
-import { resolve, relative, sep, extname, join } from "node:path";
+import { resolve, relative, isAbsolute, sep, extname, join } from "node:path";
 import { Worker } from "node:worker_threads";
 import { readConfigFile } from "../utils/read-config-file.js";
-import { parseDotenv } from "../parser/dotenv-parser.js";
+import { inspectDeclarations } from "../parser/dotenv-parser.js";
+import {
+  normalizeRules,
+  applyIssues,
+  policyFailed,
+  requiredIssues,
+  isIgnored,
+} from "../project/rules.js";
 import { DISCOVERY_LIMITS as L, classifyVariable } from "./source.js";
 
 const EXCLUDE = new Set([
@@ -27,6 +34,7 @@ const EXTENSIONS = new Set([
   ".tsx",
   ".mts",
   ".cts",
+  ".vue",
 ]);
 const CONFIGS = [
   ".env",
@@ -49,11 +57,18 @@ function parserWorker() {
   let worker;
   return {
     async parse(source, file) {
-      worker ??= new Worker(new URL("./worker.js", import.meta.url), {
-        resourceLimits: { maxOldGenerationSizeMb: 96, stackSizeMb: 4 },
-        execArgv: [],
-        env: {},
-      });
+      if (!worker) {
+        worker = new Worker(new URL("./worker.js", import.meta.url), {
+          resourceLimits: { maxOldGenerationSizeMb: 96, stackSizeMb: 4 },
+          execArgv: [],
+          env: {},
+          stdout: true,
+          stderr: true,
+        });
+        // Parser libraries must not forward raw diagnostics/snippets to the CLI.
+        worker.stdout.resume();
+        worker.stderr.resume();
+      }
       return new Promise((resolve) => {
         const current = worker;
         const finish = (result) => {
@@ -88,15 +103,26 @@ export async function scanProjectContext({
   path = ".",
   template,
   environment,
+  rules,
+  budget = {
+    entries: 0,
+    files: 0,
+    bytes: 0,
+    references: 0,
+    issues: 0,
+    started: Date.now(),
+  },
 } = {}) {
   if ([root, path].some((v) => typeof v !== "string" || !v || v.includes("\0")))
     throw new TypeError("Root and path must be nonempty paths.");
+  const policy = rules === undefined ? undefined : normalizeRules(rules);
   let base, scope;
   try {
     base = await realpath(resolve(root));
     scope = resolve(base, path);
     const rel = relative(base, scope);
     if (
+      isAbsolute(rel) ||
       rel.startsWith(`..${sep}`) ||
       rel === ".." ||
       resolve(scope) !== scope ||
@@ -118,7 +144,7 @@ export async function scanProjectContext({
     configuration: { detected: [], template: null, environment: null },
   };
   const add = (entry) => {
-    if (report.issues.length >= L.issues)
+    if (report.issues.length >= L.issues || ++budget.issues > L.issues)
       throw discoveryError("SCAN_LIMIT_EXCEEDED");
     report.issues.push(entry);
   };
@@ -131,7 +157,11 @@ export async function scanProjectContext({
   try {
     while (pending.length) {
       const { dir, depth } = pending.pop();
-      if (depth > L.depth || Date.now() - start > 30000)
+      if (
+        depth > L.depth ||
+        Date.now() - start > 30000 ||
+        Date.now() - budget.started > 30000
+      )
         throw discoveryError("SCAN_LIMIT_EXCEEDED");
       // Revalidate every directory; skip links rather than following them.
       if (
@@ -150,13 +180,15 @@ export async function scanProjectContext({
       const listing = [];
       const handle = await opendir(dir);
       for await (const entry of handle) {
-        if (++entries > L.entries) throw discoveryError("SCAN_LIMIT_EXCEEDED");
+        if (++entries > L.entries || ++budget.entries > L.entries)
+          throw discoveryError("SCAN_LIMIT_EXCEEDED");
         listing.push(entry);
       }
       listing.sort((a, b) => order(a.name, b.name));
       for (const entry of listing) {
         if (entry.name.startsWith(".") || EXCLUDE.has(entry.name)) continue;
         const full = join(dir, entry.name);
+        if (policy && isIgnored(label(base, full), policy.ignore)) continue;
         if (entry.isSymbolicLink()) {
           add(
             issue("SOURCE_SYMLINK_SKIPPED", "A symbolic link was not scanned."),
@@ -169,7 +201,7 @@ export async function scanProjectContext({
         }
         if (
           entry.isFile() &&
-          [".vue", ".svelte", ".astro"].includes(extname(entry.name))
+          [".svelte", ".astro"].includes(extname(entry.name))
         ) {
           report.complete = false;
           const file = label(base, full);
@@ -189,7 +221,12 @@ export async function scanProjectContext({
           /\.d\.[cm]?ts$/.test(entry.name)
         )
           continue;
-        if (report.filesScanned >= L.files || Date.now() - start > 30000)
+        if (
+          report.filesScanned >= L.files ||
+          budget.files >= L.files ||
+          Date.now() - start > 30000 ||
+          Date.now() - budget.started > 30000
+        )
           throw discoveryError("SCAN_LIMIT_EXCEEDED");
         const file = label(base, full);
         if (file.length > 1024) throw discoveryError("SCAN_LIMIT_EXCEEDED");
@@ -210,7 +247,8 @@ export async function scanProjectContext({
           const bytes = new TextEncoder().encode(source).length;
           if (bytes > L.fileBytes) throw new Error();
           report.bytesScanned += Math.max(info.size, bytes);
-          if (report.bytesScanned > L.totalBytes)
+          budget.bytes += Math.max(info.size, bytes);
+          if (report.bytesScanned > L.totalBytes || budget.bytes > L.totalBytes)
             throw discoveryError("SCAN_LIMIT_EXCEEDED");
           if (source.includes("\0")) throw new Error();
         } catch (error) {
@@ -226,6 +264,7 @@ export async function scanProjectContext({
           continue;
         }
         report.filesScanned++;
+        budget.files++;
         const parsed = await parser.parse(source, file);
         if (parsed.failed) {
           report.complete = false;
@@ -243,7 +282,9 @@ export async function scanProjectContext({
           if (entry.code === "SOURCE_PARSE_ERROR") report.complete = false;
         }
         refs += parsed.references.length + parsed.issues.length;
-        if (refs > L.references) throw discoveryError("SCAN_LIMIT_EXCEEDED");
+        budget.references += parsed.references.length + parsed.issues.length;
+        if (refs > L.references || budget.references > L.references)
+          throw discoveryError("SCAN_LIMIT_EXCEEDED");
         for (const reference of parsed.references) {
           if (!found.has(reference.name)) found.set(reference.name, []);
           found.get(reference.name).push(reference);
@@ -278,6 +319,7 @@ export async function scanProjectContext({
       (report.configuration.detected.includes(".env") ? ".env" : null),
   };
   const keySets = {};
+  let environmentStates = null;
   for (const role of ["template", "environment"]) {
     const name = selected[role];
     keySets[role] = null;
@@ -288,6 +330,7 @@ export async function scanProjectContext({
     try {
       const rel = relative(base, full);
       if (
+        isAbsolute(rel) ||
         rel === ".." ||
         rel.startsWith(`..${sep}`) ||
         (await realpath(full)) !== full ||
@@ -295,20 +338,25 @@ export async function scanProjectContext({
       )
         throw new Error();
       const file = label(base, full);
-      const parsed = parseDotenv(
+      const inspected = inspectDeclarations(
         await readConfigFile(full, { noFollow: true }),
         { file },
       );
+      const { parsed } = inspected;
       report.configuration[role] = file;
       if (parsed.issues.some((i) => i.severity === "error")) {
         report.complete = false;
+        if (role === "environment") environmentStates = undefined;
         add(
           issue(
             "SOURCE_CONFIG_INVALID",
             "Selected configuration syntax prevents reliable key comparison.",
           ),
         );
-      } else keySets[role] = new Set(parsed.declarations.map((d) => d.key));
+      } else {
+        keySets[role] = new Set(parsed.declarations.map((d) => d.key));
+        if (role === "environment") environmentStates = inspected.states;
+      }
     } catch {
       throw discoveryError("SCAN_CONFIG_INVALID");
     }
@@ -337,6 +385,15 @@ export async function scanProjectContext({
       inEnvironment:
         keySets.environment === null ? null : keySets.environment.has(name),
     };
+    if (policy) {
+      variable.configurationRole = policy.externalKeys.includes(name)
+        ? "external"
+        : policy.optionalKeys.includes(name)
+          ? "optional"
+          : policy.requiredKeys.includes(name)
+            ? "required"
+            : "unspecified";
+    }
     report.variables.push(variable);
     for (const [condition, code, message] of [
       [
@@ -362,14 +419,41 @@ export async function scanProjectContext({
     ])
       if (condition) add({ ...issue(code, message), name });
   }
+  if (policy) {
+    const requirements = requiredIssues(
+      environmentStates,
+      policy,
+      false,
+      "name",
+    );
+    for (const finding of requirements) add(finding);
+    report.issues = applyIssues(report.issues, policy);
+    report.policy = {
+      failOn: policy.failOn,
+      failed: policyFailed(report.issues, policy),
+    };
+  }
   return {
     report,
+    templateKeys: [...(keySets.template ?? [])],
     configurationKeys: [
-      ...new Set([...(keySets.template ?? []), ...(keySets.environment ?? [])]),
+      ...new Set([
+        ...(keySets.template ?? []),
+        ...(keySets.environment ?? []),
+        ...(policy?.requiredKeys ?? []),
+      ]),
     ],
   };
 }
 
-export async function scanProject(options) {
-  return (await scanProjectContext(options)).report;
+export async function scanProject({
+  root,
+  path,
+  template,
+  environment,
+  rules,
+} = {}) {
+  return (
+    await scanProjectContext({ root, path, template, environment, rules })
+  ).report;
 }

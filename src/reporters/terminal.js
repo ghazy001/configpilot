@@ -1,6 +1,8 @@
 import { formatJson } from "./json.js";
 
 const TITLES = {
+  REQUIRED_KEY: "Required local variable",
+  EMPTY_REQUIRED_KEY: "Unfinished required variable",
   MISSING_KEY: "Missing variable",
   UNDOCUMENTED_KEY: "Undocumented variable",
   DUPLICATE_KEY: "Duplicate variable",
@@ -312,6 +314,14 @@ export function writer(options = {}) {
 export function terminalHeader(terminal, command, subtitle, options = {}) {
   terminal.row(`${options.unicode ? "◈" : ">"} ConfigPilot`, command, "brand");
   terminal.line(subtitle, "muted");
+  if (options.project) {
+    terminal.detail(
+      "Policy",
+      formatJson(options.project.config).trimEnd(),
+      "path",
+    );
+    terminal.detail("Root", formatJson(options.project.root).trimEnd(), "path");
+  }
   terminal.line();
   terminal.rule();
   terminal.line();
@@ -377,7 +387,9 @@ export function formatTerminal(report, options = {}) {
     line();
     if (!report.issues.length)
       line(
-        "Syntax and declared keys match. Values and deployment configuration were not validated.",
+        options.policyReport
+          ? "No active project-policy findings. Value validity and deployment provisioning were not checked."
+          : "Syntax and declared keys match. Values and deployment configuration were not validated.",
       );
     else row("Configuration diagnostics", "STATUS");
     line();
@@ -406,10 +418,12 @@ export function formatTerminal(report, options = {}) {
           locationText(issue.relatedLocation, issue.source),
           "path",
         );
-      const [message, action] = TERMINAL_DETAILS[issue.code] ?? [
-        issue.message,
-        issue.recommendation,
-      ];
+      const [message, action] = options.policyReport
+        ? [issue.message, issue.recommendation]
+        : (TERMINAL_DETAILS[issue.code] ?? [
+            issue.message,
+            issue.recommendation,
+          ]);
       detail("Message", message);
       detail("Action", action);
       line();
@@ -446,7 +460,9 @@ export function formatTerminal(report, options = {}) {
         "muted",
       );
       line(
-        "Checks: syntax, duplicate declarations, and key presence. External environment variables and variable values are not checked.",
+        options.policyReport
+          ? "Checks include explicit project policy and blank required local values. External provisioning and value validity are not checked."
+          : "Checks: syntax, duplicate declarations, and key presence. External environment variables and variable values are not checked.",
         "muted",
       );
     }

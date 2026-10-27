@@ -5,3 +5,6 @@ export { scanSource } from "./discovery/source.js";
 export { scanProject } from "./discovery/project.js";
 export { generateEnvTemplate } from "./initialization/template.js";
 export { createEnvFile } from "./initialization/create.js";
+
+export { analyzeConfigWithRules } from "./project/check.js";
+export { previewTemplateUpdates } from "./initialization/updates.js";

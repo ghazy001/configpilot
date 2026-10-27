@@ -85,7 +85,7 @@ function skipMalformedBlock(lines, start, offset = 0) {
  * @throws {TypeError} For invalid argument types (without echoing arguments).
  * @throws {RangeError} If source exceeds the documented size limit.
  */
-export function parseDotenv(source, options = {}) {
+function parseRecords(source, options = {}, onDeclaration) {
   if (typeof source !== "string") {
     throw new TypeError("source must be a string.");
   }
@@ -181,6 +181,13 @@ export function parseDotenv(source, options = {}) {
     const key = assignment[1];
     consume(key, firstLocations.has(key));
     declarations.push({ key, location });
+    if (onDeclaration) {
+      const empty = QUOTES.has(quote)
+        ? line.slice(start + 1, closingQuote(line, start + 1, quote)).trim()
+            .length === 0
+        : line.slice(start).split("#", 1)[0].trim().length === 0;
+      onDeclaration(key, { location, empty });
+    }
     if (firstLocations.has(key)) {
       issues.push({
         ...createIssue("DUPLICATE_KEY", location),
@@ -193,4 +200,18 @@ export function parseDotenv(source, options = {}) {
   }
 
   return { declarations, issues };
+}
+
+export function parseDotenv(source, options = {}) {
+  return parseRecords(source, options);
+}
+
+// Internal opt-in value-presence inspection. Only booleans and accepted keys
+// leave the shared parser; malformed credential quarantine stays identical.
+export function inspectDeclarations(source, options = {}) {
+  const states = new Map();
+  const parsed = parseRecords(source, options, (key, state) =>
+    states.set(key, state),
+  );
+  return { parsed, states };
 }

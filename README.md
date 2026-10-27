@@ -6,10 +6,13 @@ ConfigPilot helps you configure an unfamiliar JavaScript or TypeScript project:
 discover environment-variable references, generate safe editable placeholders with
 permission, and check configuration consistency without displaying secret values.
 
-**v1.2.0** adds `scan`, `init`, reusable discovery/generation APIs, and a shared
-terminal layout with three severity cards, aligned status badges, and highlighted
-Next Steps. The existing `check` command, analysis API, JSON schema and exit policy
-remain compatible. Runtime: **Node.js 20+**, ES modules. License: [MIT](LICENSE).
+**v1.3.0** adds explicit JSON project rules, CI failure policies, required-local
+blank checks, safe template-addition previews, Vue script-block discovery,
+independent workspaces, GitHub annotations and exported JSON Schemas.
+The existing default commands, analysis API, JSON schema and exit policy remain
+compatible. Runtime: **Node.js 20+**, ES modules. License: [MIT](LICENSE).
+See [the project workflows guide](docs/PROJECT_WORKFLOWS.md) for commands,
+security boundaries and supported Vue syntax.
 
 ## Discover → configure → verify
 
@@ -33,7 +36,9 @@ runtime readiness. Missing local variables may be supplied by your deployment.
 
 Scan supports JavaScript, TypeScript, JSX and TSX, including direct members,
 immutable aliases and static destructuring. Dynamic references stay unresolved;
-Vue/Svelte/Astro components make a scan explicitly incomplete and block init.
+Vue inline script blocks are supported; template expressions stay unresolved.
+Svelte/Astro components and unsupported Vue script formats make a scan incomplete
+and block init.
 No scanned project code is executed. Values/fallback literals are never copied,
 and creation requires consent or `--yes` for a nonexistent file only.
 See [the complete workflow, options and API](docs/SOURCE_DISCOVERY.md) for selection
@@ -56,8 +61,8 @@ npm install --save-dev configpilot
 
 For an application importing the JavaScript API at runtime, use
 `npm install configpilot` instead. These commands install the latest release.
-To pin v1.2.0 explicitly, append `@1.2.0` to the package name. No extra installation flags are required.
-Source discovery uses a pinned Babel parser dependency.
+To pin v1.3.0 explicitly, append `@1.3.0` to the package name. No extra installation flags are required.
+Source discovery uses pinned Babel and Vue SFC parser dependencies.
 ConfigPilot has no install lifecycle scripts.
 
 Add `"config:check": "configpilot check"` to your npm scripts, then run
@@ -153,7 +158,7 @@ For a project's development dependency or library consumer, build an archive in
 the checkout with `npm pack --ignore-scripts`. Then, from the consumer project:
 
 ```sh
-npm install --save-dev "/absolute/path/to/configpilot/configpilot-1.2.0.tgz"
+npm install --save-dev "/absolute/path/to/configpilot/configpilot-1.3.0.tgz"
 ```
 
 Replace the archive path with your actual path, using native Windows paths on

@@ -1,5 +1,15 @@
 # Release readiness
 
+## v1.3.0 — Authorized delivery in progress
+
+Owner approved pushing, tagging and publishing on 2026-10-27. All six project-workflow
+improvements passed local acceptance; see PROJECT_WORKFLOWS_VALIDATION.md for the
+pre-release development evidence. Fresh protected native OS/Node CI and exact main
+archive acceptance remain mandatory. Publication and registry verification are not
+yet complete. Historical release records below retain their original identities.
+
+## v1.2.0 — Historical verified release
+
 Reviewed 2026-10-27. **v1.2.0 published and verified.** The owner authorized
 pushing, tagging and publishing the discovery/init workflow, terminal redesign and
 matching documentation. All mandatory delivery gates passed. Exact main source
@@ -9,7 +19,7 @@ public API and TypeScript consumers passed. npm latest and immutable v1.2.0 iden
 this release; see [the durable receipt](releases/1.2.0.json) and
 [release notes](RELEASE_NOTES_v1.2.0.md).
 
-The current package adds AST-based JavaScript/TypeScript discovery, exclusive
+The published v1.2.0 package adds AST-based JavaScript/TypeScript discovery, exclusive
 placeholder-file creation and four additive public APIs. Existing check reports,
 JSON schema and exit codes remain compatible. It is ESM-only, Node >=20, MIT,
 with one direct runtime dependency (pinned Babel parser) and 32 allowlisted files.
