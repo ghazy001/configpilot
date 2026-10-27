@@ -1586,3 +1586,12 @@ notes and preparation plan. Historical receipts and audit measurements are retai
 Hosted compatibility and exact-archive gates remain mandatory. npm identity preflight
 returned 401; a browser login will be needed after the concrete candidate is verified.
 No publication, tag, push or external release has occurred in this release session yet.
+
+### First hosted v1.2.0 PR run — Windows test-harness correction
+
+Run 40460706980 passed the minimum-runtime and Linux jobs but failed on Windows
+in the output-failure security test: the injected ESM preload used a bare Windows
+drive path with `--import`, returning 1 before the CLI could run. Changed the preload
+to `pathToFileURL(...).href`, matching the existing portable failure-injection tests.
+The security assertions and expected operational exit 2 remain unchanged.
+The complete hosted matrix must pass on the corrected revision before release.

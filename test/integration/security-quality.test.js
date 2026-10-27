@@ -13,7 +13,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import process from "node:process";
 import { spawnSync } from "node:child_process";
-import { URL, fileURLToPath } from "node:url";
+import { URL, fileURLToPath, pathToFileURL } from "node:url";
 import { scanProject } from "../../src/discovery/project.js";
 async function fixture(t) {
   const root = await mkdtemp(join(tmpdir(), "configpilot adversarial é "));
@@ -126,7 +126,7 @@ test("security: CLI output failure before approval cannot create a configuration
   );
   const r = spawnSync(
     process.execPath,
-    ["--import", preload, fileURLToPath(cli), "init"],
+    ["--import", pathToFileURL(preload).href, fileURLToPath(cli), "init"],
     {
       cwd: root,
       encoding: "utf8",
