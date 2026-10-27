@@ -64,3 +64,15 @@ owner's private channel, without personal paths or environment contents.
 
 Windows verification closes only this platform gate. It does not count as developer
 feedback, authorize publication or establish Linux x64 compatibility.
+
+## v1.2.0 discovery and initialization follow-up
+
+Hosted run [40462042075](https://github.com/ghazy001/configpilot/actions/runs/40462042075)
+at 41efc6428803bf7ed2590e8eebef7c73a12a0e24 passed all four native Windows Node
+versions (20.19.0, 22.13.0, 24.x, 26.x), including discovery/init, installed consumers
+and coverage. It also passed all Linux/macOS jobs and the minimum runtime.
+Earlier runs exposed a nonportable test preload and a real guarded-read device-ID
+compatibility defect; both are recorded in PROGRESS.md. Exact-main release CI
+is verified separately before publication. This is automated runtime/terminal-output
+validation; no manual Windows Terminal/PowerShell font rendering or external human
+feedback is implied.

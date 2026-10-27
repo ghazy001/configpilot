@@ -1616,3 +1616,17 @@ its device and BigInt inode against the original descriptor, and revalidate the
 named regular file before/after. Nonzero device mismatches still fail. Local
 regressions simulate missing path serials and reject changed device/inode records;
 full native validation is being rerun.
+
+### Hosted compatibility verified — v1.2.0 release source
+
+Run [40462042075](https://github.com/ghazy001/configpilot/actions/runs/40462042075)
+at 41efc6428803bf7ed2590e8eebef7c73a12a0e24 completed all 12 Windows/Linux/macOS
+Node 20.19/22.13/24/26 jobs and the minimum Node 20.0.0 job successfully. The native
+Windows 22 unchanged-file regression now passes. Two POSIX-only integration tests
+are intentionally skipped on Windows; native POSIX runners execute them.
+Local complete quality and coverage reruns passed **238 tests**, seven contracts,
+installed TypeScript consumers, lint and formatting (98.83% aggregate lines).
+Improved the replacement regression to rename and retain the original file, then
+verify rejection of a genuinely different file at its former path.
+Final PR revision, exact merged-main CI, clean archive acceptance and registry
+publication/verification remain mandatory gates.
