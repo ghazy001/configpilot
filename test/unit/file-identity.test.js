@@ -30,7 +30,7 @@ test("Windows volume serials normalize to libuv's low 32 bits without discarding
 });
 
 test("missing Windows path serial still verifies descriptor device identity and rejects replaced files", async (t) => {
-  const { mkdtemp, writeFile, open, lstat, rm } =
+  const { mkdtemp, writeFile, open, lstat, rm, rename } =
     await import("node:fs/promises");
   const { join } = await import("node:path");
   const { tmpdir } = await import("node:os");
@@ -75,17 +75,11 @@ test("missing Windows path serial still verifies descriptor device identity and 
     ),
     { code: "FILE_NOT_READABLE" },
   );
-  await rm(path);
+  // Keep the original file alive, preventing filesystem inode recycling.
+  await rename(path, join(root, "original.js"));
   await writeFile(path, "process.env.REPLACED");
-  // Keep a different inode snapshot even on filesystems that recycle deleted IDs.
   await assert.rejects(
-    verifyFileIdentity(
-      path,
-      { ...missing, ino: named.ino + 1n },
-      opened,
-      constants.O_RDONLY,
-      "win32",
-    ),
+    verifyFileIdentity(path, missing, opened, constants.O_RDONLY, "win32"),
     { code: "FILE_NOT_READABLE" },
   );
 });

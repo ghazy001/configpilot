@@ -299,3 +299,32 @@ The single most valuable next step is native Windows/Linux validation of these e
 bytes. Keep publication on hold until the required compatibility results are reviewed.
 Component-framework parsing and broader flow inference are optional future milestones,
 not claims of this JS/TS release scope. The current release verdict remains NEEDS WORK.
+
+## Release follow-up — native compatibility findings
+
+Q21 — High Windows compatibility, utils/read-config-file.js: native Node 22.13.0
+rejected unchanged source files because path and descriptor device IDs differed.
+A dedicated isolated regression confirmed canonical paths and matching inode IDs,
+with differing volume serials. Windows normalization follows libuv's 32-bit serial
+policy; a missing path serial uses an independently opened descriptor witness and
+named-file rechecks instead of discarding device identity. BigInt IDs prevent
+precision loss. Unit tests reject differing devices/inodes and replacement files.
+A separate test-harness preload now uses a portable file URL.
+
+All 12 OS/Node jobs and minimum Node 20.0.0 passed at 41efc64 in hosted run
+40462042075; final release delivery requires successful CI for the final PR and
+merged main. Local verification now passes 238 tests, seven contracts, TypeScript
+5.0.4/7.0.2 consumers, lint/format and coverage. There is no known remaining
+confirmed critical security/correctness defect. Publication gates and the exact
+archive are tracked in PROGRESS.md and the release receipt. External human trials
+remain pending. The original local-only NEEDS WORK verdict above is historical.
+
+## Current delivery verdict — READY (v1.2.0 technical release gates)
+
+The owner-approved v1.2.0 release completed protected PR/main native CI, exact
+archive inspection/offline acceptance and public-registry installation checks.
+No confirmed critical defect remains. Windows 22 guarded reads now pass, retaining
+descriptor device/inode verification. The original pre-release verdict above remains
+historical. See releases/1.2.0.json for immutable source/archive/CI/publication evidence.
+This verdict does not claim full framework coverage, deployment/value validation,
+manual font testing or completed external human trials. Those limits remain explicit.

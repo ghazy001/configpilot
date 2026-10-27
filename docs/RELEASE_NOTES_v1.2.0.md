@@ -55,3 +55,11 @@ onboarding guidance for .env.sample/custom paths, updated CLI examples, security
 boundaries and a 13-image terminal gallery. Release verification and registry identity
 are recorded in PROGRESS.md and the publication receipt after execution. External
 human feedback remains pending; no invented acceptance or benchmark claims are made.
+
+## Publication verification
+
+Published 2026-10-27 from protected main 9523a0c after successful PR and exact-main
+CI, including the complete native OS/Node matrix. The 32-file registry archive
+matched the reviewed SHA-256/integrity. Fresh local/global installs and full workflow,
+privacy, overwrite protection, public API and TypeScript consumers passed. npm latest
+is 1.2.0; immutable tag and GitHub release are live. See [the receipt](releases/1.2.0.json).
