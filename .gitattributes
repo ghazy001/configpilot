@@ -1,1 +1,3 @@
 * text=auto eol=lf
+# Preserve exact PTY bytes for the hashed terminal captures.
+/docs/screenshots/cli-reference/transcripts/*.ansi -text
