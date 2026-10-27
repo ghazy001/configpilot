@@ -132,3 +132,10 @@ evidence is recorded in the release progress log. A write failure may leave a pa
 No confirmed value-disclosure vulnerability was reproduced; this is maintainer review,
 not an independent security certification. Audit evidence is retained in repository
 FEATURE_QUALITY_AUDIT.md; it is not part of the npm archive.
+
+Guarded discovery reads use BigInt file IDs. On Windows, volume serials are
+normalized to libuv's 32-bit policy. When an older Windows path-stat reports no
+volume serial, a second descriptor verifies device/inode identity and the named
+regular file is rechecked before and after verification. Device/inode mismatches
+remain failures; this does not add atomic protection against hostile parent-directory
+mutation beyond portable Node filesystem guarantees.

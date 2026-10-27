@@ -26,6 +26,8 @@ test("discovery reads an unchanged regular file with no-follow identity checks o
   await file.close();
   const context = JSON.stringify({
     canonical: (await realpath(path)) === path,
+    pathDevice: before.dev.toString(),
+    handleDevice: opened.dev.toString(),
     sameDevice: opened.dev === before.dev,
     sameWindowsVolumeSerial:
       BigInt.asUintN(32, opened.dev) === BigInt.asUintN(32, before.dev),
@@ -33,6 +35,7 @@ test("discovery reads an unchanged regular file with no-follow identity checks o
     noFollowFlag: constants.O_NOFOLLOW ?? 0,
     nonblockFlag: constants.O_NONBLOCK ?? 0,
   });
+  t.diagnostic(context);
   let result;
   try {
     result = await readConfigFile(path, { noFollow: true });

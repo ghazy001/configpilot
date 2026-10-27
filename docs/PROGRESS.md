@@ -1608,3 +1608,11 @@ reject mismatched low device bits and inode IDs separated beyond Number precisio
 No symlink checks, limits, no-follow flags or failure assertions were removed.
 Primary reference: https://github.com/libuv/libuv/blob/v1.51.0/src/win/fs.c#L1714.
 The complete hosted matrix remains mandatory on the corrected source.
+
+The first normalization-only revision still failed on Windows 22: the focused
+probe showed low-32-bit device IDs also differed. Added a narrowly scoped fallback
+for missing Windows path serials: independently open a witness descriptor, compare
+its device and BigInt inode against the original descriptor, and revalidate the
+named regular file before/after. Nonzero device mismatches still fail. Local
+regressions simulate missing path serials and reject changed device/inode records;
+full native validation is being rerun.
