@@ -1595,3 +1595,16 @@ drive path with `--import`, returning 1 before the CLI could run. Changed the pr
 to `pathToFileURL(...).href`, matching the existing portable failure-injection tests.
 The security assertions and expected operational exit 2 remain unchanged.
 The complete hosted matrix must pass on the corrected revision before release.
+
+### Native Windows guarded-read defect — fixed, verification in progress
+
+The isolated unchanged-file regression failed on Windows Node 22.13.0 in run
+40461357908: canonical path true, inode equal, device unequal; guarded reading
+returned FILE_NOT_READABLE. Node's bundled libuv exposes a 64-bit path volume serial
+and 32-bit descriptor serial on this runtime. Applied the upstream libuv v1.51
+low-32-bit Windows normalization, retaining both volume and inode comparisons.
+Identity stats now use BigInt to avoid rounding 64-bit file IDs. Added tests that
+reject mismatched low device bits and inode IDs separated beyond Number precision.
+No symlink checks, limits, no-follow flags or failure assertions were removed.
+Primary reference: https://github.com/libuv/libuv/blob/v1.51.0/src/win/fs.c#L1714.
+The complete hosted matrix remains mandatory on the corrected source.

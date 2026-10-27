@@ -20,13 +20,15 @@ test("discovery reads an unchanged regular file with no-follow identity checks o
   t.after(() => rm(root, { recursive: true, force: true }));
   const path = join(root, "source.ts");
   await writeFile(path, "process.env.PORT");
-  const before = await lstat(path);
+  const before = await lstat(path, { bigint: true });
   const file = await open(path, constants.O_RDONLY);
-  const opened = await file.stat();
+  const opened = await file.stat({ bigint: true });
   await file.close();
   const context = JSON.stringify({
     canonical: (await realpath(path)) === path,
     sameDevice: opened.dev === before.dev,
+    sameWindowsVolumeSerial:
+      BigInt.asUintN(32, opened.dev) === BigInt.asUintN(32, before.dev),
     sameInode: opened.ino === before.ino,
     noFollowFlag: constants.O_NOFOLLOW ?? 0,
     nonblockFlag: constants.O_NONBLOCK ?? 0,

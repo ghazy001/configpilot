@@ -5,6 +5,10 @@ recorded in the repository's development progress log.
 
 ## 1.2.0 — 2026-10-27
 
+- Normalize Windows volume-serial widths for guarded source reads on older Node 22
+  runtimes, retaining device/inode checks with BigInt precision. Native Windows
+  regression tests cover the previously rejected unchanged files.
+
 - Follow the CLI visual reference with three distinct severity cards, aligned status
   badges/detail columns, shared header dividers and a highlighted Next Steps panel
   across scan/init/check and operational errors. Stack the layout for narrow terminals.
