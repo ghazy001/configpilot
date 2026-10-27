@@ -65,3 +65,17 @@ const unauthorizedCreation: Parameters<typeof createEnvFile>[0] = {
   confirmed: false,
 };
 void unauthorizedCreation;
+
+import { analyzeConfigWithRules, previewTemplateUpdates } from "configpilot";
+analyzeConfigWithRules(
+  { template: "", environment: "" },
+  // @ts-expect-error syntax severity cannot be suppressed by project rules
+  { severity: { INVALID_DECLARATION: "off" } },
+);
+analyzeConfigWithRules(
+  { template: "", environment: "" },
+  // @ts-expect-error invalid failure threshold
+  { failOn: "sometimes" },
+);
+// @ts-expect-error template preview requires a discovery report
+previewTemplateUpdates({ complete: true });

@@ -15,6 +15,7 @@ import { dirname, join } from "node:path";
 import process from "node:process";
 import test from "node:test";
 import { fileURLToPath, URL } from "node:url";
+import { parserDependencies } from "../../scripts/offline-dependencies.js";
 import { candidateFiles } from "../../scripts/release-guards.js";
 
 test("private candidate acceptance verifies installed workflows and rejects tampered identity or bytes", (t) => {
@@ -30,6 +31,7 @@ test("private candidate acceptance verifies installed workflows and rejects tamp
   mkdirSync(repo);
   for (const file of [
     ...candidateFiles(metadata),
+    "package-lock.json",
     "scripts/verify-candidate.js",
     "scripts/offline-dependencies.js",
     "scripts/release-guards.js",
@@ -39,12 +41,7 @@ test("private candidate acceptance verifies installed workflows and rejects tamp
     copyFileSync(join(root, file), join(repo, file));
   }
   writeFileSync(join(repo, ".gitignore"), "node_modules/\n");
-  for (const name of [
-    "@babel/parser",
-    "@babel/types",
-    "@babel/helper-string-parser",
-    "@babel/helper-validator-identifier",
-  ]) {
+  for (const name of parserDependencies) {
     mkdirSync(dirname(join(repo, "node_modules", name)), { recursive: true });
     cpSync(join(root, "node_modules", name), join(repo, "node_modules", name), {
       recursive: true,

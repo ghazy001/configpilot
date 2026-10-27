@@ -139,3 +139,19 @@ volume serial, a second descriptor verifies device/inode identity and the named
 regular file is rechecked before and after verification. Device/inode mismatches
 remain failures; this does not add atomic protection against hostile parent-directory
 mutation beyond portable Node filesystem guarantees.
+
+## Project-workflow boundaries (v1.3.0)
+
+Project settings are explicit bounded JSON, never imported/executed JavaScript.
+Unknown policy fields and severity downgrades for syntax/parse/resource failures
+are rejected. Required-local checks retain booleans only and share dotenv quote
+quarantine. They do not inspect deployment values or validate credentials.
+Workspace roots are explicit, contained, nonoverlapping and selected individually
+for creation. Aggregate operations are read-only and share scan resource budgets.
+Template-addition previews contain only empty assignments and never edit files.
+GitHub annotations are explicit local stdout, not network transmission. Workflow
+metacharacters are escaped; snippets/values/arbitrary native text are excluded.
+The official Vue SFC parser is pinned and loaded inside the bounded parser worker.
+No component code, src imports, compiler plugins or preprocessors run. Unresolved
+template scopes remain explicit; unsupported block combinations prevent init.
+See [project workflows](docs/PROJECT_WORKFLOWS.md) for exact limits and scope.

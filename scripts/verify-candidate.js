@@ -158,7 +158,7 @@ import assert from "node:assert/strict";
 import * as api from "configpilot";
 import { createRequire } from "node:module";
 import { readFileSync } from "node:fs";
-assert.deepEqual(Object.keys(api).sort(), ["ISSUE_CODES", "analyzeConfig", "createEnvFile", "generateEnvTemplate", "parseDotenv", "scanProject", "scanSource"]);
+assert.deepEqual(Object.keys(api).sort(), ["ISSUE_CODES", "analyzeConfig", "analyzeConfigWithRules", "createEnvFile", "generateEnvTemplate", "parseDotenv", "previewTemplateUpdates", "scanProject", "scanSource"]);
 const schema = JSON.parse(readFileSync(createRequire(import.meta.url).resolve("configpilot/schema.json"), "utf8"));
 assert.ok(schema.$defs.complete && schema.$defs.skipped && schema.$defs.operational);
 const input = {template: "TOKEN=\nPORT=", environment: "PORT=3000\nEXTRA=SYNTHETIC_ACCEPTANCE_SECRET"};

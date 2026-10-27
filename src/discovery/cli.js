@@ -1,4 +1,6 @@
 import { scanProjectContext, discoveryError } from "./project.js";
+import { previewTemplateUpdates } from "../initialization/updates.js";
+import { formatTemplateUpdates } from "../reporters/project.js";
 import { generateEnvTemplate } from "../initialization/template.js";
 import {
   createEnvFile,
@@ -16,6 +18,8 @@ import {
 export { formatDiscovery } from "../reporters/discovery.js";
 
 const ERRORS = {
+  TEMPLATE_DIFF_INCOMPLETE:
+    "Resolve incomplete discovery before previewing template additions.",
   DISCOVERY_ARGUMENTS:
     "Unsupported, repeated or incomplete discovery arguments. Run configpilot scan --help or configpilot init --help.",
   SCAN_PATH_INVALID:
@@ -42,9 +46,9 @@ const ERRORS = {
     "Discovery could not complete safely. Retry with supported source files.",
 };
 export function discoveryHelp(command) {
-  return `ConfigPilot — Environment ${command === "scan" ? "Discovery" : "Initialization"}\n\nUsage:\n  configpilot ${command} [--path DIRECTORY] [--json] [--verbose] [--no-color]\n${command === "init" ? "  --template       Generate .env.example instead of .env.\n  --output FILE    Root-level filename; never overwrite.\n  --dry-run        Preview only; no creation or confirmation.\n  --yes            Authorize a new file; never overwrite.\n" : "  --template FILE  Select a template explicitly (default .env.example/.env.sample).\n  --env FILE       Select a local file explicitly (default .env).\n"}  --path DIRECTORY Source scope inside cwd (default .).\n  --json           One machine-readable object; no prompts.\n  --verbose        Include safe reference locations.\n  --no-color       Disable ANSI styling.\n  --help           Show help.\n\nWorkflow: scan -> init --template -> init -> check\nReferences do not prove requiredness. No source values are reported.\nScan exits: 0 complete, 1 incomplete, 2 operational/argument failure.\nInit exits: 0 created/preview/cancelled/no variables, 2 failure.\n`;
+  return `ConfigPilot — Environment ${command === "scan" ? "Discovery" : "Initialization"}\n\nUsage:\n  configpilot ${command} [--path DIRECTORY] [--json] [--verbose] [--no-color]\n${command === "init" ? "  --template       Generate .env.example instead of .env.\n  --output FILE    Root-level filename; never overwrite.\n  --dry-run        Preview only; no creation or confirmation.\n  --yes            Authorize a new file; never overwrite.\n" : "  --template FILE  Select a template explicitly (default .env.example/.env.sample).\n  --env FILE       Select a local file explicitly (default .env).\n"}  --config FILE    Explicit JSON rules; no project code executes.\n  --workspace NAME Select one configured root; --workspaces scans all (scan only).\n  --template-diff  Read-only missing template assignments (scan only).\n  --github         GitHub annotations (scan only; exclusive with --json).\n  --path DIRECTORY Source scope inside cwd (default .).\n  --json           One machine-readable object; no prompts.\n  --verbose        Include safe reference locations.\n  --no-color       Disable ANSI styling.\n  --help           Show help.\n\nWorkflow: scan -> init --template -> init -> check\nReferences do not prove requiredness. No source values are reported.\nScan exits: 0 complete, 1 incomplete, 2 operational/argument failure.\nInit exits: 0 created/preview/cancelled/no variables, 2 failure.\n`;
 }
-function argumentsFor(args) {
+export function argumentsFor(args) {
   const command = args[0];
   if (args.length === 2 && args[1] === "--help") return { help: true, command };
   const options = { command, path: "." };
@@ -58,7 +62,7 @@ function argumentsFor(args) {
           "--yes": "yes",
           "--dry-run": "dryRun",
         }
-      : {}),
+      : { "--template-diff": "templateDiff" }),
   };
   const values = {
     "--path": "path",
@@ -88,7 +92,7 @@ function argumentsFor(args) {
 }
 export async function runDiscoveryCli(
   args,
-  { cwd, display = {}, interactive = false, confirm } = {},
+  { cwd, display = {}, interactive = false, confirm, policyRules, budget } = {},
 ) {
   const json = args.includes("--json");
   const style = {
@@ -122,15 +126,37 @@ export async function runDiscoveryCli(
         else throw error;
       }
     }
-    const { report, configurationKeys } = await scanProjectContext({
-      root: cwd,
-      path: options.path,
-      ...(options.template ? { template: options.template } : {}),
-      ...(options.environment ? { environment: options.environment } : {}),
-    });
+    const { report, configurationKeys, templateKeys } =
+      await scanProjectContext({
+        root: cwd,
+        rules: policyRules,
+        ...(budget ? { budget } : {}),
+        path: options.path,
+        ...(options.template ? { template: options.template } : {}),
+        ...(options.environment ? { environment: options.environment } : {}),
+      });
+    if (options.command === "scan" && options.templateDiff) {
+      if (!report.complete) throw discoveryError("TEMPLATE_DIFF_INCOMPLETE");
+      let updates;
+      try {
+        updates = previewTemplateUpdates(report, {
+          requiredKeys: policyRules?.requiredKeys,
+          templateKeys,
+        });
+      } catch {
+        throw discoveryError("SCAN_LIMIT_EXCEEDED");
+      }
+      return {
+        exitCode: report.policy?.failed ? 1 : 0,
+        stdout: json
+          ? formatJson(updates)
+          : formatTemplateUpdates(updates, style),
+        stderr: "",
+      };
+    }
     if (options.command === "scan")
       return {
-        exitCode: report.complete ? 0 : 1,
+        exitCode: report.complete && !report.policy?.failed ? 0 : 1,
         stdout: json
           ? formatJson(report)
           : formatDiscovery(report, { ...style, verbose: options.verbose }),

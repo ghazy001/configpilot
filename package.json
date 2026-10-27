@@ -1,6 +1,6 @@
 {
   "name": "configpilot",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
     "access": "public",
@@ -27,7 +27,11 @@
       "types": "./src/index.d.ts",
       "default": "./src/index.js"
     },
-    "./schema.json": "./schemas/report.schema.json"
+    "./schema.json": "./schemas/report.schema.json",
+    "./discovery.schema.json": "./schemas/discovery.schema.json",
+    "./initialization.schema.json": "./schemas/initialization.schema.json",
+    "./project.schema.json": "./schemas/project.schema.json",
+    "./config.schema.json": "./schemas/config.schema.json"
   },
   "bin": {
     "configpilot": "./bin/configpilot.js"
@@ -61,7 +65,20 @@
     "docs/SOURCE_DISCOVERY.md",
     "src/discovery/bindings.js",
     "src/initialization/confirm.js",
-    "src/reporters/discovery.js"
+    "src/reporters/discovery.js",
+    "src/project/rules.js",
+    "src/project/config.js",
+    "src/project/check.js",
+    "src/project/cli.js",
+    "src/initialization/updates.js",
+    "src/discovery/vue.js",
+    "src/reporters/github.js",
+    "src/reporters/project.js",
+    "docs/PROJECT_WORKFLOWS.md",
+    "schemas/discovery.schema.json",
+    "schemas/initialization.schema.json",
+    "schemas/project.schema.json",
+    "schemas/config.schema.json"
   ],
   "scripts": {
     "test": "node --test",
@@ -74,7 +91,7 @@
     "format:check": "prettier --check .",
     "check": "npm run lint && npm test && npm run test:contracts && npm run test:types && npm run format:check",
     "pack:dry-run": "npm pack --dry-run --ignore-scripts",
-    "test:contracts": "node --test scripts/verify-contracts.js",
+    "test:contracts": "node --test scripts/verify-contracts.js scripts/verify-project-contracts.js",
     "test:resources": "node scripts/measure-resources.js"
   },
   "keywords": [
@@ -97,6 +114,7 @@
     "typescript-minimum": "npm:typescript@5.0.4"
   },
   "dependencies": {
-    "@babel/parser": "7.29.11"
+    "@babel/parser": "7.29.11",
+    "@vue/compiler-sfc": "3.5.44"
   }
 }

@@ -1,5 +1,9 @@
 # ConfigPilot CLI
 
+Version 1.3.0 additions: [project rules, workspaces, template previews, Vue and
+GitHub annotations](PROJECT_WORKFLOWS.md). The existing commands below retain
+their defaults; the new options require this development checkout.
+
 Requires Node.js 20+. From the checkout, run `node bin/configpilot.js`; a local
 installation also provides the `configpilot` executable. Version 1.0.0 defines the
 stable CLI contract. The check command never changes configuration files or executes their contents,

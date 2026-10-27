@@ -1,0 +1,284 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:configpilot:discovery:1",
+  "title": "ConfigPilot discovery schema version 1",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/discovery"
+    },
+    {
+      "$ref": "#/$defs/error"
+    }
+  ],
+  "$defs": {
+    "discovery": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "schemaVersion": {
+          "const": 1
+        },
+        "kind": {
+          "const": "discovery"
+        },
+        "complete": {
+          "type": "boolean"
+        },
+        "filesScanned": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000
+        },
+        "bytesScanned": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 8388608
+        },
+        "variables": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "type": "string",
+                "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,127}$"
+              },
+              "category": {
+                "type": "string",
+                "maxLength": 4096
+              },
+              "purpose": {
+                "type": "string",
+                "maxLength": 4096
+              },
+              "confidence": {
+                "enum": ["low", "medium"]
+              },
+              "potentiallySensitive": {
+                "type": "boolean"
+              },
+              "frameworkProvided": {
+                "type": "boolean"
+              },
+              "referenceCount": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 4096
+              },
+              "references": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,127}$"
+                    },
+                    "location": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {
+                        "file": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 4096
+                        },
+                        "line": {
+                          "type": "integer",
+                          "minimum": 1
+                        }
+                      },
+                      "required": ["file", "line"]
+                    },
+                    "syntax": {
+                      "enum": ["process.env", "import.meta.env"]
+                    },
+                    "notation": {
+                      "enum": ["dot", "bracket", "destructuring"]
+                    },
+                    "hasStaticFallback": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "location",
+                    "syntax",
+                    "notation",
+                    "hasStaticFallback"
+                  ]
+                },
+                "maxItems": 4096
+              },
+              "hasStaticFallback": {
+                "type": "boolean"
+              },
+              "potentiallyRequired": {
+                "type": "boolean"
+              },
+              "inTemplate": {
+                "type": ["boolean", "null"]
+              },
+              "inEnvironment": {
+                "type": ["boolean", "null"]
+              },
+              "configurationRole": {
+                "enum": ["optional", "external", "required", "unspecified"]
+              }
+            },
+            "required": [
+              "name",
+              "category",
+              "purpose",
+              "confidence",
+              "potentiallySensitive",
+              "frameworkProvided",
+              "referenceCount",
+              "references",
+              "hasStaticFallback",
+              "potentiallyRequired",
+              "inTemplate",
+              "inEnvironment"
+            ]
+          },
+          "maxItems": 4096
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "code": {
+                "enum": [
+                  "SOURCE_DYNAMIC_REFERENCE",
+                  "SOURCE_PARSE_ERROR",
+                  "SOURCE_SKIPPED",
+                  "SOURCE_SYMLINK_SKIPPED",
+                  "SOURCE_CONFIG_INVALID",
+                  "SOURCE_UNDOCUMENTED_KEY",
+                  "SOURCE_MISSING_LOCAL_KEY",
+                  "SOURCE_OPTIONAL_REFERENCE",
+                  "SOURCE_POTENTIAL_SECRET",
+                  "REQUIRED_KEY",
+                  "EMPTY_REQUIRED_KEY"
+                ]
+              },
+              "severity": {
+                "enum": ["error", "warning", "info"]
+              },
+              "message": {
+                "type": "string",
+                "maxLength": 4096
+              },
+              "name": {
+                "type": "string",
+                "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,127}$"
+              },
+              "location": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 4096
+                  },
+                  "line": {
+                    "type": "integer",
+                    "minimum": 1
+                  }
+                },
+                "required": ["file", "line"]
+              },
+              "recommendation": {
+                "type": "string",
+                "maxLength": 4096
+              }
+            },
+            "required": ["code", "severity", "message"]
+          },
+          "maxItems": 8192
+        },
+        "configuration": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "detected": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "maxLength": 4096
+              },
+              "maxItems": 6
+            },
+            "template": {
+              "type": ["string", "null"]
+            },
+            "environment": {
+              "type": ["string", "null"]
+            }
+          },
+          "required": ["detected", "template", "environment"]
+        },
+        "policy": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "failOn": {
+              "enum": ["warning", "error", "never"]
+            },
+            "failed": {
+              "type": "boolean"
+            }
+          },
+          "required": ["failOn", "failed"]
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "kind",
+        "complete",
+        "filesScanned",
+        "bytesScanned",
+        "variables",
+        "issues",
+        "configuration"
+      ]
+    },
+    "error": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "schemaVersion": {
+          "const": 1
+        },
+        "kind": {
+          "const": "discovery-error"
+        },
+        "error": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "string",
+              "pattern": "^[A-Z_]{1,64}$"
+            },
+            "message": {
+              "type": "string",
+              "maxLength": 4096
+            },
+            "recommendation": {
+              "type": "string",
+              "maxLength": 4096
+            }
+          },
+          "required": ["code", "message"]
+        }
+      },
+      "required": ["schemaVersion", "kind", "error"]
+    }
+  }
+}

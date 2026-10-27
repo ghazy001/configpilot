@@ -81,3 +81,25 @@ const creator: typeof createEnvFile = createEnvFile;
 void generated;
 void scanner;
 void creator;
+
+import {
+  analyzeConfigWithRules,
+  previewTemplateUpdates,
+  type ProjectRules,
+  type PolicyCheckReport,
+} from "configpilot";
+const rules: ProjectRules = {
+  requiredKeys: ["TOKEN"],
+  severity: { MISSING_KEY: "info" },
+  failOn: "error",
+};
+const policyReport: PolicyCheckReport = analyzeConfigWithRules(
+  { template: "TOKEN=", environment: "TOKEN=" },
+  rules,
+);
+if (!policyReport.failed)
+  throw new Error("Required placeholder was not checked.");
+const updates: string = previewTemplateUpdates(discovery, {
+  requiredKeys: ["NEW_KEY"],
+}).content;
+void updates;

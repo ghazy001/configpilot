@@ -3,6 +3,20 @@
 Release history for ConfigPilot. Verification evidence and release status are
 recorded in the repository's development progress log.
 
+## 1.3.0 — 2026-10-27
+
+- Add explicit non-executable JSON project policies, optional/external/required key
+  rules, safe source ignore patterns and opt-in CI severity/failure controls.
+- Add value-free blank-required checks with separate policy reports; legacy check
+  reports, API/schema/issue codes and default exits remain unchanged.
+- Preview missing template assignments without modifying files or copying values.
+- Discover Vue JS/TS/JSX/TSX script blocks with the official pinned SFC parser;
+  report unresolved template scopes and unsupported formats honestly.
+- Analyze explicit nonoverlapping monorepo workspaces independently, sharing scan
+  budgets and allowing init only for a single explicitly selected root.
+- Export discovery, initialization, project and configuration JSON Schemas; add safe
+  opt-in GitHub Actions annotations and TypeScript declarations for new pure APIs.
+
 ## 1.2.0 — 2026-10-27
 
 - Normalize Windows volume-serial widths for guarded source reads on older Node 22

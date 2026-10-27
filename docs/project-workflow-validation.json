@@ -1,0 +1,113 @@
+{
+  "date": "2026-10-27",
+  "node": "v20.20.0",
+  "platform": "darwin",
+  "method": "Single isolated process per cached pinned public source-only repository. No application code/dependencies executed or installed. Read-only scan and init preview; original source bytes checked. Timings are one-run local measurements, not general benchmarks. No new exhaustive false-positive/negative claims.",
+  "results": [
+    {
+      "repository": "heroku/node-js-getting-started",
+      "commit": "8b8dec11fcf027522a857e0c831ee01b7124f673",
+      "framework": "Node/Express",
+      "filesScanned": 2,
+      "variables": 1,
+      "references": 2,
+      "complete": true,
+      "issues": {
+        "SOURCE_OPTIONAL_REFERENCE": 1
+      },
+      "elapsedMs": 109.31,
+      "maxRssMiB": 67.27,
+      "initPreviewExit": 0,
+      "initStatus": "preview",
+      "sourceBytesUnchanged": true
+    },
+    {
+      "repository": "expressjs/express",
+      "commit": "1c6f1b0fe4000977b9a7b4f34097e4d527dd9824",
+      "framework": "Express",
+      "filesScanned": 142,
+      "variables": 2,
+      "references": 15,
+      "complete": true,
+      "issues": {
+        "SOURCE_OPTIONAL_REFERENCE": 1
+      },
+      "elapsedMs": 413.5,
+      "maxRssMiB": 106.3,
+      "initPreviewExit": 0,
+      "initStatus": "preview",
+      "sourceBytesUnchanged": true
+    },
+    {
+      "repository": "fastify/demo",
+      "commit": "895908e4e706b896aa3991f3f6507617edddb1dd",
+      "framework": "Fastify/TypeScript",
+      "filesScanned": 46,
+      "variables": 11,
+      "references": 32,
+      "complete": true,
+      "issues": {
+        "SOURCE_DYNAMIC_REFERENCE": 1,
+        "SOURCE_OPTIONAL_REFERENCE": 3,
+        "SOURCE_POTENTIAL_SECRET": 1
+      },
+      "elapsedMs": 198.61,
+      "maxRssMiB": 78.77,
+      "initPreviewExit": 0,
+      "initStatus": "preview",
+      "sourceBytesUnchanged": true
+    },
+    {
+      "repository": "vercel/nextjs-postgres-nextauth-tailwindcss-template",
+      "commit": "fe026711c19ac3ee4589c86a738f59b84e611559",
+      "framework": "Next.js/React",
+      "filesScanned": 33,
+      "variables": 1,
+      "references": 1,
+      "complete": true,
+      "issues": {},
+      "elapsedMs": 176.48,
+      "maxRssMiB": 77.48,
+      "initPreviewExit": 0,
+      "initStatus": "preview",
+      "sourceBytesUnchanged": true
+    },
+    {
+      "repository": "antfu/vitesse-lite",
+      "commit": "0b352977755e1f7f6399698e308777760409ca71",
+      "framework": "Vite/Vue",
+      "filesScanned": 15,
+      "variables": 1,
+      "references": 1,
+      "complete": true,
+      "issues": {
+        "SOURCE_DYNAMIC_REFERENCE": 5
+      },
+      "elapsedMs": 260.74,
+      "maxRssMiB": 80.38,
+      "initPreviewExit": 0,
+      "initStatus": "no-variables",
+      "sourceBytesUnchanged": true
+    },
+    {
+      "repository": "nestjs/typescript-starter",
+      "commit": "0b6d71261ba30bb6976949a8653e4a86479a68c1",
+      "framework": "TypeScript/NestJS",
+      "filesScanned": 8,
+      "variables": 3,
+      "references": 3,
+      "complete": true,
+      "issues": {
+        "SOURCE_OPTIONAL_REFERENCE": 3,
+        "SOURCE_POTENTIAL_SECRET": 1
+      },
+      "elapsedMs": 107.18,
+      "maxRssMiB": 67.98,
+      "initPreviewExit": 0,
+      "initStatus": "preview",
+      "sourceBytesUnchanged": true
+    }
+  ],
+  "implementationFingerprint": "835ce8f3e6b2a2d378ddb1ce8f93efe16da88daab0972d403f8162e95005f144",
+  "fingerprintMethod": "SHA-256 of sorted source/declaration-file hashes and package-lock hash; local development identity, not a release commit."
+}
