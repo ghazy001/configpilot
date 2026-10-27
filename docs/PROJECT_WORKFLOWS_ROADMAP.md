@@ -40,3 +40,10 @@ No version bump, Git push, release tag or npm publication occurred.
 Owner explicitly authorized pushing, tagging and publishing on 2026-10-27.
 Local implementation evidence above is historical; fresh native OS CI and exact
 committed archive acceptance are mandatory before publication.
+
+## v1.3.0 delivery completed
+
+PR #16 and exact main passed the full protected native matrix. The verified 45-file
+archive was published after owner browser verification, tagged v1.3.0 and verified
+through ordinary clean registry installs. See releases/1.3.0.json and PROGRESS.md.
+Earlier pending/no-release statements record the historical development phase.

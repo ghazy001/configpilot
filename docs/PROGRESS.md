@@ -2,6 +2,30 @@
 
 Last updated: 2026-10-27 (Africa/Tunis).
 
+## Current release — v1.3.0 published and verified
+
+Status: **Complete — pushed, tagged and published on 2026-10-27**.
+Owner explicitly approved delivery. PR #16 merged as
+`cef8c1254e7f7e6c726ddbbdf4fe6ad27c3698a4`. Both PR and exact-main protected
+Quality CI passed all Windows/Linux/macOS x Node 20/22/24/26 jobs and minimum
+Node 20.0.0. Local release quality passed 258 tests, nine contracts, installed
+TypeScript consumers, lint/format and coverage (98.99% aggregate lines).
+
+The exact 45-file archive passed committed-source equality, offline installation,
+installed content/API/CLI acceptance and privacy checks. Owner browser security
+verification authorized npm publication as ghazi001. Initial registry reads returned
+404/ETARGET while npm propagated; fresh retry passed. Public archive SHA-256 and
+integrity match the reviewed archive; npm latest is 1.3.0. Fresh unauthenticated
+ordinary local/global installs passed scan → init → check, overwrite protection,
+new project policy/template-preview/Vue workflows, nine public exports, CommonJS
+dynamic import and TypeScript 5.0.4/7.0.2 NodeNext/Bundler checks.
+
+Created immutable v1.3.0 tag and GitHub release at the verified source. Shipped README,
+project guide, CLI documentation, security boundaries and changelog cover the features.
+[The release receipt](releases/1.3.0.json) records exact identities and verification.
+Vue template/unsupported-script limitations remain documented. External human feedback
+remains Pending — Requires Human Participation. No future release is authorized.
+
 ## v1.3.0 release delivery — In Progress
 
 Owner explicitly authorized pushing, tagging and publishing the six completed

@@ -1,12 +1,18 @@
 # Release readiness
 
-## v1.3.0 — Authorized delivery in progress
+## v1.3.0 — Published and verified
 
-Owner approved pushing, tagging and publishing on 2026-10-27. All six project-workflow
-improvements passed local acceptance; see PROJECT_WORKFLOWS_VALIDATION.md for the
-pre-release development evidence. Fresh protected native OS/Node CI and exact main
-archive acceptance remain mandatory. Publication and registry verification are not
-yet complete. Historical release records below retain their original identities.
+Owner-authorized PR #16 merged as cef8c1254e7f7e6c726ddbbdf4fe6ad27c3698a4.
+Protected PR and exact-main native Quality CI passed. The clean 45-file archive
+passed committed-source and offline consumer acceptance before publication.
+Owner browser verification completed npm publication; registry latest is 1.3.0.
+Public archive hash/integrity match, and fresh unauthenticated ordinary local/global
+installs, old/new workflows, nine public exports and TypeScript consumers passed.
+The immutable tag and GitHub release identify that exact source. See
+[the receipt](releases/1.3.0.json) and [release notes](RELEASE_NOTES_v1.3.0.md).
+Historical development measurements retain their original revision. Vue template
+limits and Pending external human feedback remain explicit. No future publication
+is authorized by this receipt.
 
 ## v1.2.0 — Historical verified release
 
