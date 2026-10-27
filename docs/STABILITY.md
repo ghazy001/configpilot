@@ -125,3 +125,14 @@ after the reference-led screenshots. Version 1.2.0 is the selected additive rele
 the earlier dependency-free statements describe the 1.0/1.1 scope only. Required new
 hosted Windows/Linux/macOS checks and exact-archive verification are in progress, not
 claimed complete. See RELEASE_PLAN_v1.2.0.md and the latest PROGRESS.md entry.
+
+## v1.2.0 publication — 2026-10-27
+
+Owner-approved v1.2.0 is published and verified from protected main 9523a0c.
+The 32-file archive SHA-256 is b0c492dd8e581e591ffc2390ce6ffcd78230a69ca1c244025b3adbfda40ed5c9.
+Both PR and exact-main hosted quality gates passed across Windows/Linux/macOS,
+Node 20/22/24/26 and minimum 20.0.0. Registry bytes and fresh unauthenticated
+local/global installation/workflow/API/TypeScript checks passed before the immutable
+tag and GitHub release. See [the durable receipt](releases/1.2.0.json).
+This release includes a pinned Babel parser runtime dependency; earlier
+dependency-free claims describe historical check-only releases. Human trials remain pending.

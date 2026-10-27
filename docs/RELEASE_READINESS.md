@@ -1,10 +1,13 @@
 # Release readiness
 
-Reviewed 2026-10-27. **v1.2.0 preparation is in progress.** The owner authorized
+Reviewed 2026-10-27. **v1.2.0 published and verified.** The owner authorized
 pushing, tagging and publishing the discovery/init workflow, terminal redesign and
-matching documentation. Publication follows the gates in
-[the release plan](RELEASE_PLAN_v1.2.0.md); no success is implied by this checklist.
-See [release notes](RELEASE_NOTES_v1.2.0.md) for the new workflow and limitations.
+matching documentation. All mandatory delivery gates passed. Exact main source
+9523a0c passed trusted hosted Quality CI; the 32-file public tarball matches the
+reviewed archive. Fresh unauthenticated local/global installs, the full workflow,
+public API and TypeScript consumers passed. npm latest and immutable v1.2.0 identify
+this release; see [the durable receipt](releases/1.2.0.json) and
+[release notes](RELEASE_NOTES_v1.2.0.md).
 
 The current package adds AST-based JavaScript/TypeScript discovery, exclusive
 placeholder-file creation and four additive public APIs. Existing check reports,
@@ -13,10 +16,11 @@ with one direct runtime dependency (pinned Babel parser) and 32 allowlisted file
 The archive includes discovery/API/CLI/security documentation and excludes fixtures,
 real environment files and terminal-capture tooling.
 
-Local runtime, contract, installed TypeScript, lint and formatting checks passed
-for the versioned source. Hosted Windows/Linux/macOS validation, exact-main candidate
-verification, npm browser authentication and registry installation remain release
-gates. [PROGRESS.md](PROGRESS.md) records actual results as each completes.
+Local runtime, contract, installed TypeScript, lint, formatting, coverage and
+resource checks passed. Hosted Windows/Linux/macOS and Node 20.0.0 tests passed;
+exact-main archive/installation verification and owner browser authentication
+preceded publication. Registry bytes, latest metadata and installations were then
+verified before the tag and GitHub release. [PROGRESS.md](PROGRESS.md) records results.
 The [feature audit](FEATURE_QUALITY_AUDIT.md) and
 [design review](CLI_DESIGN_REVIEW.md) retain the pre-release evidence and screenshots.
 External developer feedback remains **Pending — Requires Human Participation**;

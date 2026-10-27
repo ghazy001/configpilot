@@ -1,5 +1,8 @@
 # Environment discovery and initialization — implementation report
 
+Release follow-up: v1.2.0 is published and verified; see [the receipt](releases/1.2.0.json)
+and PROGRESS.md. Original local implementation evidence below is historical.
+
 Local feature, 2026-10-26. Package version remains 1.1.1. Not published or pushed.
 
 Historical initial implementation report. The 2026-10-27 deep audit supersedes its

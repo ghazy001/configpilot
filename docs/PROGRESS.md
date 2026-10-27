@@ -2,20 +2,32 @@
 
 Last updated: 2026-10-27 (Africa/Tunis).
 
-## Current release preparation — v1.2.0
+## Current release — v1.2.0 published and verified
 
-Status: **In Progress — owner authorized push, tag and publication**.
-The new discovery/init workflow, premium terminal layout, APIs and documentation
-are staged for an additive minor release. See [the release plan](RELEASE_PLAN_v1.2.0.md).
-The published registry version remains 1.1.1 until verification and publication finish.
+Status: **Complete — pushed, tagged and published on 2026-10-27**.
+The owner authorized release delivery after the terminal screenshots. PR #14 merged
+as `9523a0ca2d735176348ea482314c177e70db97c5`; both PR and exact-main Quality CI
+passed the complete Windows/Linux/macOS/Node matrix and minimum Node 20.0.0.
+The exact source produced a clean 32-file archive; source/blob equality, offline
+installation, installed contents, API and CLI acceptance passed.
 
-Executed locally for the versioned source: `npm run check` passed 235 runtime tests,
-seven contract tests, installed TypeScript 5.0.4/7.0.2 consumers, lint and formatting.
-Runtime dependency audit returned zero vulnerabilities. Resource checks passed all
-five isolated budgets. Coverage reran all 235 tests successfully (98.79% aggregate
-lines; parser/analyzer each 100% lines and branches). `npm pack --dry-run` succeeded; archive inspection/hosted
-OS tests and final exact-main publication checks remain gates. Human trials remain
-**Pending — Requires Human Participation**.
+npm accepted publication as ghazi001 after owner browser login and final security
+verification. npm latest is 1.2.0. Public tarball SHA-256/integrity match the reviewed
+archive. Fresh unauthenticated ordinary local/global installs passed the complete
+scan → init → check workflow, overwrite protection, privacy, seven public exports,
+CommonJS dynamic import and TypeScript 5.0.4/7.0.2 NodeNext/Bundler checks. The
+registry README and embedded archive documentation include the new feature and
+v1.2.0 commands. Created and pushed annotated immutable v1.2.0 at the verified source,
+then created [the GitHub release](https://github.com/ghazy001/configpilot/releases/tag/v1.2.0).
+
+Local verification passed 238 runtime tests, seven contracts, installed TypeScript,
+lint/format, coverage (98.83% aggregate lines), all five resource budgets and zero
+runtime dependency audit vulnerabilities. Native CI exposed and helped fix a Windows
+ESM preload test path and a real guarded-read volume-identity compatibility defect.
+[The durable receipt](releases/1.2.0.json) records archive identity and verification.
+External feedback remains **Pending — Requires Human Participation**. Manual
+font-specific terminal checks and full Vue/Svelte/Astro parsing remain limitations.
+No future publication is authorized by this receipt.
 
 ## v1.1.1 documentation release — Complete
 
@@ -1630,3 +1642,19 @@ Improved the replacement regression to rename and retain the original file, then
 verify rejection of a genuinely different file at its former path.
 Final PR revision, exact merged-main CI, clean archive acceptance and registry
 publication/verification remain mandatory gates.
+
+### v1.2.0 delivery receipt follow-up
+
+Release source and public package are immutable at 9523a0c. The follow-up branch
+adds the final native-validation notes, the stronger real replacement regression
+and the publication receipt without changing shipped package files. Candidate
+preparation initially failed with the sandbox's default npm cache; selecting the
+task-local cache succeeded. No failed candidate was published. The final exact
+archive passed independent acceptance before owner-controlled publication.
+
+Receipt-branch final `npm run check` passed all 238 runtime tests, seven contracts,
+installed TypeScript consumers, lint and formatting after the stronger replacement
+regression. Public GitHub release read-back and remote annotated tag/peeled commit
+matched the receipt. Registry README metadata contains ordinary latest installation
+commands, the v1.2.0 pinning guidance and the new workflow. No shipped files changed
+in the receipt branch.

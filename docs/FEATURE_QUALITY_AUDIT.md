@@ -318,3 +318,13 @@ merged main. Local verification now passes 238 tests, seven contracts, TypeScrip
 confirmed critical security/correctness defect. Publication gates and the exact
 archive are tracked in PROGRESS.md and the release receipt. External human trials
 remain pending. The original local-only NEEDS WORK verdict above is historical.
+
+## Current delivery verdict — READY (v1.2.0 technical release gates)
+
+The owner-approved v1.2.0 release completed protected PR/main native CI, exact
+archive inspection/offline acceptance and public-registry installation checks.
+No confirmed critical defect remains. Windows 22 guarded reads now pass, retaining
+descriptor device/inode verification. The original pre-release verdict above remains
+historical. See releases/1.2.0.json for immutable source/archive/CI/publication evidence.
+This verdict does not claim full framework coverage, deployment/value validation,
+manual font testing or completed external human trials. Those limits remain explicit.
