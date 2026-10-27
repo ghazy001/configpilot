@@ -1,7 +1,7 @@
 # CI and repository safeguards
 
 This document describes ConfigPilot's repository automation. It is separate from
-the dependency-free runtime package. See [TESTING.md](TESTING.md) for local commands
+the runtime package, which uses a pinned Babel parser for static source analysis. See [TESTING.md](TESTING.md) for local commands
 and the platform matrix, and [RELEASING.md](RELEASING.md) for candidate review.
 
 ## Required quality checks
@@ -53,7 +53,7 @@ not replace maintainer review, credential hygiene or explicit publication approv
 
 ## Dependency updates
 
-[Dependabot](../.github/dependabot.yml) checks npm development dependencies and
+[Dependabot](../.github/dependabot.yml) checks npm runtime and development dependencies and
 GitHub Actions weekly, Monday at 08:00 Africa/Tunis. Compatible npm minor/patch
 development updates are grouped; major updates remain separate. Each ecosystem
 has a five-open-PR limit. There is no automatic merge or automatic version release.

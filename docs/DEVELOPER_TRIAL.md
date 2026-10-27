@@ -1,11 +1,11 @@
 # ConfigPilot developer trial
 
-Thank you for trying ConfigPilot v1.1.1. Participation is voluntary. Share only
+Thank you for trying ConfigPilot v1.2.0. Participation is voluntary. Share only
 sanitized observations with the maintainer privately; never send real environment
 files, credentials, process-environment dumps or screenshots containing secrets.
 You may stop at any time. The released package is open source under the MIT license.
 
-Use published **configpilot@1.1.1** for new trials. The earlier supplied private
+Use published **configpilot@1.2.0** for new trials. The earlier supplied private
 0.1.0-text archive was a historical validation build; do not substitute it or the
 older public 0.1.0 release. No developer trial has yet been recorded.
 
@@ -16,7 +16,7 @@ your Node version, OS and architecture. In that folder, install the released pac
 
 ```sh
 npm init -y
-npm install --save-dev configpilot@1.1.1
+npm install --save-dev configpilot@1.2.0
 ```
 
 Invoke `./node_modules/.bin/configpilot` on macOS/Linux, or
@@ -54,6 +54,14 @@ API_TOKEN="synthetic-only"
 6. In a disposable synthetic example resembling your usual project's conventions,
    try quoting/export/optional-variable patterns you actually use. Note unsupported
    syntax and false positives. Do not copy actual credentials into this trial.
+
+7. In a separate disposable directory, create `app.ts` containing
+   `process.env.PORT ?? 3000; process.env.API_TOKEN;`. Run `scan`, preview with
+   `init --template --dry-run`, approve `init --template`, then approve `init`.
+   Review placeholders and run `check`. Explain why a clean check does not validate
+   empty credentials. Try init again and confirm that the existing file is protected.
+8. Add `process.env[dynamicName]` and compare scan text/JSON. Does unresolved-reference
+   guidance make its uncertainty clear? Never use a real application's secrets.
 
 Use the README/help without facilitator coaching first. Record where you needed
 help; this is feedback about the tool, not a test of your ability.

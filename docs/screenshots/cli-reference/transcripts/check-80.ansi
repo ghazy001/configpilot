@@ -1,0 +1,51 @@
+  [1;36m◈ ConfigPilot[0m                                                        [90;40m[ CHECK ][0m
+  [90mEnvironment configuration diagnostics[0m
+
+  [90m──────────────────────────────────────────────────────────────────────────────[0m
+
+  [33m! Analysis completed[0m                                                [33;40m[ REVIEW ][0m
+
+  [90m╭───────────────────────╮[0m  [90m╭───────────────────────╮[0m  [90m╭──────────────────────╮[0m
+  [90m│[0m[1;37;40m           0           [0m[90m│[0m  [90m│[0m[1;33;40m           2           [0m[90m│[0m  [90m│[0m[1;37;40m          0           [0m[90m│[0m
+  [90m│[0m[90;40m        Errors         [0m[90m│[0m  [90m│[0m[90;40m       Warnings        [0m[90m│[0m  [90m│[0m[90;40m     Information      [0m[90m│[0m
+  [90m╰───────────────────────╯[0m  [90m╰───────────────────────╯[0m  [90m╰──────────────────────╯[0m
+
+  [90m  Template:    [0m[36m".env.example"[0m
+  [90m  Target:      [0m[36m".env"[0m
+
+  [1mConfiguration diagnostics[0m                                           [90;40m[ STATUS ][0m
+
+  [1m! DATABASE_URL[0m                                                     [33;40m[ WARNING ][0m
+  [90m  Finding:     [0m[33mMissing variable [MISSING_KEY][0m
+  [90m  Location:    [0m[36mtemplate ".env.example":2[0m
+  [90m  Message:     [0m[90mNo local declaration was found. This key may be supplied[0m
+  [90m               [0m[90mexternally.[0m
+  [90m  Action:      [0m[90mProvide it locally or verify deployment provisioning before[0m
+  [90m               [0m[90mchanging files.[0m
+
+  [1m! OPENAI_API_KEY[0m                                                   [33;40m[ WARNING ][0m
+  [90m  Finding:     [0m[33mMissing variable [MISSING_KEY][0m
+  [90m  Location:    [0m[36mtemplate ".env.example":3[0m
+  [90m  Message:     [0m[90mNo local declaration was found. This key may be supplied[0m
+  [90m               [0m[90mexternally.[0m
+  [90m  Action:      [0m[90mProvide it locally or verify deployment provisioning before[0m
+  [90m               [0m[90mchanging files.[0m
+
+  [90m──────────────────────────────────────────────────────────────────────────────[0m
+
+  [1mSummary[0m
+  [90m0 errors, 2 warnings, 0 info.[0m
+  [90mComparison: complete[0m
+  Keys: 3 template, 1 environment; 1 shared, 2 missing, 0 undocumented.
+
+  [1;36m╭────────────────────────────────────────────────────────────────────────────╮[0m
+  [1;36m│[0m[1;36;40m Next Steps                                                                 [0m[1;36m│[0m
+  [1;36m│[0m[40m                                                                            [0m[1;36m│[0m
+  [1;36m│[0m[40m Review the locations and actions above. Rerun your selected check after    [0m[1;36m│[0m
+  [1;36m│[0m[40m making intentional changes.                                                [0m[1;36m│[0m
+  [1;36m│[0m[40m                                                                            [0m[1;36m│[0m
+  [1;36m│[0m[1;36;44m › configpilot check                                                        [0m[1;36m│[0m
+  [1;36m╰────────────────────────────────────────────────────────────────────────────╯[0m
+
+  [33mConfiguration needs attention.[0m
+  [90mNo files were modified.[0m

@@ -1,0 +1,86 @@
+{
+  "date": "2026-10-26",
+  "node": "20.20.0",
+  "platform": "darwin-arm64",
+  "scope": "Selected public source files only, not complete repositories; no project dependencies/scripts executed. Direct reference inventory was compared to expected names. Single-run measurements include worker startup.",
+  "results": [
+    {
+      "kind": "Node",
+      "repository": "heroku/node-js-getting-started",
+      "commit": "8b8dec11fcf027522a857e0c831ee01b7124f673",
+      "files": ["index.js"],
+      "filesScanned": 1,
+      "references": 1,
+      "names": ["PORT"],
+      "observedFalsePositives": 0,
+      "observedFalseNegatives": 0,
+      "elapsedMs": 152.19,
+      "maxRssMiB": 67.63,
+      "generatedBytes": 322,
+      "onboarding": "template/local/check passed"
+    },
+    {
+      "kind": "Express",
+      "repository": "expressjs/express",
+      "commit": "1c6f1b0fe4000977b9a7b4f34097e4d527dd9824",
+      "files": ["examples/hello-world/index.js"],
+      "filesScanned": 1,
+      "references": 0,
+      "names": [],
+      "observedFalsePositives": 0,
+      "observedFalseNegatives": 0,
+      "elapsedMs": 117.44,
+      "maxRssMiB": 66.19,
+      "generatedBytes": 0,
+      "onboarding": "no variables; no file created"
+    },
+    {
+      "kind": "Vite",
+      "repository": "vitejs/vite",
+      "commit": "e954a9cda0b5254be495a937333a0be1b8503d8f",
+      "files": ["packages/create-vite/template-react/src/App.jsx"],
+      "filesScanned": 1,
+      "references": 0,
+      "names": [],
+      "observedFalsePositives": 0,
+      "observedFalseNegatives": 0,
+      "elapsedMs": 125.95,
+      "maxRssMiB": 69.11,
+      "generatedBytes": 0,
+      "onboarding": "no variables; no file created"
+    },
+    {
+      "kind": "Next.js",
+      "repository": "vercel/next.js",
+      "commit": "7748e532a1abeb4387a722b0f1665bd53218f51a",
+      "files": [
+        "examples/with-docker-multi-env/next.config.js",
+        "examples/with-docker-multi-env/pages/index.js"
+      ],
+      "filesScanned": 2,
+      "references": 1,
+      "names": ["NEXT_PUBLIC_API_URL"],
+      "observedFalsePositives": 0,
+      "observedFalseNegatives": 0,
+      "elapsedMs": 116.94,
+      "maxRssMiB": 67.3,
+      "generatedBytes": 333,
+      "onboarding": "template/local/check passed"
+    },
+    {
+      "kind": "TypeScript backend",
+      "repository": "nestjs/typescript-starter",
+      "commit": "0b6d71261ba30bb6976949a8653e4a86479a68c1",
+      "files": ["src/main.ts", "src/app.controller.ts"],
+      "filesScanned": 2,
+      "references": 1,
+      "names": ["PORT"],
+      "observedFalsePositives": 0,
+      "observedFalseNegatives": 0,
+      "elapsedMs": 93.59,
+      "maxRssMiB": 66.81,
+      "generatedBytes": 322,
+      "onboarding": "template/local/check passed"
+    }
+  ]
+}

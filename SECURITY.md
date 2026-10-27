@@ -39,7 +39,7 @@ ConfigPilot is designed to analyze declarations without retaining assignment val
 
 - The parser and analyzer take explicit strings. They do not read files, inspect
   `process.env`, load project modules, log input, or make network requests.
-- The CLI reads only the selected configuration inputs in read-only mode. It never
+- The check CLI reads only the selected configuration inputs in read-only mode. It never
   executes their contents, automatically rewrites files, sends data over the network,
   or creates temporary configuration copies.
 - Reports contain key names, caller-provided file labels, line locations, fixed
@@ -85,7 +85,8 @@ send the credential to this project as evidence.
 
 ## Packaging and publication
 
-The runtime has no dependencies. Development dependencies are lockfile-pinned.
+Source discovery uses the pinned @babel/parser runtime dependency and its locked
+transitive type-support packages. Development dependencies are lockfile-pinned.
 An exact package allowlist and archive/consumer tests prevent unintended files from
 being silently shipped; environment files, tests, and source-checkout examples are
 excluded. The package has explicit public-registry metadata. Candidate preparation
@@ -93,3 +94,48 @@ never publishes. Publication, new tags and external releases always need explici
 owner approval for an exact new version/artifact. A published name/version must never
 be reused for changed bytes. Manual owner-controlled 2FA publication is supported;
 trusted publishing/provenance requires a separate reviewed setup.
+
+## Source discovery and explicitly authorized initialization (v1.2.0)
+
+Scan reads bounded JS/TS/JSX/TSX, never loads project modules/config/plugins, and
+returns only portable names and public locations. Workers bound parser heap/time;
+parse failures discard raw exceptions and do not recover speculative keys. Fallback
+literals are not retained or copied. Directory/file links are skipped or refused.
+Selected dotenv inputs use no-follow reads; check's documented symlink policy is unchanged.
+No network transmission is performed. Git-ignore inspection invokes only native
+Git check-ignore with fsmonitor/hooks disabled, not scanned scripts or project commands.
+
+Init is the explicit exception to read-only operation: after confirmation or --yes
+it creates one nonexistent root-level file with exclusive creation and mode 0600.
+It cannot overwrite or automatically edit .gitignore. It never stages/commits/pushes.
+Generated content is safe placeholders only; credentials must be supplied privately.
+The programmatic createEnvFile caller must obtain consent before passing confirmed:true.
+Concurrent hostile replacement of ancestor directories and Windows ACL policy are
+outside portable Node path guarantees; root identity is checked before creation.
+Write errors may leave a partial new file; errors request manual inspection and never
+delete a path that could have been replaced. See SOURCE_DISCOVERY.md in docs for bounds.
+
+## Deep feature audit — 2026-10-27
+
+Discovery workers receive no process environment and no inherited startup arguments.
+Only static portable keys/locations leave the AST; unknown expressions/object escapes
+are unresolved. Source/template/local key union is retained only for CLI generation,
+never values. All .env variants except explicit example/sample templates keep private
+Git-ignore warnings even when --template is supplied. Tracked files cannot be declared
+safely ignored using no-index. Existing-file checks happen before scans; exclusive
+creation and an opened-descriptor regular-file check remain mandatory.
+
+Confirmation defaults No on EOF, interruption, output failure and idle timeout. Known
+CI indicators prevent interactive prompts. Windows console names and C1 controls are
+rejected on all platforms as a conservative policy; current native Windows CI
+evidence is recorded in the release progress log. A write failure may leave a partial new file, and cannot be reported as success.
+No confirmed value-disclosure vulnerability was reproduced; this is maintainer review,
+not an independent security certification. Audit evidence is retained in repository
+FEATURE_QUALITY_AUDIT.md; it is not part of the npm archive.
+
+Guarded discovery reads use BigInt file IDs. On Windows, volume serials are
+normalized to libuv's 32-bit policy. When an older Windows path-stat reports no
+volume serial, a second descriptor verifies device/inode identity and the named
+regular file is rechecked before and after verification. Device/inode mismatches
+remain failures; this does not add atomic protection against hostile parent-directory
+mutation beyond portable Node filesystem guarantees.

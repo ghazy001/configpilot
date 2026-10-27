@@ -3,6 +3,7 @@ import { spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import {
   copyFileSync,
+  cpSync,
   mkdirSync,
   mkdtempSync,
   readFileSync,
@@ -30,11 +31,24 @@ test("private candidate acceptance verifies installed workflows and rejects tamp
   for (const file of [
     ...candidateFiles(metadata),
     "scripts/verify-candidate.js",
+    "scripts/offline-dependencies.js",
     "scripts/release-guards.js",
     "scripts/prepare-release.js",
   ]) {
     mkdirSync(dirname(join(repo, file)), { recursive: true });
     copyFileSync(join(root, file), join(repo, file));
+  }
+  writeFileSync(join(repo, ".gitignore"), "node_modules/\n");
+  for (const name of [
+    "@babel/parser",
+    "@babel/types",
+    "@babel/helper-string-parser",
+    "@babel/helper-validator-identifier",
+  ]) {
+    mkdirSync(dirname(join(repo, "node_modules", name)), { recursive: true });
+    cpSync(join(root, "node_modules", name), join(repo, "node_modules", name), {
+      recursive: true,
+    });
   }
   const hooks = join(directory, "empty-hooks");
   mkdirSync(hooks);

@@ -55,3 +55,13 @@ if (report.comparison === "skipped") {
     }
   }
 }
+
+import { scanSource, createEnvFile } from "configpilot";
+// @ts-expect-error Source must be text.
+scanSource(42);
+const unauthorizedCreation: Parameters<typeof createEnvFile>[0] = {
+  content: "PORT=3000",
+  // @ts-expect-error File creation requires explicit literal true authorization.
+  confirmed: false,
+};
+void unauthorizedCreation;

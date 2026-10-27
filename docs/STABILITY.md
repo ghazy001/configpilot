@@ -99,3 +99,29 @@ The owner-approved v1.1.1 patch corrects the npm README and current installation
 guides. Runtime code is unchanged from v1.1.0. Registry README metadata, matching
 archive bytes, fresh installation and hosted CI are verified; see
 [the release receipt](releases/1.1.1.json).
+
+## Local discovery/initialization feature
+
+The source discovery roadmap is implemented locally with additive APIs, isolated AST
+parsing, deterministic heuristics and consent-based exclusive file creation. Existing
+check contracts remain unchanged; the npm version remains 1.1.1 and does not include
+this feature. See SOURCE_DISCOVERY.md, DISCOVERY_ARCHITECTURE.md and
+SOURCE_DISCOVERY_VALIDATION.md. New hosted Windows/Linux validation is pending because
+the owner prohibits pushing this work. Human feedback remains uncollected.
+
+The 2026-10-27 deep audit fixes previously missed lexical binding, initialization,
+confirmation and guidance defects and upgrades terminal presentation. See
+[FEATURE_QUALITY_AUDIT.md](FEATURE_QUALITY_AUDIT.md) for reproductions and measurements.
+Six pinned source inventories were independently compared; unsupported Vue components
+remain explicitly incomplete. The feature's release verdict is NEEDS WORK pending
+native compatibility checks and acceptance of the documented syntax boundaries.
+Historical published-version CI receipts do not validate this new revision.
+
+## v1.2.0 discovery release preparation — 2026-10-27
+
+The owner approved pushing, tagging and publishing the feature and current documentation
+after the reference-led screenshots. Version 1.2.0 is the selected additive release;
+1.1.1 remains historical. This release adds pinned Babel runtime dependencies, so
+the earlier dependency-free statements describe the 1.0/1.1 scope only. Required new
+hosted Windows/Linux/macOS checks and exact-archive verification are in progress, not
+claimed complete. See RELEASE_PLAN_v1.2.0.md and the latest PROGRESS.md entry.

@@ -214,7 +214,11 @@ test("runtime exposes exactly the documented named exports", async () => {
   assert.deepEqual(Object.keys(api).sort(), [
     "ISSUE_CODES",
     "analyzeConfig",
+    "createEnvFile",
+    "generateEnvTemplate",
     "parseDotenv",
+    "scanProject",
+    "scanSource",
   ]);
 });
 

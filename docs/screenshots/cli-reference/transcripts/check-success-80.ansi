@@ -1,0 +1,35 @@
+  [1;36m◈ ConfigPilot[0m                                                        [90;40m[ CHECK ][0m
+  [90mEnvironment configuration diagnostics[0m
+
+  [90m──────────────────────────────────────────────────────────────────────────────[0m
+
+  [32m✔ No configuration issues found.[0m                                     [32;40m[ CLEAN ][0m
+
+  [90m╭───────────────────────╮[0m  [90m╭───────────────────────╮[0m  [90m╭──────────────────────╮[0m
+  [90m│[0m[1;37;40m           0           [0m[90m│[0m  [90m│[0m[1;37;40m           0           [0m[90m│[0m  [90m│[0m[1;37;40m          0           [0m[90m│[0m
+  [90m│[0m[90;40m        Errors         [0m[90m│[0m  [90m│[0m[90;40m       Warnings        [0m[90m│[0m  [90m│[0m[90;40m     Information      [0m[90m│[0m
+  [90m╰───────────────────────╯[0m  [90m╰───────────────────────╯[0m  [90m╰──────────────────────╯[0m
+
+  [90m  Template:    [0m[36m".env.example"[0m
+  [90m  Target:      [0m[36m".env.example"[0m
+
+  Syntax and declared keys match. Values and deployment configuration were not
+  validated.
+
+  [90m──────────────────────────────────────────────────────────────────────────────[0m
+
+  [1mSummary[0m
+  [90m0 errors, 0 warnings, 0 info.[0m
+  [90mComparison: complete[0m
+  Keys: 3 template, 3 environment; 3 shared, 0 missing, 0 undocumented.
+
+  [1;36m╭────────────────────────────────────────────────────────────────────────────╮[0m
+  [1;36m│[0m[1;36;40m Next Steps                                                                 [0m[1;36m│[0m
+  [1;36m│[0m[40m                                                                            [0m[1;36m│[0m
+  [1;36m│[0m[40m Keep your reference template current. Recheck after changing configuration [0m[1;36m│[0m
+  [1;36m│[0m[40m keys.                                                                      [0m[1;36m│[0m
+  [1;36m│[0m[40m                                                                            [0m[1;36m│[0m
+  [1;36m│[0m[1;36;44m › configpilot check --help                                                 [0m[1;36m│[0m
+  [1;36m╰────────────────────────────────────────────────────────────────────────────╯[0m
+
+  [90mNo files were modified.[0m

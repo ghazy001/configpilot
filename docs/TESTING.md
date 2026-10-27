@@ -117,7 +117,7 @@ that a platform has passed.
 `npm run test:contracts` uses pinned development-only dotenv 18.0.9 and Ajv 8.20.0.
 It verifies 99 conventional key/location cases, intentional grammar differences,
 quote/backslash mutations, emitted JSON schemas and rejected structural mutations.
-It is part of `check`; dependency-free minimum-runtime tests remain separate.
+It is part of `check`; minimum-runtime tests install runtime dependencies while omitting development tools.
 The absence of assignment-value fields is also asserted at runtime and in types.
 
 `npm run test:resources` launches isolated synthetic processes for duplicate/different

@@ -55,3 +55,29 @@ for (const issue of issues) {
     throw new Error("Unexpected related location.");
   }
 }
+
+import {
+  scanSource,
+  scanProject,
+  generateEnvTemplate,
+  createEnvFile,
+  type DiscoveryReport,
+} from "configpilot";
+const extracted = scanSource("process.env.PORT ?? 3000", { file: "app.ts" });
+const discovery: DiscoveryReport = {
+  schemaVersion: 1,
+  kind: "discovery",
+  complete: true,
+  filesScanned: 0,
+  bytesScanned: 0,
+  variables: [],
+  issues: extracted.issues,
+  configuration: { detected: [], template: null, environment: null },
+};
+const generated: string = generateEnvTemplate(discovery);
+const scanner: (options?: { root?: string }) => Promise<DiscoveryReport> =
+  scanProject;
+const creator: typeof createEnvFile = createEnvFile;
+void generated;
+void scanner;
+void creator;

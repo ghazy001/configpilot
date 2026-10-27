@@ -1,0 +1,137 @@
+{
+  "method": "Unmodified output bytes captured from real Node CLI processes in POSIX PTYs. Disposable synthetic inputs only; captures are replayed in xterm.js for screenshots, not hand-drawn HTML output.",
+  "viewer": "xterm.js 5.5.0, dark ANSI palette, browser screenshots; captions are capture metadata",
+  "platform": "darwin",
+  "records": [
+    {
+      "command": ["configpilot", "scan"],
+      "columns": 80,
+      "exitCode": 0,
+      "sha256": "e5a89797ca69cb4abed4593be9f8cf9d6c453c7b3428f20f2b7635e9b4099390",
+      "bytes": 4267,
+      "transcript": "scan-80.ansi",
+      "screenshot": "scan-80.jpg",
+      "screenshotSha256": "550a492fb121d546a939f610efd3edb53b7501985b651fe89eb613ffd4f16c41"
+    },
+    {
+      "command": ["configpilot", "scan"],
+      "columns": 40,
+      "exitCode": 0,
+      "sha256": "18356bc4e9543171e11aa41f1ff7f9bf37c1f0281cd7b390d62c8173e2a05383",
+      "bytes": 3903,
+      "transcript": "scan-40.ansi",
+      "screenshot": "scan-40.jpg",
+      "screenshotSha256": "ce43eefd1def373cca53122f8dbad8f8a60b93369fc4ea6498cbd5789f47f95e"
+    },
+    {
+      "command": ["configpilot", "init", "--template", "--dry-run"],
+      "columns": 80,
+      "exitCode": 0,
+      "sha256": "35d53e715df57027302920a2aeb23ce82865a85b608c83756d6acecebd9ac23e",
+      "bytes": 3158,
+      "transcript": "init-80.ansi",
+      "screenshot": "init-80.jpg",
+      "screenshotSha256": "473a4cecfdf37b922042abc46adbda7b19a44790bd00955b661a1529f15aa450"
+    },
+    {
+      "command": ["configpilot", "init", "--template", "--dry-run"],
+      "columns": 40,
+      "exitCode": 0,
+      "sha256": "20b4295ba8d5cdfe4478ac388f07890d36aa23658aaf75ac96e4c3d1666f1fdf",
+      "bytes": 3132,
+      "transcript": "init-40.ansi",
+      "screenshot": "init-40.jpg",
+      "screenshotSha256": "0a0aefd7a96888c0d59eee1fb2ffc582752b31c73486b1274c787d3ee26f268a"
+    },
+    {
+      "command": ["configpilot", "check"],
+      "columns": 80,
+      "exitCode": 1,
+      "sha256": "c799b9734f0dbae4d13bdb3ecc5b40067b2a413c9e7c8d19764a5b4516e4cbfa",
+      "bytes": 4358,
+      "transcript": "check-80.ansi",
+      "screenshot": "check-80.jpg",
+      "screenshotSha256": "bc8db6d65b391baad96963c1b68114064a81537dddc3ca4e11fc241f13a6f469"
+    },
+    {
+      "command": ["configpilot", "check"],
+      "columns": 40,
+      "exitCode": 1,
+      "sha256": "a264c9c35a1e62c07ac33f530e4f7ba87c6045ece9d42a3708e9047696276f33",
+      "bytes": 3928,
+      "transcript": "check-40.ansi",
+      "screenshot": "check-40.jpg",
+      "screenshotSha256": "fb4a4e3f990bc32fbbf31c4311a98a7969041dab8a0200390bfa6d38db03d424"
+    },
+    {
+      "command": ["configpilot", "check", "--env", ".env.example"],
+      "columns": 80,
+      "exitCode": 0,
+      "sha256": "6d7b021cf6377239293805b5a616561f84f1dbeca7dd354f8a71d7ba01d1a6ec",
+      "bytes": 3273,
+      "transcript": "check-success-80.ansi",
+      "screenshot": "check-success-80.jpg",
+      "screenshotSha256": "5bb1c641bf32f4393a86661b1ca7e93eca5800b7e9dad7576406cc8e018dadbb"
+    },
+    {
+      "command": ["configpilot", "check", "--env", "invalid.txt"],
+      "columns": 80,
+      "exitCode": 1,
+      "sha256": "028d2d2d21f2444bb1bfdfa67aa2a596838fab82f8be172d19ead1741dd578d6",
+      "bytes": 4173,
+      "transcript": "check-error-80.ansi",
+      "screenshot": "check-error-80.jpg",
+      "screenshotSha256": "9e6c5def8850babd0c972562e567cc9b84364ed5f7e8fc27d84475839cc2c6f1"
+    },
+    {
+      "command": ["configpilot", "check"],
+      "columns": 80,
+      "exitCode": 2,
+      "sha256": "9944afee6890bc76c20b2fa182cda07673e63a5d790220ae9fe932e6435c8af7",
+      "bytes": 2761,
+      "transcript": "check-missing-80.ansi",
+      "screenshot": "check-missing-80.jpg",
+      "screenshotSha256": "d4efca6695d5bd673c572038ab7bd1e43147f1cf60734b8dbdfffd73379ff2e9"
+    },
+    {
+      "command": ["configpilot", "scan"],
+      "columns": 80,
+      "exitCode": 0,
+      "sha256": "d34e5799e975f6ca3fcb46d5b6c6f1f0fd3a22610f79ce59f821b8e9d8507f97",
+      "bytes": 3260,
+      "transcript": "scan-empty-80.ansi",
+      "screenshot": "scan-empty-80.jpg",
+      "screenshotSha256": "2185e2a53f137b84c13049a1aa230bc3eedeede5abe94412a5c122fa282e276c"
+    },
+    {
+      "command": ["configpilot", "init", "--dry-run"],
+      "columns": 80,
+      "exitCode": 0,
+      "sha256": "24ae3e40a5b216891c073f968b0a03d9dcbef0e13035a6058975039b92b5c303",
+      "bytes": 3332,
+      "transcript": "init-empty-80.ansi",
+      "screenshot": "init-empty-80.jpg",
+      "screenshotSha256": "7330a9e97a10716a758abce8a6cc62e4e18c7334e7877b2c5f937111cfd4cb2d"
+    },
+    {
+      "command": ["configpilot", "check"],
+      "columns": 80,
+      "exitCode": 0,
+      "sha256": "de7f845ac2b0b510f31136cb598e1def8b9782aa015eda39436ad5c5c586eb03",
+      "bytes": 3265,
+      "transcript": "check-empty-80.ansi",
+      "screenshot": "check-empty-80.jpg",
+      "screenshotSha256": "8807b3f994ef019dfdbd07bb1d47a2ba0e23c26e13e555002eb857f228637212"
+    },
+    {
+      "command": ["configpilot", "init", "--template", "--yes"],
+      "columns": 80,
+      "exitCode": 0,
+      "sha256": "c44d8a35c20578f020ad1a1c34b14055ee7ea8d7d5aecd33eba9223563b7f70d",
+      "bytes": 2822,
+      "transcript": "init-created-80.ansi",
+      "screenshot": "init-created-80.jpg",
+      "screenshotSha256": "125151ab5fbd967913a08bc15fd0bf354f5821a3acd8df47db0dad0102fb1201"
+    }
+  ]
+}
