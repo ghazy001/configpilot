@@ -1,0 +1,205 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:configpilot:config:1",
+  "title": "ConfigPilot config schema version 1",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "rules": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "optionalKeys": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,127}$"
+          },
+          "maxItems": 256
+        },
+        "externalKeys": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,127}$"
+          },
+          "maxItems": 256
+        },
+        "requiredKeys": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,127}$"
+          },
+          "maxItems": 256
+        },
+        "ignore": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "maxItems": 32
+        },
+        "severity": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "MISSING_KEY": {
+              "enum": ["off", "info", "warning", "error"]
+            },
+            "UNDOCUMENTED_KEY": {
+              "enum": ["off", "info", "warning", "error"]
+            },
+            "DUPLICATE_KEY": {
+              "enum": ["off", "info", "warning", "error"]
+            },
+            "SOURCE_UNDOCUMENTED_KEY": {
+              "enum": ["off", "info", "warning", "error"]
+            },
+            "SOURCE_MISSING_LOCAL_KEY": {
+              "enum": ["off", "info", "warning", "error"]
+            },
+            "SOURCE_DYNAMIC_REFERENCE": {
+              "enum": ["off", "info", "warning", "error"]
+            },
+            "SOURCE_OPTIONAL_REFERENCE": {
+              "enum": ["off", "info", "warning", "error"]
+            },
+            "SOURCE_POTENTIAL_SECRET": {
+              "enum": ["off", "info", "warning", "error"]
+            },
+            "REQUIRED_KEY": {
+              "enum": ["off", "info", "warning", "error"]
+            },
+            "EMPTY_REQUIRED_KEY": {
+              "enum": ["off", "info", "warning", "error"]
+            }
+          },
+          "required": []
+        },
+        "failOn": {
+          "enum": ["warning", "error", "never"]
+        }
+      },
+      "required": []
+    },
+    "workspaces": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{0,31}$"
+          },
+          "root": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 512
+          },
+          "path": {
+            "type": "string",
+            "maxLength": 4096
+          },
+          "template": {
+            "type": "string",
+            "maxLength": 4096
+          },
+          "environment": {
+            "type": "string",
+            "maxLength": 4096
+          },
+          "rules": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "optionalKeys": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,127}$"
+                },
+                "maxItems": 256
+              },
+              "externalKeys": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,127}$"
+                },
+                "maxItems": 256
+              },
+              "requiredKeys": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,127}$"
+                },
+                "maxItems": 256
+              },
+              "ignore": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128
+                },
+                "maxItems": 32
+              },
+              "severity": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "MISSING_KEY": {
+                    "enum": ["off", "info", "warning", "error"]
+                  },
+                  "UNDOCUMENTED_KEY": {
+                    "enum": ["off", "info", "warning", "error"]
+                  },
+                  "DUPLICATE_KEY": {
+                    "enum": ["off", "info", "warning", "error"]
+                  },
+                  "SOURCE_UNDOCUMENTED_KEY": {
+                    "enum": ["off", "info", "warning", "error"]
+                  },
+                  "SOURCE_MISSING_LOCAL_KEY": {
+                    "enum": ["off", "info", "warning", "error"]
+                  },
+                  "SOURCE_DYNAMIC_REFERENCE": {
+                    "enum": ["off", "info", "warning", "error"]
+                  },
+                  "SOURCE_OPTIONAL_REFERENCE": {
+                    "enum": ["off", "info", "warning", "error"]
+                  },
+                  "SOURCE_POTENTIAL_SECRET": {
+                    "enum": ["off", "info", "warning", "error"]
+                  },
+                  "REQUIRED_KEY": {
+                    "enum": ["off", "info", "warning", "error"]
+                  },
+                  "EMPTY_REQUIRED_KEY": {
+                    "enum": ["off", "info", "warning", "error"]
+                  }
+                },
+                "required": []
+              },
+              "failOn": {
+                "enum": ["warning", "error", "never"]
+              }
+            },
+            "required": []
+          }
+        },
+        "required": ["name", "root"]
+      },
+      "maxItems": 16
+    }
+  },
+  "required": ["schemaVersion"]
+}

@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:configpilot:initialization:1",
+  "title": "ConfigPilot initialization schema version 1",
+  "oneOf": [
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "schemaVersion": {
+          "const": 1
+        },
+        "kind": {
+          "const": "initialization"
+        },
+        "status": {
+          "enum": ["preview", "created", "cancelled", "no-variables"]
+        },
+        "output": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "ignore": {
+          "enum": ["ignored", "not-ignored", "unknown", "public-template"]
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 4096
+          },
+          "maxItems": 8192
+        },
+        "content": {
+          "type": "string",
+          "maxLength": 262144
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "kind",
+        "status",
+        "output",
+        "ignore",
+        "warnings",
+        "content"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "schemaVersion": {
+          "const": 1
+        },
+        "kind": {
+          "const": "discovery-error"
+        },
+        "error": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "string",
+              "pattern": "^[A-Z_]{1,64}$"
+            },
+            "message": {
+              "type": "string",
+              "maxLength": 4096
+            },
+            "recommendation": {
+              "type": "string",
+              "maxLength": 4096
+            }
+          },
+          "required": ["code", "message"]
+        }
+      },
+      "required": ["schemaVersion", "kind", "error"]
+    }
+  ]
+}
