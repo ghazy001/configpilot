@@ -115,6 +115,6 @@
   },
   "dependencies": {
     "@babel/parser": "7.29.11",
-    "@vue/compiler-sfc": "3.5.44"
+    "@vue/compiler-sfc": "3.5.45"
   }
 }
